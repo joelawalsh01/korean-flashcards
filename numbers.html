@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean Flashcards - Numbers (Sino & Native)</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  /* --- Category Filters --- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: 2px solid #4361ee;
+    border-radius: 20px;
+    background: #fff;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .filter-btn:hover { background: #eef1ff; }
+
+  .filter-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+
+  /* --- Controls --- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .ctrl-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4361ee;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ctrl-btn:hover { background: #3a56d4; }
+
+  .progress {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* --- Card Scene --- */
+  .card-scene {
+    width: 340px;
+    max-width: 90vw;
+    height: 260px;
+    perspective: 800px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .card-front {
+    background: #fff;
+  }
+
+  .card-back {
+    background: #4361ee;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .card-category {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.55;
+  }
+
+  .card-system {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.75;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .card-front .card-main {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .card-back .card-main {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .card-back .pronunciation {
+    margin-top: 8px;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  .card-back .card-main {
+    cursor: help;
+    border-bottom: 1px dashed rgba(255,255,255,0.4);
+    padding-bottom: 2px;
+  }
+
+  .romanization {
+    display: none;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .romanization.visible {
+    display: block;
+  }
+
+  .card-hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 0.75rem;
+    opacity: 0.4;
+  }
+
+  /* --- Nav Arrows --- */
+  .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #e0e0e0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover { background: #ccc; }
+
+  .keyboard-hint {
+    margin-top: 24px;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-family: inherit;
+    font-size: 0.78rem;
+  }
+
+  /* --- Deck Switcher (shared across index/numbers/verbs) --- */
+  .deck-switch {
+    display: inline-flex;
+    background: #e6e9f2;
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+  }
+
+  .deck-btn {
+    padding: 6px 16px;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .deck-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<nav class="deck-switch">
+  <a class="deck-btn" href="index.html">Vocabulary</a>
+  <a class="deck-btn active" href="numbers.html">Numbers</a>
+  <a class="deck-btn" href="verbs.html">Verbs</a>
+</nav>
+
+<h1>Korean Numbers</h1>
+<p class="subtitle">Sino-Korean vs Native Korean — filter by usage</p>
+
+<div class="filters" id="filters"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="shuffleBtn">Shuffle</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+<div class="card-scene" id="cardScene">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <span class="card-category" id="frontCat"></span>
+      <span class="card-main" id="frontMain"></span>
+      <span class="card-hint">tap to flip</span>
+    </div>
+    <div class="card-face card-back">
+      <span class="card-category" id="backCat"></span>
+      <span class="card-system" id="backSystem"></span>
+      <span class="card-main" id="backMain"></span>
+      <span class="romanization" id="backRoman"></span>
+      <span class="pronunciation" id="backPron"></span>
+      <span class="card-hint" id="backHint">tap to flip</span>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn">&#8592;</button>
+  <button class="nav-btn" id="nextBtn">&#8594;</button>
+</div>
+
+<p class="keyboard-hint">
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip
+</p>
+
+<script>
+// Each card poses a usage question on the front (e.g. "Age: 20?").
+// The category filter lets you drill into one usage at a time so you can
+// practice choosing the right number system for each context.
+const allCards = [
+  // ===== AGE — Native Korean + 살 =====
+  { english: "Age: 1 year old?", korean: "한 살", romanization: "han sal", system: "Native", category: "Age" },
+  { english: "Age: 2 years old?", korean: "두 살", romanization: "du sal", system: "Native", category: "Age" },
+  { english: "Age: 3 years old?", korean: "세 살", romanization: "se sal", system: "Native", category: "Age" },
+  { english: "Age: 4 years old?", korean: "네 살", romanization: "ne sal", system: "Native", category: "Age" },
+  { english: "Age: 5 years old?", korean: "다섯 살", romanization: "daseot sal", system: "Native", category: "Age" },
+  { english: "Age: 10 years old?", korean: "열 살", romanization: "yeol sal", system: "Native", category: "Age" },
+  { english: "Age: 20 years old?", korean: "스무 살", romanization: "seumu sal", system: "Native", category: "Age" },
+  { english: "Age: 21 years old?", korean: "스물한 살", romanization: "seumul-han sal", system: "Native", category: "Age" },
+  { english: "Age: 30 years old?", korean: "서른 살", romanization: "seoreun sal", system: "Native", category: "Age" },
+  { english: "Age: 40 years old?", korean: "마흔 살", romanization: "maheun sal", system: "Native", category: "Age" },
+  { english: "Age: 50 years old?", korean: "쉰 살", romanization: "swin sal", system: "Native", category: "Age" },
+
+  // ===== HOUR — Native Korean + 시 =====
+  { english: "Time: 1 o'clock?", korean: "한 시", romanization: "han si", system: "Native", category: "Hour" },
+  { english: "Time: 2 o'clock?", korean: "두 시", romanization: "du si", system: "Native", category: "Hour" },
+  { english: "Time: 3 o'clock?", korean: "세 시", romanization: "se si", system: "Native", category: "Hour" },
+  { english: "Time: 4 o'clock?", korean: "네 시", romanization: "ne si", system: "Native", category: "Hour" },
+  { english: "Time: 5 o'clock?", korean: "다섯 시", romanization: "daseot si", system: "Native", category: "Hour" },
+  { english: "Time: 6 o'clock?", korean: "여섯 시", romanization: "yeoseot si", system: "Native", category: "Hour" },
+  { english: "Time: 7 o'clock?", korean: "일곱 시", romanization: "ilgop si", system: "Native", category: "Hour" },
+  { english: "Time: 12 o'clock?", korean: "열두 시", romanization: "yeoldu si", system: "Native", category: "Hour" },
+
+  // ===== MINUTE — Sino-Korean + 분 =====
+  { english: "Time: 1 minute?", korean: "일 분", romanization: "il bun", system: "Sino", category: "Minute" },
+  { english: "Time: 5 minutes?", korean: "오 분", romanization: "o bun", system: "Sino", category: "Minute" },
+  { english: "Time: 10 minutes?", korean: "십 분", romanization: "sip bun", system: "Sino", category: "Minute" },
+  { english: "Time: 15 minutes?", korean: "십오 분", romanization: "sibo bun", system: "Sino", category: "Minute" },
+  { english: "Time: 30 minutes?", korean: "삼십 분", romanization: "samsip bun", system: "Sino", category: "Minute" },
+  { english: "Time: 45 minutes?", korean: "사십오 분", romanization: "sasibo bun", system: "Sino", category: "Minute" },
+
+  // ===== COUNTING PEOPLE — Native Korean + 명 =====
+  { english: "1 person?", korean: "한 명", romanization: "han myeong", system: "Native", category: "People" },
+  { english: "2 people?", korean: "두 명", romanization: "du myeong", system: "Native", category: "People" },
+  { english: "3 people?", korean: "세 명", romanization: "se myeong", system: "Native", category: "People" },
+  { english: "4 people?", korean: "네 명", romanization: "ne myeong", system: "Native", category: "People" },
+  { english: "5 people?", korean: "다섯 명", romanization: "daseot myeong", system: "Native", category: "People" },
+  { english: "10 people?", korean: "열 명", romanization: "yeol myeong", system: "Native", category: "People" },
+
+  // ===== COUNTING THINGS — Native Korean + 개 =====
+  { english: "1 item?", korean: "한 개", romanization: "han gae", system: "Native", category: "Things" },
+  { english: "2 items?", korean: "두 개", romanization: "du gae", system: "Native", category: "Things" },
+  { english: "3 items?", korean: "세 개", romanization: "se gae", system: "Native", category: "Things" },
+  { english: "4 items?", korean: "네 개", romanization: "ne gae", system: "Native", category: "Things" },
+  { english: "5 items?", korean: "다섯 개", romanization: "daseot gae", system: "Native", category: "Things" },
+  { english: "10 items?", korean: "열 개", romanization: "yeol gae", system: "Native", category: "Things" },
+  { english: "20 items?", korean: "스무 개", romanization: "seumu gae", system: "Native", category: "Things" },
+
+  // ===== MONEY — Sino-Korean + 원 =====
+  { english: "Money: 100 won?", korean: "백 원", romanization: "baek won", system: "Sino", category: "Money" },
+  { english: "Money: 500 won?", korean: "오백 원", romanization: "obaek won", system: "Sino", category: "Money" },
+  { english: "Money: 1,000 won?", korean: "천 원", romanization: "cheon won", system: "Sino", category: "Money" },
+  { english: "Money: 5,000 won?", korean: "오천 원", romanization: "ocheon won", system: "Sino", category: "Money" },
+  { english: "Money: 10,000 won?", korean: "만 원", romanization: "man won", system: "Sino", category: "Money" },
+  { english: "Money: 50,000 won?", korean: "오만 원", romanization: "oman won", system: "Sino", category: "Money" },
+
+  // ===== MONTH — Sino-Korean + 월 =====
+  { english: "Date: January?", korean: "일월", romanization: "irwol", system: "Sino", category: "Month" },
+  { english: "Date: February?", korean: "이월", romanization: "iwol", system: "Sino", category: "Month" },
+  { english: "Date: March?", korean: "삼월", romanization: "samwol", system: "Sino", category: "Month" },
+  { english: "Date: April?", korean: "사월", romanization: "sawol", system: "Sino", category: "Month" },
+  { english: "Date: May?", korean: "오월", romanization: "owol", system: "Sino", category: "Month" },
+  { english: "Date: June?", korean: "유월", romanization: "yuwol", system: "Sino", category: "Month" },
+  { english: "Date: July?", korean: "칠월", romanization: "chirwol", system: "Sino", category: "Month" },
+  { english: "Date: August?", korean: "팔월", romanization: "parwol", system: "Sino", category: "Month" },
+  { english: "Date: September?", korean: "구월", romanization: "guwol", system: "Sino", category: "Month" },
+  { english: "Date: October?", korean: "시월", romanization: "siwol", system: "Sino", category: "Month" },
+  { english: "Date: November?", korean: "십일월", romanization: "sibirwol", system: "Sino", category: "Month" },
+  { english: "Date: December?", korean: "십이월", romanization: "sibiwol", system: "Sino", category: "Month" },
+
+  // ===== DAY OF MONTH — Sino-Korean + 일 =====
+  { english: "Date: 1st?", korean: "일 일", romanization: "il il", system: "Sino", category: "Day" },
+  { english: "Date: 5th?", korean: "오 일", romanization: "o il", system: "Sino", category: "Day" },
+  { english: "Date: 10th?", korean: "십 일", romanization: "sip il", system: "Sino", category: "Day" },
+  { english: "Date: 15th?", korean: "십오 일", romanization: "sibo il", system: "Sino", category: "Day" },
+  { english: "Date: 25th?", korean: "이십오 일", romanization: "isibo il", system: "Sino", category: "Day" },
+  { english: "Date: 31st?", korean: "삼십일 일", romanization: "samsibil il", system: "Sino", category: "Day" },
+
+  // ===== FLOOR — Sino-Korean + 층 =====
+  { english: "Floor: 1st?", korean: "일 층", romanization: "il cheung", system: "Sino", category: "Floor" },
+  { english: "Floor: 2nd?", korean: "이 층", romanization: "i cheung", system: "Sino", category: "Floor" },
+  { english: "Floor: 3rd?", korean: "삼 층", romanization: "sam cheung", system: "Sino", category: "Floor" },
+  { english: "Floor: 10th?", korean: "십 층", romanization: "sip cheung", system: "Sino", category: "Floor" },
+
+  // ===== PHONE / MATH — Sino-Korean, pure numbers =====
+  { english: "Phone/Math: 0?", korean: "영 / 공", romanization: "yeong / gong", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 1?", korean: "일", romanization: "il", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 2?", korean: "이", romanization: "i", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 3?", korean: "삼", romanization: "sam", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 4?", korean: "사", romanization: "sa", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 5?", korean: "오", romanization: "o", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 6?", korean: "육", romanization: "yuk", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 7?", korean: "칠", romanization: "chil", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 8?", korean: "팔", romanization: "pal", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 9?", korean: "구", romanization: "gu", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 10?", korean: "십", romanization: "sip", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 100?", korean: "백", romanization: "baek", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 1,000?", korean: "천", romanization: "cheon", system: "Sino", category: "Phone/Math" },
+  { english: "Phone/Math: 10,000?", korean: "만", romanization: "man", system: "Sino", category: "Phone/Math" },
+];
+
+const categories = [...new Set(allCards.map(c => c.category))];
+
+let activeCategory = "All";
+let deck = [...allCards];
+let idx = 0;
+
+// --- Filters ---
+const filtersEl = document.getElementById("filters");
+
+function buildFilters() {
+  filtersEl.innerHTML = "";
+  ["All", ...categories].forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.addEventListener("click", () => {
+      activeCategory = cat;
+      applyFilter();
+    });
+    filtersEl.appendChild(btn);
+  });
+}
+
+function applyFilter() {
+  deck = activeCategory === "All" ? [...allCards] : allCards.filter(c => c.category === activeCategory);
+  idx = 0;
+  buildFilters();
+  render();
+}
+
+// --- Render ---
+const cardEl = document.getElementById("card");
+const frontCat = document.getElementById("frontCat");
+const frontMain = document.getElementById("frontMain");
+const backCat = document.getElementById("backCat");
+const backSystem = document.getElementById("backSystem");
+const backMain = document.getElementById("backMain");
+const backPron = document.getElementById("backPron");
+const backRoman = document.getElementById("backRoman");
+const backHint = document.getElementById("backHint");
+const progressEl = document.getElementById("progress");
+
+function render() {
+  cardEl.classList.remove("flipped");
+  backRoman.classList.remove("visible");
+  if (deck.length === 0) {
+    frontCat.textContent = "";
+    frontMain.textContent = "No cards";
+    backCat.textContent = "";
+    backSystem.textContent = "";
+    backMain.textContent = "";
+    backRoman.textContent = "";
+    backPron.textContent = "";
+    progressEl.textContent = "0 of 0";
+    backHint.textContent = "tap to flip";
+    return;
+  }
+  const c = deck[idx];
+  frontCat.textContent = c.category;
+  frontMain.textContent = c.english;
+  backCat.textContent = c.category;
+  backSystem.textContent = c.system + "-Korean";
+  backMain.textContent = c.korean;
+  backRoman.textContent = c.romanization || "";
+  backPron.textContent = c.pronunciation || "";
+  backHint.textContent = "hover hangul for romanization";
+  progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
+}
+
+// --- Romanization hover/tap ---
+backMain.addEventListener("mouseenter", () => backRoman.classList.add("visible"));
+backMain.addEventListener("mouseleave", () => backRoman.classList.remove("visible"));
+backMain.addEventListener("touchstart", (e) => {
+  e.stopPropagation();
+  backRoman.classList.toggle("visible");
+}, { passive: true });
+
+// --- Flip ---
+document.getElementById("cardScene").addEventListener("click", () => {
+  cardEl.classList.toggle("flipped");
+});
+
+// --- Navigation ---
+function prev() {
+  if (deck.length === 0) return;
+  idx = (idx - 1 + deck.length) % deck.length;
+  render();
+}
+
+function next() {
+  if (deck.length === 0) return;
+  idx = (idx + 1) % deck.length;
+  render();
+}
+
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("nextBtn").addEventListener("click", next);
+
+// --- Shuffle ---
+document.getElementById("shuffleBtn").addEventListener("click", () => {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  render();
+});
+
+// --- Keyboard ---
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+  else if (e.key === " ") { e.preventDefault(); cardEl.classList.toggle("flipped"); }
+});
+
+// --- Init ---
+buildFilters();
+render();
+</script>
+</body>
+</html>

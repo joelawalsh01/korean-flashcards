@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean Flashcards - Conversations 1–3 + TTMIK 7, 9, 10</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  /* --- Category Filters --- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: 2px solid #4361ee;
+    border-radius: 20px;
+    background: #fff;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .filter-btn:hover { background: #eef1ff; }
+
+  .filter-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+
+  /* --- Controls --- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .ctrl-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4361ee;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ctrl-btn:hover { background: #3a56d4; }
+
+  .progress {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* --- Card Scene --- */
+  .card-scene {
+    width: 340px;
+    max-width: 90vw;
+    height: 260px;
+    perspective: 800px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .card-front {
+    background: #fff;
+  }
+
+  .card-back {
+    background: #4361ee;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .card-category {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.55;
+  }
+
+  .card-front .card-main {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .card-back .card-main {
+    font-size: 2.2rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .card-back .pronunciation {
+    margin-top: 8px;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  .card-back .card-main {
+    cursor: help;
+    border-bottom: 1px dashed rgba(255,255,255,0.4);
+    padding-bottom: 2px;
+  }
+
+  .romanization {
+    display: none;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  .romanization.visible {
+    display: block;
+  }
+
+  .card-hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 0.75rem;
+    opacity: 0.4;
+  }
+
+  /* --- Nav Arrows --- */
+  .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #e0e0e0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover { background: #ccc; }
+
+  .keyboard-hint {
+    margin-top: 24px;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-family: inherit;
+    font-size: 0.78rem;
+  }
+
+  /* --- Deck Switcher (shared across index/numbers/verbs) --- */
+  .deck-switch {
+    display: inline-flex;
+    background: #e6e9f2;
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+  }
+
+  .deck-btn {
+    padding: 6px 16px;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .deck-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<nav class="deck-switch">
+  <a class="deck-btn active" href="index.html">Vocabulary</a>
+  <a class="deck-btn" href="numbers.html">Numbers</a>
+  <a class="deck-btn" href="verbs.html">Verbs</a>
+</nav>
+
+<h1>Korean Flashcards</h1>
+<p class="subtitle">Conversations 1–3 + TTMIK Lessons 7, 9, 10</p>
+
+<div class="filters" id="filters"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="shuffleBtn">Shuffle</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+<div class="card-scene" id="cardScene">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <span class="card-category" id="frontCat"></span>
+      <span class="card-main" id="frontMain"></span>
+      <span class="card-hint">tap to flip</span>
+    </div>
+    <div class="card-face card-back">
+      <span class="card-category" id="backCat"></span>
+      <span class="card-main" id="backMain"></span>
+      <span class="romanization" id="backRoman"></span>
+      <span class="pronunciation" id="backPron"></span>
+      <span class="card-hint" id="backHint">tap to flip</span>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn">&#8592;</button>
+  <button class="nav-btn" id="nextBtn">&#8594;</button>
+</div>
+
+<p class="keyboard-hint">
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip
+</p>
+
+<script>
+const allCards = [
+  // ===== Conversation 1 (1과) =====
+
+  // Nouns
+  { english: "freshman", korean: "1학년", romanization: "il-hangnyeon", pronunciation: null, category: "Noun" },
+  { english: "sophomore", korean: "2학년", romanization: "i-hangnyeon", pronunciation: null, category: "Noun" },
+  { english: "junior", korean: "3학년", romanization: "sam-hangnyeon", pronunciation: null, category: "Noun" },
+  { english: "senior", korean: "4학년", romanization: "sa-hangnyeon", pronunciation: null, category: "Noun" },
+  { english: "lesson, chapter", korean: "과", romanization: "gwa", pronunciation: null, category: "Noun" },
+  { english: "college student", korean: "대학생", romanization: "daehaksaeng", pronunciation: null, category: "Noun" },
+  { english: "the United States", korean: "미국", romanization: "miguk", pronunciation: null, category: "Noun" },
+  { english: "person, people", korean: "사람", romanization: "saram", pronunciation: null, category: "Noun" },
+  { english: "greeting", korean: "인사", romanization: "insa", pronunciation: null, category: "Noun" },
+  { english: "school year", korean: "학년", romanization: "hangnyeon", pronunciation: "[항년]", category: "Noun" },
+  { english: "student", korean: "학생", romanization: "haksaeng", pronunciation: "[학쌩]", category: "Noun" },
+  { english: "Korea", korean: "한국", romanization: "hanguk", pronunciation: "[항국]", category: "Noun" },
+
+  // Numbers
+  { english: "1 (one)", korean: "일", romanization: "il", pronunciation: null, category: "Number" },
+  { english: "2 (two)", korean: "이", romanization: "i", pronunciation: null, category: "Number" },
+  { english: "3 (three)", korean: "삼", romanization: "sam", pronunciation: null, category: "Number" },
+  { english: "4 (four)", korean: "사", romanization: "sa", pronunciation: null, category: "Number" },
+
+  // Adjective
+  { english: "to be well (Hi, Hello, How are you?)", korean: "안녕하다", romanization: "annyeonghada", pronunciation: "안녕하세요.", category: "Adjective" },
+
+  // Copula
+  { english: "to be (equation)", korean: "이다", romanization: "ida", pronunciation: "이에요/예요", category: "Copula" },
+
+  // Particles
+  { english: "also, too", korean: "도", romanization: "do", pronunciation: null, category: "Particle" },
+  { english: "topic particle ('as for')", korean: "은/는", romanization: "eun/neun", pronunciation: null, category: "Particle" },
+
+  // Pronoun
+  { english: "I (humble)", korean: "저", romanization: "jeo", pronunciation: "= 나 (plain)", category: "Pronoun" },
+
+  // ===== Conversation 2 (2과 한국어 수업) =====
+
+  // Nouns
+  { english: "library", korean: "도서관", romanization: "doseogwan", pronunciation: null, category: "Noun" },
+  { english: "course, class", korean: "수업", romanization: "sueop", pronunciation: null, category: "Noun" },
+  { english: "homework", korean: "숙제", romanization: "sukje", pronunciation: null, category: "Noun" },
+  { english: "restaurant (학교 식당 'school cafeteria')", korean: "식당", romanization: "sikdang", pronunciation: null, category: "Noun" },
+  { english: "breakfast; morning", korean: "아침", romanization: "achim", pronunciation: null, category: "Noun" },
+  { english: "friend", korean: "친구", romanization: "chingu", pronunciation: null, category: "Noun" },
+  { english: "coffee", korean: "커피", romanization: "keopi", pronunciation: null, category: "Noun" },
+  { english: "school", korean: "학교", romanization: "hakgyo", pronunciation: null, category: "Noun" },
+
+  // Suffix
+  { english: "polite ending", korean: "~어요/아요", romanization: "~eoyo/ayo", pronunciation: null, category: "Suffix" },
+
+  // Particle
+  { english: "plural particle", korean: "들", romanization: "deul", pronunciation: null, category: "Particle" },
+
+  // Interjection
+  { english: "oh", korean: "어", romanization: "eo", pronunciation: null, category: "Interjection" },
+
+  // Adjectives
+  { english: "to be all right, okay", korean: "괜찮다", romanization: "gwaenchanta", pronunciation: null, category: "Adjective" },
+  { english: "to be spacious, wide", korean: "넓다", romanization: "neolda", pronunciation: null, category: "Adjective" },
+  { english: "to be many, much", korean: "많다", romanization: "manta", pronunciation: "많아요", category: "Adjective" },
+  { english: "to be delicious", korean: "맛있다", romanization: "masitta", pronunciation: null, category: "Adjective" },
+  { english: "to be how", korean: "어떻다", romanization: "eotteota", pronunciation: "어때요", category: "Adjective" },
+  { english: "to be fun, interesting", korean: "재미있다", romanization: "jaemiitda", pronunciation: "재미있어요", category: "Adjective" },
+  { english: "to be good, nice", korean: "좋다", romanization: "jota", pronunciation: "좋아요", category: "Adjective" },
+
+  // Verbs
+  { english: "to eat", korean: "먹다", romanization: "meokda", pronunciation: null, category: "Verb" },
+  { english: "to sit", korean: "앉다", romanization: "anda", pronunciation: null, category: "Verb" },
+  { english: "to know", korean: "알다", romanization: "alda", pronunciation: null, category: "Verb" },
+
+  // Adverb
+  { english: "very, really", korean: "아주", romanization: "aju", pronunciation: null, category: "Adverb" },
+
+  // ===== Conversation 3 (3과 대학 캠퍼스) =====
+
+  // Nouns
+  { english: "bag", korean: "가방", romanization: "gabang", pronunciation: null, category: "Noun" },
+  { english: "dormitory", korean: "기숙사", romanization: "gisuksa", pronunciation: null, category: "Noun" },
+  { english: "college, university", korean: "대학교", romanization: "daehakgyo", pronunciation: null, category: "Noun" },
+  { english: "back, behind", korean: "뒤", romanization: "dwi", pronunciation: null, category: "Noun" },
+  { english: "bottom, below", korean: "밑", romanization: "mit", pronunciation: null, category: "Noun" },
+  { english: "outside", korean: "밖", romanization: "bak", pronunciation: null, category: "Noun" },
+  { english: "building", korean: "빌딩", romanization: "bilding", pronunciation: null, category: "Noun" },
+  { english: "bookstore", korean: "서점", romanization: "seojeom", pronunciation: null, category: "Noun" },
+  { english: "clock, watch", korean: "시계", romanization: "sigye", pronunciation: null, category: "Noun" },
+  { english: "inside", korean: "안", romanization: "an", pronunciation: null, category: "Noun" },
+  { english: "front", korean: "앞", romanization: "ap", pronunciation: null, category: "Noun" },
+  { english: "what place, where (question word)", korean: "어디", romanization: "eodi", pronunciation: null, category: "Noun" },
+  { english: "side, beside", korean: "옆", romanization: "yeop", pronunciation: null, category: "Noun" },
+  { english: "post office", korean: "우체국", romanization: "ucheguk", pronunciation: null, category: "Noun" },
+  { english: "chair", korean: "의자", romanization: "uija", pronunciation: null, category: "Noun" },
+  { english: "the top side, above", korean: "위", romanization: "wi", pronunciation: null, category: "Noun" },
+  { english: "desk", korean: "책상", romanization: "chaeksang", pronunciation: null, category: "Noun" },
+  { english: "book", korean: "책", romanization: "chaek", pronunciation: null, category: "Noun" },
+  { english: "student center", korean: "학생회관", romanization: "haksaenghoegwan", pronunciation: null, category: "Noun" },
+  { english: "campus", korean: "캠퍼스", romanization: "kaempeoseu", pronunciation: null, category: "Noun" },
+
+  // Counter
+  { english: "floor, layer (1층, 2층, 3층, ...)", korean: "층", romanization: "cheung", pronunciation: null, category: "Counter" },
+
+  // Adjective
+  { english: "to be (existence)", korean: "있다", romanization: "itda", pronunciation: "있어요", category: "Adjective" },
+
+  // Interjection
+  { english: "uh (expression of hesitation)", korean: "저", romanization: "jeo", pronunciation: null, category: "Interjection" },
+
+  // Particle
+  { english: "in, at, on (static location)", korean: "에", romanization: "e", pronunciation: null, category: "Particle" },
+
+  // ===== Lesson 7 (TTMIK) — This, That, It =====
+
+  // Determiners (must precede a noun)
+  { english: "this (near me)", korean: "이", romanization: "i", pronunciation: "+ noun", category: "Determiner" },
+  { english: "the, that (near you)", korean: "그", romanization: "geu", pronunciation: "+ noun", category: "Determiner" },
+  { english: "that (over there)", korean: "저", romanization: "jeo", pronunciation: "+ noun", category: "Determiner" },
+
+  // Nouns (thing/item)
+  { english: "thing, item (informal)", korean: "거", romanization: "geo", pronunciation: null, category: "Noun" },
+  { english: "thing, item, fact", korean: "것", romanization: "geot", pronunciation: null, category: "Noun" },
+
+  // Pronouns (this/that one)
+  { english: "this thing, this one", korean: "이것", romanization: "igeot", pronunciation: "spoken: 이거", category: "Pronoun" },
+  { english: "this thing, this one (spoken)", korean: "이거", romanization: "igeo", pronunciation: null, category: "Pronoun" },
+  { english: "that thing, it", korean: "그것", romanization: "geugeot", pronunciation: "spoken: 그거", category: "Pronoun" },
+  { english: "that thing, it (spoken)", korean: "그거", romanization: "geugeo", pronunciation: null, category: "Pronoun" },
+  { english: "that thing over there", korean: "저것", romanization: "jeogeot", pronunciation: "spoken: 저거", category: "Pronoun" },
+  { english: "that thing over there (spoken)", korean: "저거", romanization: "jeogeo", pronunciation: null, category: "Pronoun" },
+  { english: "here", korean: "여기", romanization: "yeogi", pronunciation: null, category: "Pronoun" },
+  { english: "there (near you)", korean: "거기", romanization: "geogi", pronunciation: null, category: "Pronoun" },
+  { english: "over there", korean: "저기", romanization: "jeogi", pronunciation: null, category: "Pronoun" },
+  { english: "who", korean: "누구", romanization: "nugu", pronunciation: null, category: "Pronoun" },
+
+  // Counter
+  { english: "person (honorific counter)", korean: "분", romanization: "bun", pronunciation: "이 분 = this person (honorific)", category: "Counter" },
+
+  // Nouns
+  { english: "computer", korean: "컴퓨터", romanization: "keompyuteo", pronunciation: null, category: "Noun" },
+  { english: "ice cream", korean: "아이스크림", romanization: "aiseukeurim", pronunciation: null, category: "Noun" },
+  { english: "hotel", korean: "호텔", romanization: "hotel", pronunciation: null, category: "Noun" },
+  { english: "taxi", korean: "택시", romanization: "taeksi", pronunciation: null, category: "Noun" },
+  { english: "bus", korean: "버스", romanization: "beoseu", pronunciation: null, category: "Noun" },
+  { english: "microphone", korean: "마이크", romanization: "maikeu", pronunciation: null, category: "Noun" },
+  { english: "table", korean: "테이블", romanization: "teibeul", pronunciation: null, category: "Noun" },
+  { english: "restaurant", korean: "레스토랑", romanization: "reseutorang", pronunciation: null, category: "Noun" },
+  { english: "brand", korean: "브랜드", romanization: "beuraendeu", pronunciation: null, category: "Noun" },
+  { english: "subway", korean: "지하철", romanization: "jihacheol", pronunciation: null, category: "Noun" },
+  { english: "(train/subway) station", korean: "역", romanization: "yeok", pronunciation: null, category: "Noun" },
+
+  // Verb
+  { english: "to like", korean: "좋아하다", romanization: "joahada", pronunciation: "좋아해요", category: "Verb" },
+
+  // Interjections / Adverb
+  { english: "no", korean: "아니요", romanization: "aniyo", pronunciation: null, category: "Interjection" },
+  { english: "yes", korean: "네", romanization: "ne", pronunciation: null, category: "Interjection" },
+  { english: "then, so, in that case", korean: "그럼", romanization: "geureom", pronunciation: null, category: "Adverb" },
+
+  // ===== Lesson 9 (TTMIK) — Topic / Subject Particles =====
+
+  // Particle
+  { english: "subject marking particle", korean: "이/가", romanization: "i/ga", pronunciation: null, category: "Particle" },
+
+  // Nouns
+  { english: "car", korean: "차", romanization: "cha", pronunciation: null, category: "Noun" },
+  { english: "apple", korean: "사과", romanization: "sagwa", pronunciation: null, category: "Noun" },
+  { english: "water", korean: "물", romanization: "mul", pronunciation: null, category: "Noun" },
+  { english: "orange juice", korean: "오렌지 주스", romanization: "orenji juseu", pronunciation: null, category: "Noun" },
+  { english: "tomorrow", korean: "내일", romanization: "naeil", pronunciation: null, category: "Noun" },
+  { english: "today", korean: "오늘", romanization: "oneul", pronunciation: null, category: "Noun" },
+  { english: "weather", korean: "날씨", romanization: "nalssi", pronunciation: null, category: "Noun" },
+  { english: "peach", korean: "복숭아", romanization: "boksunga", pronunciation: null, category: "Noun" },
+  { english: "pizza", korean: "피자", romanization: "pija", pronunciation: null, category: "Noun" },
+
+  // Pronoun
+  { english: "what", korean: "뭐", romanization: "mwo", pronunciation: null, category: "Pronoun" },
+
+  // Verb
+  { english: "to work", korean: "일하다", romanization: "ilhada", pronunciation: "일해요", category: "Verb" },
+
+  // Adjectives
+  { english: "to be right, correct", korean: "맞다", romanization: "matda", pronunciation: "맞아요", category: "Adjective" },
+  { english: "to be expensive", korean: "비싸다", romanization: "bissada", pronunciation: "비싸요", category: "Adjective" },
+
+  // ===== Lesson 10 (TTMIK) — Have / Don't Have, There Is / There Isn't =====
+
+  // Adjectives
+  { english: "to not exist; to not have", korean: "없다", romanization: "eopda", pronunciation: "없어요 [업서요]", category: "Adjective" },
+  { english: "to not be delicious", korean: "맛없다", romanization: "maseopda", pronunciation: "맛없어요", category: "Adjective" },
+
+  // Family / People
+  { english: "older sister (of a male)", korean: "누나", romanization: "nuna", pronunciation: null, category: "Noun" },
+  { english: "older sister (of a female)", korean: "언니", romanization: "eonni", pronunciation: null, category: "Noun" },
+  { english: "older brother (of a male)", korean: "형", romanization: "hyeong", pronunciation: null, category: "Noun" },
+  { english: "older brother (of a female)", korean: "오빠", romanization: "oppa", pronunciation: null, category: "Noun" },
+  { english: "younger sister", korean: "여동생", romanization: "yeodongsaeng", pronunciation: null, category: "Noun" },
+  { english: "younger brother", korean: "남동생", romanization: "namdongsaeng", pronunciation: null, category: "Noun" },
+  { english: "woman, female", korean: "여자", romanization: "yeoja", pronunciation: null, category: "Noun" },
+  { english: "man, male", korean: "남자", romanization: "namja", pronunciation: null, category: "Noun" },
+  { english: "sibling(s)", korean: "형제", romanization: "hyeongje", pronunciation: null, category: "Noun" },
+
+  // Nouns
+  { english: "time", korean: "시간", romanization: "sigan", pronunciation: null, category: "Noun" },
+  { english: "fun (재미있다 = interesting)", korean: "재미", romanization: "jaemi", pronunciation: null, category: "Noun" },
+  { english: "taste", korean: "맛", romanization: "mat", pronunciation: null, category: "Noun" },
+  { english: "next door, neighbor's house", korean: "옆집", romanization: "yeopjip", pronunciation: null, category: "Noun" },
+  { english: "umbrella", korean: "우산", romanization: "usan", pronunciation: null, category: "Noun" },
+  { english: "food", korean: "음식", romanization: "eumsik", pronunciation: null, category: "Noun" },
+  { english: "teacher; respectful term", korean: "선생님", romanization: "seonsaengnim", pronunciation: null, category: "Noun" },
+  { english: "customer, guest", korean: "손님", romanization: "sonnim", pronunciation: null, category: "Noun" },
+  { english: "driver (respectful)", korean: "기사님", romanization: "gisanim", pronunciation: null, category: "Noun" },
+
+  // Suffix
+  { english: "Mr./Ms. (after a name)", korean: "씨", romanization: "ssi", pronunciation: null, category: "Suffix" },
+];
+
+const categories = [...new Set(allCards.map(c => c.category))];
+
+let activeCategory = "All";
+let deck = [...allCards];
+let idx = 0;
+
+// --- Filters ---
+const filtersEl = document.getElementById("filters");
+
+function buildFilters() {
+  filtersEl.innerHTML = "";
+  ["All", ...categories].forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.addEventListener("click", () => {
+      activeCategory = cat;
+      applyFilter();
+    });
+    filtersEl.appendChild(btn);
+  });
+}
+
+function applyFilter() {
+  deck = activeCategory === "All" ? [...allCards] : allCards.filter(c => c.category === activeCategory);
+  idx = 0;
+  buildFilters();
+  render();
+}
+
+// --- Render ---
+const cardEl = document.getElementById("card");
+const frontCat = document.getElementById("frontCat");
+const frontMain = document.getElementById("frontMain");
+const backCat = document.getElementById("backCat");
+const backMain = document.getElementById("backMain");
+const backPron = document.getElementById("backPron");
+const backRoman = document.getElementById("backRoman");
+const backHint = document.getElementById("backHint");
+const progressEl = document.getElementById("progress");
+
+function render() {
+  cardEl.classList.remove("flipped");
+  backRoman.classList.remove("visible");
+  if (deck.length === 0) {
+    frontCat.textContent = "";
+    frontMain.textContent = "No cards";
+    backCat.textContent = "";
+    backMain.textContent = "";
+    backRoman.textContent = "";
+    backPron.textContent = "";
+    progressEl.textContent = "0 of 0";
+    backHint.textContent = "tap to flip";
+    return;
+  }
+  const c = deck[idx];
+  frontCat.textContent = c.category;
+  frontMain.textContent = c.english;
+  backCat.textContent = c.category;
+  backMain.textContent = c.korean;
+  backRoman.textContent = c.romanization || "";
+  backPron.textContent = c.pronunciation || "";
+  backHint.textContent = "hover hangul for romanization";
+  progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
+}
+
+// --- Romanization hover/tap ---
+backMain.addEventListener("mouseenter", () => backRoman.classList.add("visible"));
+backMain.addEventListener("mouseleave", () => backRoman.classList.remove("visible"));
+backMain.addEventListener("touchstart", (e) => {
+  e.stopPropagation();
+  backRoman.classList.toggle("visible");
+}, { passive: true });
+
+// --- Flip ---
+document.getElementById("cardScene").addEventListener("click", () => {
+  cardEl.classList.toggle("flipped");
+});
+
+// --- Navigation ---
+function prev() {
+  if (deck.length === 0) return;
+  idx = (idx - 1 + deck.length) % deck.length;
+  render();
+}
+
+function next() {
+  if (deck.length === 0) return;
+  idx = (idx + 1) % deck.length;
+  render();
+}
+
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("nextBtn").addEventListener("click", next);
+
+// --- Shuffle ---
+document.getElementById("shuffleBtn").addEventListener("click", () => {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  render();
+});
+
+// --- Keyboard ---
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+  else if (e.key === " ") { e.preventDefault(); cardEl.classList.toggle("flipped"); }
+});
+
+// --- Init ---
+buildFilters();
+render();
+</script>
+</body>
+</html>

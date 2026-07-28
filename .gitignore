@@ -1,0 +1,9 @@
+# Personal study materials — kept local, not published
+*.pdf
+*.jpg
+*.jpeg
+*.png
+
+# Local tooling
+.claude/settings.local.json
+.DS_Store

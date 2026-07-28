@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean Flashcards - Verbs & Conjugation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  /* --- Mode Toggle --- */
+  .mode-toggle {
+    display: inline-flex;
+    background: #e6e9f2;
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 16px;
+  }
+
+  .mode-btn {
+    padding: 6px 18px;
+    border: none;
+    background: transparent;
+    color: #4361ee;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .mode-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+
+  /* --- Filters --- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+    max-width: 600px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: 2px solid #4361ee;
+    border-radius: 20px;
+    background: #fff;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .filter-btn:hover { background: #eef1ff; }
+
+  .filter-btn.active { background: #4361ee; color: #fff; }
+
+  .tense-filters .filter-btn {
+    border-color: #7048e8;
+    color: #7048e8;
+  }
+  .tense-filters .filter-btn:hover { background: #f2ecff; }
+  .tense-filters .filter-btn.active { background: #7048e8; color: #fff; }
+
+  .tense-filters { display: none; }
+  body.mode-conjugate .tense-filters { display: flex; }
+
+  .filters-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* --- Controls --- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .ctrl-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4361ee;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ctrl-btn:hover { background: #3a56d4; }
+
+  .progress {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* --- Card Scene --- */
+  .card-scene {
+    width: 360px;
+    max-width: 92vw;
+    height: 280px;
+    perspective: 800px;
+    margin-bottom: 16px;
+    cursor: pointer;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .card-front { background: #fff; }
+
+  .card-back {
+    background: #4361ee;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .card.correct .card-back { background: #2f9e44; }
+  .card.incorrect .card-back { background: #c92a2a; }
+
+  .card-category {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.55;
+  }
+
+  .tense-chip {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    padding: 3px 10px;
+    background: #7048e8;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 10px;
+  }
+
+  .card-front .card-main {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .card-front .card-main.hangul {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .card-front .card-sub {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: #666;
+  }
+
+  .card-back .card-main {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .card-back .pronunciation {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+
+  /* Conjugation list on back face (Recall mode) */
+  .conj-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .conj-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .conj-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.75;
+    font-weight: 600;
+  }
+
+  .conj-form { font-weight: 600; }
+
+  .card-hint {
+    position: absolute;
+    bottom: 14px;
+    font-size: 0.75rem;
+    opacity: 0.4;
+  }
+
+  /* --- Conjugate input --- */
+  .answer-row {
+    display: none;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+    width: 360px;
+    max-width: 92vw;
+  }
+  body.mode-conjugate .answer-row { display: flex; }
+
+  .answer-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .answer-input:focus { border-color: #4361ee; }
+
+  /* --- Nav --- */
+  .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #e0e0e0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover { background: #ccc; }
+
+  .keyboard-hint {
+    margin-top: 20px;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-family: inherit;
+    font-size: 0.78rem;
+  }
+
+  /* --- Deck Switcher (shared across index/numbers/verbs) --- */
+  .deck-switch {
+    display: inline-flex;
+    background: #e6e9f2;
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+  }
+
+  .deck-btn {
+    padding: 6px 16px;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .deck-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+</style>
+</head>
+<body class="mode-recall">
+
+<nav class="deck-switch">
+  <a class="deck-btn" href="index.html">Vocabulary</a>
+  <a class="deck-btn" href="numbers.html">Numbers</a>
+  <a class="deck-btn active" href="verbs.html">Verbs</a>
+</nav>
+
+<h1>Korean Verbs &amp; Conjugation</h1>
+<p class="subtitle">TTMIK Lessons 17–18 — recall meanings and drill conjugations</p>
+
+<div class="mode-toggle">
+  <button class="mode-btn active" data-mode="recall">Recall</button>
+  <button class="mode-btn" data-mode="conjugate">Conjugate</button>
+</div>
+
+<div class="filters" id="filters"></div>
+<div class="filters tense-filters" id="tenseFilters"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="shuffleBtn">Shuffle</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+<div class="card-scene" id="cardScene">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <span class="card-category" id="frontCat"></span>
+      <span class="tense-chip" id="frontTense" style="display:none;"></span>
+      <span class="card-main" id="frontMain"></span>
+      <span class="card-sub" id="frontSub"></span>
+      <span class="card-hint" id="frontHint">tap to flip</span>
+    </div>
+    <div class="card-face card-back">
+      <span class="card-category" id="backCat"></span>
+      <span class="card-main" id="backMain"></span>
+      <span class="pronunciation" id="backRoman"></span>
+      <div class="conj-list" id="conjList"></div>
+      <span class="card-hint" id="backHint">tap to flip</span>
+    </div>
+  </div>
+</div>
+
+<div class="answer-row">
+  <input type="text" class="answer-input" id="answerInput" placeholder="Type conjugation (hangul or romanization)" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+  <button class="ctrl-btn" id="checkBtn">Check</button>
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn">&#8592;</button>
+  <button class="nav-btn" id="nextBtn">&#8594;</button>
+</div>
+
+<p class="keyboard-hint">
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>Enter</kbd> check (Conjugate)
+</p>
+
+<script>
+// ===== Tense metadata =====
+// Order here controls display order in filters and conjugation list.
+const TENSES = [
+  { key: "present", label: "Present",  short: "PRES", desc: "polite -요" },
+  { key: "past",    label: "Past",     short: "PAST", desc: "-았/었어요" },
+  { key: "want",    label: "Want to",  short: "WANT", desc: "-고 싶어요" },
+];
+
+// ===== Verb data =====
+// Each verb: english, korean (base -다 form), romanization, category, conjugations map.
+// A tense entry may be null if the form doesn't naturally apply — those cards are
+// skipped when that tense is the active filter in Conjugate mode.
+const allVerbs = [
+  // ===== Lesson 18 (TTMIK) — Core Action Verbs =====
+  {
+    english: "to go",
+    korean: "가다", romanization: "ga-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "가요",         romanization: "ga-yo" },
+      past:    { korean: "갔어요",       romanization: "ga-sseo-yo" },
+      want:    { korean: "가고 싶어요",  romanization: "ga-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to come",
+    korean: "오다", romanization: "o-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "와요",         romanization: "wa-yo" },
+      past:    { korean: "왔어요",       romanization: "wa-sseo-yo" },
+      want:    { korean: "오고 싶어요",  romanization: "o-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to see, to watch",
+    korean: "보다", romanization: "bo-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "봐요",         romanization: "bwa-yo" },
+      past:    { korean: "봤어요",       romanization: "bwa-sseo-yo" },
+      want:    { korean: "보고 싶어요",  romanization: "bo-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to do",
+    korean: "하다", romanization: "ha-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "해요",         romanization: "hae-yo" },
+      past:    { korean: "했어요",       romanization: "hae-sseo-yo" },
+      want:    { korean: "하고 싶어요",  romanization: "ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to eat",
+    korean: "먹다", romanization: "meok-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "먹어요",       romanization: "meo-geo-yo" },
+      past:    { korean: "먹었어요",     romanization: "meo-geo-sseo-yo" },
+      want:    { korean: "먹고 싶어요",  romanization: "meok-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to sit",
+    korean: "앉다", romanization: "an-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "앉아요",       romanization: "an-ja-yo" },
+      past:    { korean: "앉았어요",     romanization: "an-ja-sseo-yo" },
+      want:    { korean: "앉고 싶어요",  romanization: "an-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to know",
+    korean: "알다", romanization: "al-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "알아요",       romanization: "a-ra-yo" },
+      past:    { korean: "알았어요",     romanization: "a-ra-sseo-yo" },
+      want:    { korean: "알고 싶어요",  romanization: "al-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to like",
+    korean: "좋아하다", romanization: "jo-a-ha-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "좋아해요",       romanization: "jo-a-hae-yo" },
+      past:    { korean: "좋아했어요",     romanization: "jo-a-hae-sseo-yo" },
+      want:    { korean: "좋아하고 싶어요", romanization: "jo-a-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to work",
+    korean: "일하다", romanization: "il-ha-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "일해요",       romanization: "il-hae-yo" },
+      past:    { korean: "일했어요",     romanization: "il-hae-sseo-yo" },
+      want:    { korean: "일하고 싶어요", romanization: "il-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to study",
+    korean: "공부하다", romanization: "gong-bu-ha-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "공부해요",       romanization: "gong-bu-hae-yo" },
+      past:    { korean: "공부했어요",     romanization: "gong-bu-hae-sseo-yo" },
+      want:    { korean: "공부하고 싶어요", romanization: "gong-bu-ha-go si-peo-yo" },
+    },
+  },
+
+  // ===== Existence / State =====
+  {
+    english: "to be, to exist",
+    korean: "있다", romanization: "it-da", category: "Existence",
+    conjugations: {
+      present: { korean: "있어요",   romanization: "i-sseo-yo" },
+      past:    { korean: "있었어요", romanization: "i-sseo-sseo-yo" },
+      want:    null,
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Everyday Actions =====
+  {
+    english: "to drink",
+    korean: "마시다", romanization: "ma-si-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "마셔요",         romanization: "ma-syeo-yo" },
+      past:    { korean: "마셨어요",       romanization: "ma-syeo-sseo-yo" },
+      want:    { korean: "마시고 싶어요",  romanization: "ma-si-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to sleep",
+    korean: "자다", romanization: "ja-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "자요",           romanization: "ja-yo" },
+      past:    { korean: "잤어요",         romanization: "ja-sseo-yo" },
+      want:    { korean: "자고 싶어요",    romanization: "ja-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to wake up, to get up",
+    korean: "일어나다", romanization: "i-reo-na-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "일어나요",         romanization: "i-reo-na-yo" },
+      past:    { korean: "일어났어요",       romanization: "i-reo-na-sseo-yo" },
+      want:    { korean: "일어나고 싶어요",  romanization: "i-reo-na-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to wear, to put on clothes",
+    korean: "입다", romanization: "ip-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "입어요",         romanization: "i-beo-yo" },
+      past:    { korean: "입었어요",       romanization: "i-beo-sseo-yo" },
+      want:    { korean: "입고 싶어요",    romanization: "ip-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Household & Routine =====
+  {
+    english: "to clean",
+    korean: "청소하다", romanization: "cheong-so-ha-da", category: "Household",
+    conjugations: {
+      present: { korean: "청소해요",         romanization: "cheong-so-hae-yo" },
+      past:    { korean: "청소했어요",       romanization: "cheong-so-hae-sseo-yo" },
+      want:    { korean: "청소하고 싶어요",  romanization: "cheong-so-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to wash",
+    korean: "씻다", romanization: "ssit-da", category: "Household",
+    conjugations: {
+      present: { korean: "씻어요",         romanization: "ssi-seo-yo" },
+      past:    { korean: "씻었어요",       romanization: "ssi-seo-sseo-yo" },
+      want:    { korean: "씻고 싶어요",    romanization: "ssit-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to cook",
+    korean: "요리하다", romanization: "yo-ri-ha-da", category: "Household",
+    conjugations: {
+      present: { korean: "요리해요",         romanization: "yo-ri-hae-yo" },
+      past:    { korean: "요리했어요",       romanization: "yo-ri-hae-sseo-yo" },
+      want:    { korean: "요리하고 싶어요",  romanization: "yo-ri-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to make",
+    korean: "만들다", romanization: "man-deul-da", category: "Household",
+    conjugations: {
+      present: { korean: "만들어요",         romanization: "man-deu-reo-yo" },
+      past:    { korean: "만들었어요",       romanization: "man-deu-reo-sseo-yo" },
+      want:    { korean: "만들고 싶어요",    romanization: "man-deul-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to do the dishes",
+    korean: "설거지하다", romanization: "seol-geo-ji-ha-da", category: "Household",
+    conjugations: {
+      present: { korean: "설거지해요",         romanization: "seol-geo-ji-hae-yo" },
+      past:    { korean: "설거지했어요",       romanization: "seol-geo-ji-hae-sseo-yo" },
+      want:    { korean: "설거지하고 싶어요",  romanization: "seol-geo-ji-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to do laundry",
+    korean: "빨래하다", romanization: "ppal-lae-ha-da", category: "Household",
+    conjugations: {
+      present: { korean: "빨래해요",         romanization: "ppal-lae-hae-yo" },
+      past:    { korean: "빨래했어요",       romanization: "ppal-lae-hae-sseo-yo" },
+      want:    { korean: "빨래하고 싶어요",  romanization: "ppal-lae-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to organize, to tidy up",
+    korean: "정리하다", romanization: "jeong-ri-ha-da", category: "Household",
+    conjugations: {
+      present: { korean: "정리해요",         romanization: "jeong-ri-hae-yo" },
+      past:    { korean: "정리했어요",       romanization: "jeong-ri-hae-sseo-yo" },
+      want:    { korean: "정리하고 싶어요",  romanization: "jeong-ri-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to rest",
+    korean: "쉬다", romanization: "swi-da", category: "Household",
+    conjugations: {
+      present: { korean: "쉬어요",         romanization: "swi-eo-yo" },
+      past:    { korean: "쉬었어요",       romanization: "swi-eo-sseo-yo" },
+      want:    { korean: "쉬고 싶어요",    romanization: "swi-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Communication & Relationships =====
+  {
+    english: "to speak, to say",
+    korean: "말하다", romanization: "mal-ha-da", category: "Communication",
+    conjugations: {
+      present: { korean: "말해요",         romanization: "mal-hae-yo" },
+      past:    { korean: "말했어요",       romanization: "mal-hae-sseo-yo" },
+      want:    { korean: "말하고 싶어요",  romanization: "mal-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to listen, to hear",
+    korean: "듣다", romanization: "deut-da", category: "Communication",
+    conjugations: {
+      // ㄷ irregular: ㄷ → ㄹ before a vowel ending
+      present: { korean: "들어요",         romanization: "deu-reo-yo" },
+      past:    { korean: "들었어요",       romanization: "deu-reo-sseo-yo" },
+      want:    { korean: "듣고 싶어요",    romanization: "deut-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to give",
+    korean: "주다", romanization: "ju-da", category: "Communication",
+    conjugations: {
+      present: { korean: "줘요",           romanization: "jwo-yo" },
+      past:    { korean: "줬어요",         romanization: "jwo-sseo-yo" },
+      want:    { korean: "주고 싶어요",    romanization: "ju-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to receive",
+    korean: "받다", romanization: "bat-da", category: "Communication",
+    conjugations: {
+      present: { korean: "받아요",         romanization: "ba-da-yo" },
+      past:    { korean: "받았어요",       romanization: "ba-da-sseo-yo" },
+      want:    { korean: "받고 싶어요",    romanization: "bat-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to love",
+    korean: "사랑하다", romanization: "sa-rang-ha-da", category: "Communication",
+    conjugations: {
+      present: { korean: "사랑해요",         romanization: "sa-rang-hae-yo" },
+      past:    { korean: "사랑했어요",       romanization: "sa-rang-hae-sseo-yo" },
+      want:    { korean: "사랑하고 싶어요",  romanization: "sa-rang-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to dislike, to hate",
+    korean: "싫어하다", romanization: "sil-eo-ha-da", category: "Communication",
+    conjugations: {
+      present: { korean: "싫어해요",         romanization: "si-reo-hae-yo" },
+      past:    { korean: "싫어했어요",       romanization: "si-reo-hae-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to ask a favor, to request",
+    korean: "부탁하다", romanization: "bu-tak-ha-da", category: "Communication",
+    conjugations: {
+      present: { korean: "부탁해요",         romanization: "bu-ta-kae-yo" },
+      past:    { korean: "부탁했어요",       romanization: "bu-ta-kae-sseo-yo" },
+      want:    { korean: "부탁하고 싶어요",  romanization: "bu-ta-ka-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Travel & Exploration =====
+  {
+    english: "to ride, to take (transport)",
+    korean: "타다", romanization: "ta-da", category: "Travel",
+    conjugations: {
+      present: { korean: "타요",           romanization: "ta-yo" },
+      past:    { korean: "탔어요",         romanization: "ta-sseo-yo" },
+      want:    { korean: "타고 싶어요",    romanization: "ta-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to get off, to go down",
+    korean: "내리다", romanization: "nae-ri-da", category: "Travel",
+    conjugations: {
+      present: { korean: "내려요",         romanization: "nae-ryeo-yo" },
+      past:    { korean: "내렸어요",       romanization: "nae-ryeo-sseo-yo" },
+      want:    { korean: "내리고 싶어요",  romanization: "nae-ri-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to find, to look for",
+    korean: "찾다", romanization: "chat-da", category: "Travel",
+    conjugations: {
+      present: { korean: "찾아요",         romanization: "cha-ja-yo" },
+      past:    { korean: "찾았어요",       romanization: "cha-ja-sseo-yo" },
+      want:    { korean: "찾고 싶어요",    romanization: "chat-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to arrive",
+    korean: "도착하다", romanization: "do-chak-ha-da", category: "Travel",
+    conjugations: {
+      present: { korean: "도착해요",         romanization: "do-cha-kae-yo" },
+      past:    { korean: "도착했어요",       romanization: "do-cha-kae-sseo-yo" },
+      want:    { korean: "도착하고 싶어요",  romanization: "do-cha-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to depart, to leave",
+    korean: "출발하다", romanization: "chul-bal-ha-da", category: "Travel",
+    conjugations: {
+      present: { korean: "출발해요",         romanization: "chul-bal-hae-yo" },
+      past:    { korean: "출발했어요",       romanization: "chul-bal-hae-sseo-yo" },
+      want:    { korean: "출발하고 싶어요",  romanization: "chul-bal-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to walk",
+    korean: "걷다", romanization: "geot-da", category: "Travel",
+    conjugations: {
+      // ㄷ irregular: ㄷ → ㄹ before a vowel ending
+      present: { korean: "걸어요",         romanization: "geo-reo-yo" },
+      past:    { korean: "걸었어요",       romanization: "geo-reo-sseo-yo" },
+      want:    { korean: "걷고 싶어요",    romanization: "geot-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to run",
+    korean: "달리다", romanization: "dal-li-da", category: "Travel",
+    conjugations: {
+      present: { korean: "달려요",         romanization: "dal-lyeo-yo" },
+      past:    { korean: "달렸어요",       romanization: "dal-lyeo-sseo-yo" },
+      want:    { korean: "달리고 싶어요",  romanization: "dal-li-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to travel",
+    korean: "여행하다", romanization: "yeo-haeng-ha-da", category: "Travel",
+    conjugations: {
+      present: { korean: "여행해요",         romanization: "yeo-haeng-hae-yo" },
+      past:    { korean: "여행했어요",       romanization: "yeo-haeng-hae-sseo-yo" },
+      want:    { korean: "여행하고 싶어요",  romanization: "yeo-haeng-ha-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Food & Dining =====
+  {
+    english: "to order (food)",
+    korean: "주문하다", romanization: "ju-mun-ha-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "주문해요",         romanization: "ju-mun-hae-yo" },
+      past:    { korean: "주문했어요",       romanization: "ju-mun-hae-sseo-yo" },
+      want:    { korean: "주문하고 싶어요",  romanization: "ju-mun-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to taste",
+    korean: "맛보다", romanization: "mat-bo-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "맛봐요",         romanization: "mat-bwa-yo" },
+      past:    { korean: "맛봤어요",       romanization: "mat-bwa-sseo-yo" },
+      want:    { korean: "맛보고 싶어요",  romanization: "mat-bo-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to grill, to bake, to roast",
+    korean: "굽다", romanization: "gup-da", category: "Food & Dining",
+    conjugations: {
+      // ㅂ irregular: ㅂ → 우 before a vowel ending
+      present: { korean: "구워요",         romanization: "gu-wo-yo" },
+      past:    { korean: "구웠어요",       romanization: "gu-wo-sseo-yo" },
+      want:    { korean: "굽고 싶어요",    romanization: "gup-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to fry",
+    korean: "튀기다", romanization: "twi-gi-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "튀겨요",         romanization: "twi-gyeo-yo" },
+      past:    { korean: "튀겼어요",       romanization: "twi-gyeo-sseo-yo" },
+      want:    { korean: "튀기고 싶어요",  romanization: "twi-gi-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to boil",
+    korean: "끓이다", romanization: "kkeul-i-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "끓여요",         romanization: "kkeu-ryeo-yo" },
+      past:    { korean: "끓였어요",       romanization: "kkeu-ryeo-sseo-yo" },
+      want:    { korean: "끓이고 싶어요",  romanization: "kkeu-ri-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to put in, to add",
+    korean: "넣다", romanization: "neot-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "넣어요",         romanization: "neo-eo-yo" },
+      past:    { korean: "넣었어요",       romanization: "neo-eo-sseo-yo" },
+      want:    { korean: "넣고 싶어요",    romanization: "neo-ko si-peo-yo" },
+    },
+  },
+  {
+    english: "to leave out, to remove",
+    korean: "빼다", romanization: "ppae-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "빼요",           romanization: "ppae-yo" },
+      past:    { korean: "뺐어요",         romanization: "ppae-sseo-yo" },
+      want:    { korean: "빼고 싶어요",    romanization: "ppae-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to heat up, to warm up",
+    korean: "데우다", romanization: "de-u-da", category: "Food & Dining",
+    conjugations: {
+      present: { korean: "데워요",         romanization: "de-wo-yo" },
+      past:    { korean: "데웠어요",       romanization: "de-wo-sseo-yo" },
+      want:    { korean: "데우고 싶어요",  romanization: "de-u-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Emotions & States =====
+  // These are descriptive verbs (adjectives); "-고 싶어요" doesn't apply, so want is null.
+  {
+    english: "to be glad, to be happy",
+    korean: "기쁘다", romanization: "gi-ppeu-da", category: "Emotion & State",
+    conjugations: {
+      // 으 irregular: the final 으 drops before a vowel ending
+      present: { korean: "기뻐요",         romanization: "gi-ppeo-yo" },
+      past:    { korean: "기뻤어요",       romanization: "gi-ppeo-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be sad",
+    korean: "슬프다", romanization: "seul-peu-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "슬퍼요",         romanization: "seul-peo-yo" },
+      past:    { korean: "슬펐어요",       romanization: "seul-peo-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be angry, to get angry",
+    korean: "화나다", romanization: "hwa-na-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "화나요",         romanization: "hwa-na-yo" },
+      past:    { korean: "화났어요",       romanization: "hwa-na-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to worry",
+    korean: "걱정하다", romanization: "geok-jeong-ha-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "걱정해요",       romanization: "geok-jeong-hae-yo" },
+      past:    { korean: "걱정했어요",     romanization: "geok-jeong-hae-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be afraid, to be scared",
+    korean: "두렵다", romanization: "du-ryeop-da", category: "Emotion & State",
+    conjugations: {
+      // ㅂ irregular: ㅂ → 우 before a vowel ending
+      present: { korean: "두려워요",       romanization: "du-ryeo-wo-yo" },
+      past:    { korean: "두려웠어요",     romanization: "du-ryeo-wo-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be tired",
+    korean: "피곤하다", romanization: "pi-gon-ha-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "피곤해요",       romanization: "pi-gon-hae-yo" },
+      past:    { korean: "피곤했어요",     romanization: "pi-gon-hae-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be shy, to be embarrassed",
+    korean: "부끄러워하다", romanization: "bu-kkeu-reo-wo-ha-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "부끄러워해요",   romanization: "bu-kkeu-reo-wo-hae-yo" },
+      past:    { korean: "부끄러워했어요", romanization: "bu-kkeu-reo-wo-hae-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be excited, to have butterflies",
+    korean: "설레다", romanization: "seol-le-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "설레요",         romanization: "seol-le-yo" },
+      past:    { korean: "설렜어요",       romanization: "seol-le-sseo-yo" },
+      want:    null,
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Culture & Social Activities =====
+  {
+    english: "to dance",
+    korean: "춤추다", romanization: "chum-chu-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "춤춰요",         romanization: "chum-chwo-yo" },
+      past:    { korean: "춤췄어요",       romanization: "chum-chwo-sseo-yo" },
+      want:    { korean: "춤추고 싶어요",  romanization: "chum-chu-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to sing",
+    korean: "노래하다", romanization: "no-rae-ha-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "노래해요",         romanization: "no-rae-hae-yo" },
+      past:    { korean: "노래했어요",       romanization: "no-rae-hae-sseo-yo" },
+      want:    { korean: "노래하고 싶어요",  romanization: "no-rae-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to play games",
+    korean: "게임하다", romanization: "ge-im-ha-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "게임해요",         romanization: "ge-im-hae-yo" },
+      past:    { korean: "게임했어요",       romanization: "ge-im-hae-sseo-yo" },
+      want:    { korean: "게임하고 싶어요",  romanization: "ge-im-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to celebrate, to congratulate",
+    korean: "축하하다", romanization: "chuk-ha-ha-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "축하해요",         romanization: "chu-ka-hae-yo" },
+      past:    { korean: "축하했어요",       romanization: "chu-ka-hae-sseo-yo" },
+      want:    { korean: "축하하고 싶어요",  romanization: "chu-ka-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to invite",
+    korean: "초대하다", romanization: "cho-dae-ha-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "초대해요",         romanization: "cho-dae-hae-yo" },
+      past:    { korean: "초대했어요",       romanization: "cho-dae-hae-sseo-yo" },
+      want:    { korean: "초대하고 싶어요",  romanization: "cho-dae-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to date, to be friends with",
+    korean: "사귀다", romanization: "sa-gwi-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "사귀어요",         romanization: "sa-gwi-eo-yo" },
+      past:    { korean: "사귀었어요",       romanization: "sa-gwi-eo-sseo-yo" },
+      want:    { korean: "사귀고 싶어요",    romanization: "sa-gwi-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to keep tradition",
+    korean: "전통을 지키다", romanization: "jeon-tong-eul ji-ki-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "전통을 지켜요",         romanization: "jeon-tong-eul ji-kyeo-yo" },
+      past:    { korean: "전통을 지켰어요",       romanization: "jeon-tong-eul ji-kyeo-sseo-yo" },
+      want:    { korean: "전통을 지키고 싶어요",  romanization: "jeon-tong-eul ji-ki-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to participate in an event",
+    korean: "행사에 참여하다", romanization: "haeng-sa-e cha-myeo-ha-da", category: "Culture & Social",
+    conjugations: {
+      present: { korean: "행사에 참여해요",         romanization: "haeng-sa-e cha-myeo-hae-yo" },
+      past:    { korean: "행사에 참여했어요",       romanization: "haeng-sa-e cha-myeo-hae-sseo-yo" },
+      want:    { korean: "행사에 참여하고 싶어요",  romanization: "haeng-sa-e cha-myeo-ha-go si-peo-yo" },
+    },
+  },
+
+  // ===== Tandem: 60 Korean Verbs — Self-Improvement =====
+  {
+    english: "to learn",
+    korean: "배우다", romanization: "bae-u-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "배워요",         romanization: "bae-wo-yo" },
+      past:    { korean: "배웠어요",       romanization: "bae-wo-sseo-yo" },
+      want:    { korean: "배우고 싶어요",  romanization: "bae-u-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to practice",
+    korean: "연습하다", romanization: "yeon-seup-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "연습해요",         romanization: "yeon-seu-pae-yo" },
+      past:    { korean: "연습했어요",       romanization: "yeon-seu-pae-sseo-yo" },
+      want:    { korean: "연습하고 싶어요",  romanization: "yeon-seu-pa-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to make an effort, to try hard",
+    korean: "노력하다", romanization: "no-ryeok-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "노력해요",         romanization: "no-ryeo-kae-yo" },
+      past:    { korean: "노력했어요",       romanization: "no-ryeo-kae-sseo-yo" },
+      want:    { korean: "노력하고 싶어요",  romanization: "no-ryeo-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to focus, to concentrate",
+    korean: "집중하다", romanization: "jip-jung-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "집중해요",         romanization: "jip-jung-hae-yo" },
+      past:    { korean: "집중했어요",       romanization: "jip-jung-hae-sseo-yo" },
+      want:    { korean: "집중하고 싶어요",  romanization: "jip-jung-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to plan",
+    korean: "계획하다", romanization: "gye-hoek-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "계획해요",         romanization: "gye-hoe-kae-yo" },
+      past:    { korean: "계획했어요",       romanization: "gye-hoe-kae-sseo-yo" },
+      want:    { korean: "계획하고 싶어요",  romanization: "gye-hoe-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to prepare, to get ready",
+    korean: "준비하다", romanization: "jun-bi-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "준비해요",         romanization: "jun-bi-hae-yo" },
+      past:    { korean: "준비했어요",       romanization: "jun-bi-hae-sseo-yo" },
+      want:    { korean: "준비하고 싶어요",  romanization: "jun-bi-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to grow, to develop",
+    korean: "성장하다", romanization: "seong-jang-ha-da", category: "Self-Improvement",
+    conjugations: {
+      present: { korean: "성장해요",         romanization: "seong-jang-hae-yo" },
+      past:    { korean: "성장했어요",       romanization: "seong-jang-hae-sseo-yo" },
+      want:    { korean: "성장하고 싶어요",  romanization: "seong-jang-ha-go si-peo-yo" },
+    },
+  },
+];
+
+// ===== State =====
+let mode = "recall";               // "recall" | "conjugate"
+let activeCategory = "All";
+let activeTense = "present";       // used only in conjugate mode
+let deck = [];
+let idx = 0;
+let checked = false;               // true after user has submitted an answer
+
+const categories = [...new Set(allVerbs.map(v => v.category))];
+
+// ===== Elements =====
+const bodyEl      = document.body;
+const filtersEl   = document.getElementById("filters");
+const tenseFiltersEl = document.getElementById("tenseFilters");
+const cardEl      = document.getElementById("card");
+const cardScene   = document.getElementById("cardScene");
+const frontCat    = document.getElementById("frontCat");
+const frontTense  = document.getElementById("frontTense");
+const frontMain   = document.getElementById("frontMain");
+const frontSub    = document.getElementById("frontSub");
+const frontHint   = document.getElementById("frontHint");
+const backCat     = document.getElementById("backCat");
+const backMain    = document.getElementById("backMain");
+const backRoman   = document.getElementById("backRoman");
+const backHint    = document.getElementById("backHint");
+const conjList    = document.getElementById("conjList");
+const progressEl  = document.getElementById("progress");
+const answerInput = document.getElementById("answerInput");
+const checkBtn    = document.getElementById("checkBtn");
+
+// ===== Mode toggle =====
+document.querySelectorAll(".mode-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    mode = btn.dataset.mode;
+    document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b === btn));
+    bodyEl.classList.toggle("mode-recall",    mode === "recall");
+    bodyEl.classList.toggle("mode-conjugate", mode === "conjugate");
+    rebuildDeck();
+  });
+});
+
+// ===== Filters =====
+function buildFilters() {
+  filtersEl.innerHTML = "";
+  const label = document.createElement("span");
+  label.className = "filters-label";
+  label.textContent = "Verb type";
+  filtersEl.appendChild(label);
+  ["All", ...categories].forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.addEventListener("click", () => {
+      activeCategory = cat;
+      rebuildDeck();
+    });
+    filtersEl.appendChild(btn);
+  });
+}
+
+function buildTenseFilters() {
+  tenseFiltersEl.innerHTML = "";
+  const label = document.createElement("span");
+  label.className = "filters-label";
+  label.textContent = "Drill tense";
+  tenseFiltersEl.appendChild(label);
+  TENSES.forEach(t => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (t.key === activeTense ? " active" : "");
+    btn.textContent = t.label;
+    btn.addEventListener("click", () => {
+      activeTense = t.key;
+      rebuildDeck();
+    });
+    tenseFiltersEl.appendChild(btn);
+  });
+}
+
+function rebuildDeck() {
+  let src = activeCategory === "All"
+    ? allVerbs
+    : allVerbs.filter(v => v.category === activeCategory);
+  // In conjugate mode, skip verbs that don't have the active tense.
+  if (mode === "conjugate") {
+    src = src.filter(v => v.conjugations[activeTense]);
+  }
+  deck = [...src];
+  idx = 0;
+  buildFilters();
+  buildTenseFilters();
+  render();
+}
+
+// ===== Answer normalization =====
+// Hangul: strip all whitespace. Romanization: lowercase, strip whitespace,
+// hyphens, and common punctuation. Then either normalized target matches.
+function normalize(s) {
+  return (s || "")
+    .toLowerCase()
+    .replace(/[\s\-_.,!?'"]/g, "");
+}
+
+function isCorrect(input, target) {
+  const n = normalize(input);
+  return n === normalize(target.korean) || n === normalize(target.romanization);
+}
+
+// ===== Render =====
+function render() {
+  cardEl.classList.remove("flipped", "correct", "incorrect");
+  checked = false;
+  answerInput.value = "";
+  answerInput.disabled = false;
+  checkBtn.textContent = "Check";
+
+  if (deck.length === 0) {
+    frontCat.textContent = "";
+    frontTense.style.display = "none";
+    frontMain.textContent = "No cards";
+    frontMain.classList.remove("hangul");
+    frontSub.textContent = "";
+    backCat.textContent = "";
+    backMain.textContent = "";
+    backRoman.textContent = "";
+    conjList.innerHTML = "";
+    progressEl.textContent = "0 of 0";
+    return;
+  }
+
+  const v = deck[idx];
+  progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
+  frontCat.textContent = v.category;
+  backCat.textContent  = v.category;
+
+  if (mode === "recall") {
+    // Front: English. Back: base form + full conjugation table.
+    frontTense.style.display = "none";
+    frontMain.classList.remove("hangul");
+    frontMain.textContent = v.english;
+    frontSub.textContent  = "";
+    frontHint.textContent = "tap to flip";
+
+    backMain.textContent  = v.korean;
+    backRoman.textContent = v.romanization;
+    backHint.textContent  = "tap to flip";
+
+    conjList.innerHTML = "";
+    TENSES.forEach(t => {
+      const c = v.conjugations[t.key];
+      if (!c) return;
+      const row = document.createElement("div");
+      row.className = "conj-row";
+      row.innerHTML =
+        `<span class="conj-label">${t.label}</span>` +
+        `<span class="conj-form">${c.korean}</span>`;
+      conjList.appendChild(row);
+    });
+  } else {
+    // Conjugate mode. Front: base form + English + tense chip. Back: answer.
+    const t = TENSES.find(x => x.key === activeTense);
+    frontTense.style.display = "";
+    frontTense.textContent = t.label;
+    frontMain.classList.add("hangul");
+    frontMain.textContent = v.korean;
+    frontSub.textContent  = `${v.english}  →  ${t.desc}`;
+    frontHint.textContent = "type answer below, Enter to check";
+
+    const target = v.conjugations[activeTense];
+    backMain.textContent  = target.korean;
+    backRoman.textContent = target.romanization;
+    backHint.textContent  = "arrow key for next";
+    conjList.innerHTML = "";
+
+    setTimeout(() => answerInput.focus(), 50);
+  }
+}
+
+// ===== Recall-mode flip on tap =====
+cardScene.addEventListener("click", (e) => {
+  // In conjugate mode the user should type, not flip by tapping.
+  if (mode !== "recall") return;
+  cardEl.classList.toggle("flipped");
+});
+
+// ===== Conjugate: check answer =====
+function checkAnswer() {
+  if (mode !== "conjugate" || deck.length === 0) return;
+  if (checked) { next(); return; }
+  const v = deck[idx];
+  const target = v.conjugations[activeTense];
+  const correct = isCorrect(answerInput.value, target);
+  cardEl.classList.add("flipped", correct ? "correct" : "incorrect");
+  answerInput.disabled = true;
+  checkBtn.textContent = "Next →";
+  checked = true;
+}
+
+checkBtn.addEventListener("click", checkAnswer);
+answerInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") { e.preventDefault(); checkAnswer(); }
+});
+
+// ===== Navigation =====
+function prev() {
+  if (deck.length === 0) return;
+  idx = (idx - 1 + deck.length) % deck.length;
+  render();
+}
+function next() {
+  if (deck.length === 0) return;
+  idx = (idx + 1) % deck.length;
+  render();
+}
+
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("nextBtn").addEventListener("click", next);
+
+// ===== Shuffle =====
+document.getElementById("shuffleBtn").addEventListener("click", () => {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  render();
+});
+
+// ===== Keyboard =====
+document.addEventListener("keydown", (e) => {
+  // Don't hijack typing in the answer input (Enter is handled there directly).
+  const typing = document.activeElement === answerInput;
+  if (typing && e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+
+  if (e.key === "ArrowLeft")       { e.preventDefault(); prev(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+  else if (e.key === " " && mode === "recall") {
+    e.preventDefault();
+    cardEl.classList.toggle("flipped");
+  }
+});
+
+// ===== Init =====
+rebuildDeck();
+</script>
+</body>
+</html>
