@@ -11,7 +11,7 @@ Self-contained flashcard apps for Korean vocabulary study. No build system, no d
 | `index.html` | Vocabulary from Conversations 1–3 + TTMIK Lessons 7, 9, 10 |
 | `numbers.html` | Sino-Korean vs Native-Korean number systems, filtered by usage (age, hour, minute, …) |
 | `verbs.html` | Verb recall + conjugation drill (TTMIK Lessons 17–18) with Recall and Conjugate modes |
-| `particles.html` | Particle drill — pick 에 / 에서 / 을 / 를 / 이 / 가 / 은 / 는 for each blank in a sentence, including compound sentences with two or three blanks |
+| `particles.html` | Particle drill — pick 에 / 에서 / 을 / 를 / 이 / 가 / 은 / 는 for each blank in a sentence, including compound sentences with two or three blanks, plus a 누구 vs 누가 set (TTMIK Lesson 23) |
 
 Use the pill switcher at the top of any page to move between decks.
 

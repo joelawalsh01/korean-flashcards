@@ -542,7 +542,9 @@
   <div id="guideRows"></div>
   <p class="guide-note">
     <strong>Batchim rule:</strong> 을/이/은 follow a noun ending in a consonant (받침);
-    를/가/는 follow a noun ending in a vowel. 에 and 에서 never change.
+    를/가/는 follow a noun ending in a vowel. 에 and 에서 never change.<br>
+    <strong>누구 / 누가:</strong> 누구 + 가 contracts to 누가, so the subject form of
+    &ldquo;who&rdquo; is its own word — those two are offered only on the 누구/누가 cards.
   </p>
 </div>
 
@@ -618,7 +620,20 @@ const PARTICLES = [
     key: "는", roman: "neun", role: "topic", form: "vowel",
     tip: "는 — topic marker after a vowel-final noun: 저는, 언니는, 여기는.",
   },
+  // Only offered on 누구/누가 cards — see DEFAULT_CHOICES below.
+  {
+    key: "누구", roman: "nu-gu", role: "who",
+    tip: "누구 — 'who' in every role except the subject: before 예요, as the object of a verb, or as a possessor (누구 거 = whose).",
+  },
+  {
+    key: "누가", roman: "nu-ga", role: "whosubject",
+    tip: "누가 — 'who' as the subject, doing the action. It is 누구 + 가 contracted (누구가 → 누가), so the subject marker is already inside it.",
+  },
 ];
+
+// The eight particle buttons every ordinary card offers. A card may override
+// this with its own `choices` list — the 누구/누가 cards show just those two.
+const DEFAULT_CHOICES = ["에", "에서", "을", "를", "이", "가", "은", "는"];
 
 // ===== Sentence data =====
 // Each card: before + [blank] + after. `answer` must be one of the PARTICLES keys.
@@ -1163,6 +1178,108 @@ const allCards = [
     romanization: "jeo-neun mi-gu-ge-seo wa-sseo-yo.",
     category: "Compound — 2+ particles",
   },
+
+  // ===== Lesson 23 (TTMIK Level 1) — 누구 vs 누가 =====
+  // 누구 + 가 contracts to 누가, so the subject form is a different word rather
+  // than a particle you attach. These cards offer only those two buttons.
+  {
+    parts: ["어제 ", " 왔어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["'Who' is the one doing the coming, so it needs the subject marker — and 누구 + 가 contracts to 누가."],
+    english: "Who came yesterday?",
+    romanization: "eo-je nu-ga wa-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["그거 ", " 만들었어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["그거 is the thing made; the unknown person is the maker, so 'who' is the subject → 누가."],
+    english: "Who made that?",
+    romanization: "geu-geo nu-ga man-deu-reo-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 전화했어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["The caller is the subject of 전화하다, so 누가."],
+    english: "Who called?",
+    romanization: "nu-ga jeon-hwa-hae-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 샀어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["The buyer is doing the action → 누가. (누구 샀어요? would be asking *what* person you bought, which is nonsense.)"],
+    english: "Who bought it?",
+    romanization: "nu-ga sa-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 했어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["The doer of 하다 is the subject, so 누가."],
+    english: "Who did it?",
+    romanization: "nu-ga hae-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 선생님이에요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["Picking one person out of a group — 'which of them is the teacher' — emphasizes who, so the subject form 누가. Compare 선생님이 누구예요?, which asks the same thing from the other side."],
+    english: "Which one is the teacher?",
+    romanization: "nu-ga seon-saeng-ni-mi-e-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 커피를 마셨어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["커피 already carries the object marker 를, so the unknown person is the drinker — the subject → 누가."],
+    english: "Who drank the coffee?",
+    romanization: "nu-ga keo-pi-reul ma-syeo-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", " 학교에 갔어요?"], answers: ["누가"], choices: ["누구", "누가"],
+    explanations: ["학교 is the destination with 에; the person going is the subject → 누가."],
+    english: "Who went to school?",
+    romanization: "nu-ga hak-gyo-e ga-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["이거 ", "예요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["예요 only links 이거 to an identity — nobody is doing anything — so 'who' stays bare: 누구예요?"],
+    english: "Who is this?",
+    romanization: "i-geo nu-gu-ye-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["", "였어요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["The past of 누구예요?. 'Who' is the identity the thing turned out to be, not the doer of an action, so 누구."],
+    english: "Who was it?",
+    romanization: "nu-gu-yeo-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["어제 ", " 만났어요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["Here 'who' is the person you met — the object of 만나다, not the meeter — so the bare 누구. Swap in 누가 and the meaning flips to 'who met someone yesterday?'"],
+    english: "Who did you meet yesterday?",
+    romanization: "eo-je nu-gu man-na-sseo-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["저 사람은 ", "예요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["저 사람 is already set up as the topic with 은; 누구 is just the identity being asked for, so it stays bare."],
+    english: "Who is that person over there?",
+    romanization: "jeo sa-ra-meun nu-gu-ye-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["이 우산은 ", " 거예요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["누구 거 = 'whose thing'. A possessor is not a subject, so no 가 — 누구 거예요?"],
+    english: "Whose umbrella is this?",
+    romanization: "i u-sa-neun nu-gu geo-ye-yo?",
+    category: "누구/누가 — who",
+  },
+  {
+    parts: ["그 책은 ", " 거예요?"], answers: ["누구"], choices: ["누구", "누가"],
+    explanations: ["Same 누구 거 possessive pattern — the book belongs to someone, nobody is acting."],
+    english: "Whose book is that?",
+    romanization: "geu chae-geun nu-gu geo-ye-yo?",
+    category: "누구/누가 — who",
+  },
 ];
 
 // ===== Normalization =====
@@ -1239,9 +1356,17 @@ function rebuildDeck() {
 // ===== Choice buttons =====
 // Each carries its hover explanation in data-tip; the guide panel below is the
 // tap-friendly equivalent for touch devices.
-function buildChoices() {
+// The button row is rebuilt only when the card's option set actually changes,
+// so stepping through cards of the same kind doesn't make the row flicker.
+let shownChoices = [];
+
+function buildChoices(keys) {
+  if (keys.join("|") === shownChoices.join("|")) return;
+  shownChoices = keys.slice();
   choicesEl.innerHTML = "";
-  PARTICLES.forEach(p => {
+  keys.forEach(key => {
+    const p = PARTICLE_BY_KEY[key];
+    if (!p) return;
     const btn = document.createElement("button");
     btn.className = "particle-btn";
     btn.dataset.particle = p.key;
@@ -1285,6 +1410,15 @@ const ROLE_NAME = {
   object: "object",
   subject: "subject",
   topic: "topic",
+  who: "who",
+  whosubject: "who (subject)",
+};
+
+// 누구 vs 누가 is a single either/or, not a role matrix — the two are never
+// confused with the case particles, so they get their own explanation.
+const WHO_PAIR = {
+  "누구": "누구 is the bare form and cannot carry the subject role. When 'who' is the one doing the action, the subject marker 가 attaches and 누구가 contracts to 누가.",
+  "누가": "누가 already has the subject marker 가 inside it, so it only fits when 'who' is doing the action. Everywhere else — as the object of a verb, before 예요, or as a possessor — the bare 누구 is what you want.",
 };
 
 const ROLE_PAIR = { object: "을/를", subject: "이/가", topic: "은/는", place: "에", actionplace: "에서" };
@@ -1346,6 +1480,8 @@ function whyNot(chosenKey, correctKey, noun) {
   const chosen = PARTICLE_BY_KEY[chosenKey];
   const correct = PARTICLE_BY_KEY[correctKey];
   if (!chosen || !correct) return "";
+
+  if (WHO_PAIR[chosenKey] && WHO_PAIR[correctKey]) return WHO_PAIR[chosenKey];
 
   // Same job, wrong form — this is purely the batchim rule.
   if (chosen.role === correct.role) {
@@ -1413,6 +1549,7 @@ function render() {
   picks = [];
   answered = false;
   verdictEl.textContent = "";
+  buildChoices(deck.length ? (deck[idx].choices || DEFAULT_CHOICES) : DEFAULT_CHOICES);
   document.querySelectorAll(".particle-btn").forEach(b => {
     b.classList.remove("picked-correct", "picked-wrong", "reveal", "dimmed");
   });
@@ -1616,15 +1753,14 @@ document.addEventListener("keydown", (e) => {
     renderPrompt();
   }
   else if (e.key === "s" || e.key === "S") { e.preventDefault(); speak(currentSpeech()); }
-  else if (/^[1-8]$/.test(e.key)) {
+  else if (/^[1-9]$/.test(e.key)) {
     e.preventDefault();
-    const p = PARTICLES[Number(e.key) - 1];
-    if (p) choose(p.key);
+    const key = shownChoices[Number(e.key) - 1];
+    if (key) choose(key);
   }
 });
 
 // ===== Init =====
-buildChoices();
 buildGuide();
 rebuildDeck();
 </script>
