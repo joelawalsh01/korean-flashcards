@@ -106,7 +106,7 @@
   .card-scene {
     width: 420px;
     max-width: 92vw;
-    height: 330px;
+    height: 360px;
     perspective: 900px;
     margin-bottom: 16px;
   }
@@ -214,10 +214,11 @@
 
   .explanation {
     margin-top: 12px;
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     line-height: 1.45;
     text-align: center;
-    max-width: 360px;
+    max-width: 372px;
+    max-height: 172px;
     opacity: 0.95;
     overflow-y: auto;
   }
@@ -235,7 +236,20 @@
     font-weight: 700;
   }
 
-  .expl-row .picked { opacity: 0.85; }
+  /* Why the particle you picked doesn't fit — only shown on a miss. */
+  .why-not {
+    display: block;
+    margin-top: 3px;
+    padding-left: 9px;
+    border-left: 2px solid rgba(255,255,255,0.4);
+    opacity: 0.9;
+  }
+
+  .card-back.solo-explanation .why-not {
+    text-align: left;
+    margin: 10px auto 0;
+    max-width: 340px;
+  }
 
   .verdict {
     position: absolute;
@@ -545,35 +559,35 @@
 // `tip` is the hover explanation shown above each choice button (and in the guide panel).
 const PARTICLES = [
   {
-    key: "에", roman: "e", label: "location / time",
+    key: "에", roman: "e", role: "place",
     tip: "에 — static place (있다/없다), destination with 가다/오다, or a point in time. NOT where an action happens.",
   },
   {
-    key: "에서", roman: "e-seo", label: "action place / from",
+    key: "에서", roman: "e-seo", role: "actionplace",
     tip: "에서 — where an action takes place (study, eat, work), or the origin 'from'. Use 에 instead for pure existence or destination.",
   },
   {
-    key: "을", roman: "eul", label: "object (consonant)",
+    key: "을", roman: "eul", role: "object", form: "consonant",
     tip: "을 — object marker after a noun ending in a consonant (받침): 책을, 음식을, 운동을.",
   },
   {
-    key: "를", roman: "reul", label: "object (vowel)",
+    key: "를", roman: "reul", role: "object", form: "vowel",
     tip: "를 — object marker after a noun ending in a vowel: 커피를, 숙제를, 사과를.",
   },
   {
-    key: "이", roman: "i", label: "subject (consonant)",
+    key: "이", roman: "i", role: "subject", form: "consonant",
     tip: "이 — subject marker after a consonant-final noun. Introduces new info or the thing that is/exists: 우산이 있어요.",
   },
   {
-    key: "가", roman: "ga", label: "subject (vowel)",
+    key: "가", roman: "ga", role: "subject", form: "vowel",
     tip: "가 — subject marker after a vowel-final noun: 날씨가 좋아요, 친구가 많아요.",
   },
   {
-    key: "은", roman: "eun", label: "topic (consonant)",
+    key: "은", roman: "eun", role: "topic", form: "consonant",
     tip: "은 — topic marker after a consonant-final noun. 'As for X…' — sets the theme or contrasts: 오늘은, 형은.",
   },
   {
-    key: "는", roman: "neun", label: "topic (vowel)",
+    key: "는", roman: "neun", role: "topic", form: "vowel",
     tip: "는 — topic marker after a vowel-final noun: 저는, 언니는, 여기는.",
   },
 ];
@@ -1231,6 +1245,109 @@ function escapeHtml(s) {
   return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// ===== Why the picked particle doesn't fit =====
+// Two kinds of mistake, worked out from the data rather than hand-written per card:
+//   * right job, wrong form  — 을 vs 를 etc., decided by the batchim of the noun
+//   * wrong job entirely     — 에서 where the sentence wants 이/가, and so on
+const PARTICLE_BY_KEY = Object.fromEntries(PARTICLES.map(p => [p.key, p]));
+
+const ROLE_NAME = {
+  place: "place / time",
+  actionplace: "action location",
+  object: "object",
+  subject: "subject",
+  topic: "topic",
+};
+
+const ROLE_PAIR = { object: "을/를", subject: "이/가", topic: "은/는", place: "에", actionplace: "에서" };
+
+// Final consonant (받침) of a hangul syllable: "" means the block ends in a vowel,
+// null means the character isn't a hangul syllable at all.
+const JONGSEONG = ["", "ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ",
+                   "ㅁ","ㅂ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"];
+
+function finalConsonant(word) {
+  const ch = (word || "").trim().slice(-1);
+  if (!ch) return null;
+  const code = ch.charCodeAt(0) - 0xAC00;
+  if (code < 0 || code > 11171) return null;
+  return JONGSEONG[code % 28];
+}
+
+// The noun a blank attaches to: the last word of the text chunk in front of it.
+function nounBefore(card, i) {
+  const chunk = (card.parts[i] || "").trim();
+  const tokens = chunk.split(/\s+/);
+  return tokens[tokens.length - 1] || "";
+}
+
+const MISMATCH = {
+  place: {
+    actionplace: "에 marks a spot something sits at or heads toward. Here the verb is an action being carried out there, and an action's location takes 에서.",
+    object: "에 marks a place or a time, but this noun is what the verb acts on — that role belongs to 을/를.",
+    subject: "에 marks a place or a time. This noun is the thing being described or existing, which takes 이/가.",
+    topic: "에 marks a place or a time. Here the noun is the theme the sentence comments on, so it takes 은/는.",
+  },
+  actionplace: {
+    place: "에서 is for where an action is carried out. With 있다/없다 or a movement verb like 가다/오다/도착하다 nothing is happening at that spot — it is just where something is or where it is headed — so 에 is the one.",
+    object: "에서 marks where an action happens, but this noun isn't a place; it's what the verb acts on, so 을/를.",
+    subject: "에서 marks where an action happens. This noun is the one doing the action or being described, so 이/가.",
+    topic: "에서 marks where an action happens. Here the noun is the theme being set up, so 은/는.",
+  },
+  object: {
+    place: "을/를 marks what a verb acts on. This noun is a place or a time instead, so it takes 에.",
+    actionplace: "을/를 marks what a verb acts on. This noun is where the action is carried out, so 에서.",
+    subject: "을/를 marks the target of an action, but nothing is being done to this noun — it is what the sentence describes or says exists. Descriptive verbs like 좋다, 맛있다, 넓다 and the existence verbs 있다/없다 never take an object, so 이/가.",
+    topic: "을/를 marks the target of an action. Here the noun is the theme the rest of the sentence comments on, so 은/는.",
+  },
+  subject: {
+    place: "이/가 marks the subject. This noun is a place or a time, so it takes 에.",
+    actionplace: "이/가 marks the subject. This noun is where the action is carried out, so 에서.",
+    object: "이/가 marks who or what the sentence is about, but this noun is on the receiving end of the verb. Action verbs like 먹다, 타다, 찾다, 좋아하다 take their target with 을/를.",
+    topic: "이/가 presents the subject as new information. Here the noun is being raised as the theme — 'as for …' — and it is another noun in the sentence that carries the description, so 은/는.",
+  },
+  topic: {
+    place: "은/는 sets the theme. This noun is a place or a time, so it takes 에.",
+    actionplace: "은/는 sets the theme. This noun is where the action is carried out, so 에서.",
+    object: "은/는 sets the theme, but this noun is what the verb acts on, so 을/를.",
+    subject: "은/는 sets the theme of the sentence. Here the noun is the specific thing being described or said to exist, which is 이/가 — the topic slot is already taken or not needed.",
+  },
+};
+
+function whyNot(chosenKey, correctKey, noun) {
+  const chosen = PARTICLE_BY_KEY[chosenKey];
+  const correct = PARTICLE_BY_KEY[correctKey];
+  if (!chosen || !correct) return "";
+
+  // Same job, wrong form — this is purely the batchim rule.
+  if (chosen.role === correct.role) {
+    const jong = finalConsonant(noun);
+    const role = ROLE_NAME[correct.role];
+    if (jong === "") {
+      return `${chosenKey} is the right ${role} marker, but the wrong form: ${noun} ends in a vowel, so it takes ${correctKey}. ${chosenKey} only follows a noun with a final consonant.`;
+    }
+    if (jong) {
+      return `${chosenKey} is the right ${role} marker, but the wrong form: ${noun} ends in the consonant ${jong}, so it takes ${correctKey}. ${chosenKey} only follows a noun ending in a vowel.`;
+    }
+    return `Right ${role} marker, wrong form — ${noun} needs ${correctKey}, not ${chosenKey}.`;
+  }
+
+  // Different job entirely.
+  const msg = (MISMATCH[chosen.role] || {})[correct.role];
+  if (!msg) return `${chosenKey} marks the ${ROLE_NAME[chosen.role]}, but this blank needs the ${ROLE_NAME[correct.role]} marker ${ROLE_PAIR[correct.role]}.`;
+
+  // If the pair they reached for also has two forms, say which one they'd have needed.
+  if (chosen.form) {
+    const jong = finalConsonant(noun);
+    const sibling = PARTICLES.find(p => p.role === chosen.role && p.key !== chosenKey);
+    const wrongForm = (jong === "" && chosen.form === "consonant") || (jong && chosen.form === "vowel");
+    if (wrongForm && sibling) {
+      return `${msg} (Even as ${ROLE_PAIR[chosen.role]}, ${noun} would take ${sibling.key} rather than ${chosenKey}.)`;
+    }
+  }
+  return msg;
+}
+
 // ===== Front sentence =====
 // Blanks before `picks.length` show what was chosen; the one at `picks.length`
 // is the live target; the rest stay empty. Once the card is graded, each filled
@@ -1287,7 +1404,8 @@ function render() {
 
   const c = deck[idx];
   progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
-  frontCat.textContent = c.category;
+  // The front deliberately shows no category — naming it would give the answer away.
+  frontCat.textContent = "";
   backCat.textContent  = c.category;
   frontEng.textContent = c.english;
   backRoman.textContent = c.romanization;
@@ -1303,20 +1421,32 @@ function render() {
   updateScore();
 }
 
-// Explanations are laid out one row per blank, each marked against what was picked.
+// One row per blank, marked against what was picked. A miss also gets a "not X"
+// line explaining why the particle the learner reached for doesn't fit here.
 function renderExplanations() {
   const c = deck[idx];
+  const backFace = document.querySelector(".card-back");
+
+  const whyNotHtml = (i) => {
+    const pick = picks[i];
+    if (pick === undefined || pick === c.answers[i]) return "";
+    return `<span class="why-not"><strong>Not ${pick}:</strong> ` +
+           `${escapeHtml(whyNot(pick, c.answers[i], nounBefore(c, i)))}</span>`;
+  };
+
   if (c.blanks === 1) {
-    backExpl.textContent = c.explanations[0];
+    backFace.classList.add("solo-explanation");
+    backExpl.innerHTML = escapeHtml(c.explanations[0]) + whyNotHtml(0);
     return;
   }
+
+  backFace.classList.remove("solo-explanation");
   backExpl.innerHTML = c.explanations.map((text, i) => {
     const pick = picks[i];
     const ok = pick === c.answers[i];
     const mark = pick === undefined ? `${i + 1}.` : (ok ? "✓" : "✗");
-    const chose = (pick !== undefined && !ok) ? ` <span class="picked">(you chose ${pick})</span>` : "";
     return `<div class="expl-row"><span class="expl-mark">${mark}</span>` +
-           `<span><strong>${c.answers[i]}</strong> — ${escapeHtml(text)}${chose}</span></div>`;
+           `<span><strong>${c.answers[i]}</strong> — ${escapeHtml(text)}${whyNotHtml(i)}</span></div>`;
   }).join("");
 }
 
@@ -1402,14 +1532,30 @@ document.getElementById("prevBtn").addEventListener("click", prev);
 document.getElementById("nextBtn").addEventListener("click", next);
 
 // ===== Shuffle =====
-document.getElementById("shuffleBtn").addEventListener("click", () => {
-  for (let i = deck.length - 1; i > 0; i--) {
+// Fisher-Yates over a fresh copy of the filtered source, so repeated clicks keep
+// drawing new orders, and the card on screen is never the one you just had.
+function shuffleDeck() {
+  if (deck.length === 0) return;
+  const current = deck[idx];
+  const next = activeCategory === "All"
+    ? [...cards]
+    : cards.filter(c => c.category === activeCategory);
+
+  for (let i = next.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
+    [next[i], next[j]] = [next[j], next[i]];
   }
+  if (next.length > 1 && next[0] === current) {
+    const k = 1 + Math.floor(Math.random() * (next.length - 1));
+    [next[0], next[k]] = [next[k], next[0]];
+  }
+
+  deck = next;
   idx = 0;
   render();
-});
+}
+
+document.getElementById("shuffleBtn").addEventListener("click", shuffleDeck);
 
 // ===== Keyboard =====
 // 1–8 map to the eight particle choices, in the order shown.
