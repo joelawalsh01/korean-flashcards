@@ -231,7 +231,7 @@
     font-size: 0.78rem;
   }
 
-  /* --- Deck Switcher (shared across index/numbers/verbs) --- */
+  /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
   .deck-switch {
     display: inline-flex;
     background: #e6e9f2;
@@ -262,6 +262,7 @@
   <a class="deck-btn active" href="index.html">Vocabulary</a>
   <a class="deck-btn" href="numbers.html">Numbers</a>
   <a class="deck-btn" href="verbs.html">Verbs</a>
+  <a class="deck-btn" href="particles.html">Particles</a>
 </nav>
 
 <h1>Korean Flashcards</h1>
@@ -514,6 +515,26 @@ const allCards = [
 
   // Suffix
   { english: "Mr./Ms. (after a name)", korean: "씨", romanization: "ssi", pronunciation: null, category: "Suffix" },
+
+  // ===== Lesson (TTMIK Level 1, Track 43) — Nouns Behind 하다 Verbs =====
+
+  // Nouns
+  { english: "studying", korean: "공부", romanization: "gongbu", pronunciation: "공부하다 = to study", category: "Noun" },
+  { english: "work, job", korean: "일", romanization: "il", pronunciation: "일하다 = to work", category: "Noun" },
+  { english: "memory", korean: "기억", romanization: "gieok", pronunciation: "기억하다 = to remember", category: "Noun" },
+  { english: "cleaning", korean: "청소", romanization: "cheongso", pronunciation: "청소하다 = to clean", category: "Noun" },
+  { english: "cooking, dish", korean: "요리", romanization: "yori", pronunciation: "요리사 = chef (요리 + 사 expert)", category: "Noun" },
+  { english: "moving (house)", korean: "이사", romanization: "isa", pronunciation: "이사하다 = to move house", category: "Noun" },
+  { english: "song", korean: "노래", romanization: "norae", pronunciation: "(노래를) 노래했어요 = I sang a song", category: "Noun" },
+  { english: "effort", korean: "노력", romanization: "noryeok", pronunciation: "노력하다 = to try hard", category: "Noun" },
+  { english: "agreement, agreeing", korean: "동의", romanization: "dongui", pronunciation: "맞아요 = that's correct / I agree", category: "Noun" },
+  { english: "admitting, acknowledgement", korean: "인정", romanization: "injeong", pronunciation: "인정하다 = to admit", category: "Noun" },
+  { english: "regret", korean: "후회", romanization: "huhoe", pronunciation: "후회하다 = to regret", category: "Noun" },
+  { english: "exercise", korean: "운동", romanization: "undong", pronunciation: "운동하다 = to work out", category: "Noun" },
+  { english: "love", korean: "사랑", romanization: "sarang", pronunciation: "사랑해요 = I love you", category: "Noun" },
+  { english: "words, language", korean: "말", romanization: "mal", pronunciation: "말하다 = to speak", category: "Noun" },
+  { english: "thought, idea", korean: "생각", romanization: "saenggak", pronunciation: "생각하다 = to think", category: "Noun" },
+  { english: "cognition, recognition", korean: "인식", romanization: "insik", pronunciation: "인식하다 = to recognize", category: "Noun" },
 ];
 
 const categories = [...new Set(allCards.map(c => c.category))];

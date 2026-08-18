@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean Flashcards - Particles</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  /* --- Filters --- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 12px;
+    max-width: 640px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: 2px solid #4361ee;
+    border-radius: 20px;
+    background: #fff;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .filter-btn:hover { background: #eef1ff; }
+
+  .filter-btn.active { background: #4361ee; color: #fff; }
+
+  .filters-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* --- Controls --- */
+  .controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+
+  .ctrl-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #4361ee;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .ctrl-btn:hover { background: #3a56d4; }
+
+  .ctrl-btn.secondary {
+    background: #e6e9f2;
+    color: #4361ee;
+  }
+  .ctrl-btn.secondary:hover { background: #d8ddec; }
+
+  .progress {
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    min-width: 110px;
+    text-align: center;
+  }
+
+  /* --- Card Scene --- */
+  .card-scene {
+    width: 420px;
+    max-width: 92vw;
+    height: 330px;
+    perspective: 900px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 26px 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+
+  .card-front { background: #fff; }
+
+  .card-back {
+    background: #4361ee;
+    color: #fff;
+    transform: rotateY(180deg);
+  }
+
+  .card.correct .card-back { background: #2f9e44; }
+  .card.incorrect .card-back { background: #c92a2a; }
+
+  .card-category {
+    position: absolute;
+    top: 14px;
+    left: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.55;
+  }
+
+  .sentence {
+    font-size: 1.55rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .blank {
+    display: inline-block;
+    min-width: 46px;
+    border-bottom: 3px solid #ccd2e8;
+    color: #aab2cc;
+    text-align: center;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  /* The blank currently being filled on a multi-particle sentence. */
+  .blank.active {
+    border-bottom-color: #4361ee;
+    color: #4361ee;
+  }
+
+  .blank.filled { color: #1a1a2e; border-bottom-color: #1a1a2e; }
+  .blank.filled.ok    { color: #2f9e44; border-bottom-color: #2f9e44; }
+  .blank.filled.bad   { color: #c92a2a; border-bottom-color: #c92a2a; }
+
+  .blank-index {
+    font-size: 0.6rem;
+    vertical-align: super;
+    opacity: 0.6;
+  }
+
+  .card-back .answer-particle {
+    background: rgba(255,255,255,0.28);
+    border-radius: 6px;
+    padding: 0 4px;
+  }
+
+  .english {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    color: #666;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  .card-back .english { color: rgba(255,255,255,0.9); }
+
+  .roman {
+    margin-top: 6px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  .explanation {
+    margin-top: 12px;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    text-align: center;
+    max-width: 360px;
+    opacity: 0.95;
+    overflow-y: auto;
+  }
+
+  /* One row per blank on compound sentences. */
+  .expl-row {
+    display: flex;
+    gap: 8px;
+    text-align: left;
+    padding: 3px 0;
+  }
+
+  .expl-mark {
+    flex: 0 0 auto;
+    font-weight: 700;
+  }
+
+  .expl-row .picked { opacity: 0.85; }
+
+  .verdict {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .card-hint {
+    position: absolute;
+    bottom: 12px;
+    font-size: 0.75rem;
+    opacity: 0.4;
+  }
+
+  /* --- Particle choices --- */
+  .blank-prompt {
+    font-size: 0.78rem;
+    color: #7048e8;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    min-height: 1em;
+  }
+
+  .choices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+    max-width: 460px;
+  }
+
+  .particle-btn {
+    position: relative;
+    padding: 9px 16px;
+    border: 2px solid #7048e8;
+    border-radius: 10px;
+    background: #fff;
+    color: #7048e8;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, opacity 0.15s;
+  }
+
+  .particle-btn:hover { background: #f2ecff; }
+
+  .particle-btn .roman-tag {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    opacity: 0.7;
+    letter-spacing: 0.5px;
+  }
+
+  .particle-btn.picked-correct { background: #2f9e44; border-color: #2f9e44; color: #fff; }
+  .particle-btn.picked-wrong   { background: #c92a2a; border-color: #c92a2a; color: #fff; }
+  .particle-btn.reveal         { border-color: #2f9e44; color: #2f9e44; background: #ebfbee; }
+  .particle-btn.dimmed         { opacity: 0.35; }
+
+  /* Hover explanation tooltip */
+  .particle-btn::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    padding: 9px 11px;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: left;
+    border-radius: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .particle-btn::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: #1a1a2e;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s;
+    pointer-events: none;
+    z-index: 20;
+  }
+
+  .particle-btn:hover::after,
+  .particle-btn:hover::before,
+  .particle-btn.tip-open::after,
+  .particle-btn.tip-open::before {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* --- Guide panel (tap-friendly version of the hover tips) --- */
+  .guide {
+    display: none;
+    width: 460px;
+    max-width: 92vw;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  }
+
+  .guide.open { display: block; }
+
+  .guide h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+    margin-bottom: 10px;
+  }
+
+  .guide-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    padding: 6px 0;
+    border-top: 1px solid #eee;
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+  .guide-row:first-of-type { border-top: none; }
+
+  .guide-key {
+    flex: 0 0 76px;
+    font-weight: 700;
+    color: #7048e8;
+  }
+
+  .guide-key small {
+    display: block;
+    font-weight: 600;
+    font-size: 0.68rem;
+    color: #999;
+  }
+
+  .guide-note {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* --- Nav --- */
+  .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .nav-btn {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #e0e0e0;
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover { background: #ccc; }
+
+  .score {
+    margin-top: 16px;
+    font-size: 0.85rem;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .keyboard-hint {
+    margin-top: 12px;
+    font-size: 0.78rem;
+    color: #999;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .keyboard-hint kbd {
+    display: inline-block;
+    padding: 2px 7px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    font-family: inherit;
+    font-size: 0.78rem;
+  }
+
+  /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
+  .deck-switch {
+    display: inline-flex;
+    background: #e6e9f2;
+    padding: 4px;
+    border-radius: 24px;
+    margin-bottom: 20px;
+  }
+
+  .deck-btn {
+    padding: 6px 16px;
+    color: #4361ee;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 20px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .deck-btn.active {
+    background: #4361ee;
+    color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<nav class="deck-switch">
+  <a class="deck-btn" href="index.html">Vocabulary</a>
+  <a class="deck-btn" href="numbers.html">Numbers</a>
+  <a class="deck-btn" href="verbs.html">Verbs</a>
+  <a class="deck-btn active" href="particles.html">Particles</a>
+</nav>
+
+<h1>Korean Particles</h1>
+<p class="subtitle">Fill each blank with the right particle &mdash; hover a choice for an explanation</p>
+
+<div class="filters" id="filters"></div>
+
+<div class="controls">
+  <button class="ctrl-btn" id="shuffleBtn">Shuffle</button>
+  <button class="ctrl-btn secondary" id="guideBtn">Particle guide</button>
+  <span class="progress" id="progress"></span>
+</div>
+
+<div class="guide" id="guide">
+  <h2>What each particle does</h2>
+  <div id="guideRows"></div>
+  <p class="guide-note">
+    <strong>Batchim rule:</strong> 을/이/은 follow a noun ending in a consonant (받침);
+    를/가/는 follow a noun ending in a vowel. 에 and 에서 never change.
+  </p>
+</div>
+
+<div class="card-scene" id="cardScene">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <span class="card-category" id="frontCat"></span>
+      <div class="sentence" id="frontSentence"></div>
+      <div class="english" id="frontEnglish"></div>
+      <span class="card-hint">choose a particle below</span>
+    </div>
+    <div class="card-face card-back">
+      <span class="card-category" id="backCat"></span>
+      <span class="verdict" id="verdict"></span>
+      <div class="sentence" id="backSentence"></div>
+      <div class="roman" id="backRoman"></div>
+      <div class="explanation" id="backExplanation"></div>
+      <span class="card-hint" id="backHint">&#8594; for next</span>
+    </div>
+  </div>
+</div>
+
+<p class="blank-prompt" id="blankPrompt"></p>
+
+<div class="choices" id="choices"></div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn">&#8592;</button>
+  <button class="nav-btn" id="nextBtn">&#8594;</button>
+</div>
+
+<p class="score" id="score"></p>
+
+<p class="keyboard-hint">
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>1</kbd>&ndash;<kbd>8</kbd> pick a particle &nbsp;&middot;&nbsp; <kbd>Backspace</kbd> undo a blank &nbsp;&middot;&nbsp; <kbd>Space</kbd> reveal
+</p>
+
+<script>
+// ===== Particle metadata =====
+// `tip` is the hover explanation shown above each choice button (and in the guide panel).
+const PARTICLES = [
+  {
+    key: "에", roman: "e", label: "location / time",
+    tip: "에 — static place (있다/없다), destination with 가다/오다, or a point in time. NOT where an action happens.",
+  },
+  {
+    key: "에서", roman: "e-seo", label: "action place / from",
+    tip: "에서 — where an action takes place (study, eat, work), or the origin 'from'. Use 에 instead for pure existence or destination.",
+  },
+  {
+    key: "을", roman: "eul", label: "object (consonant)",
+    tip: "을 — object marker after a noun ending in a consonant (받침): 책을, 음식을, 운동을.",
+  },
+  {
+    key: "를", roman: "reul", label: "object (vowel)",
+    tip: "를 — object marker after a noun ending in a vowel: 커피를, 숙제를, 사과를.",
+  },
+  {
+    key: "이", roman: "i", label: "subject (consonant)",
+    tip: "이 — subject marker after a consonant-final noun. Introduces new info or the thing that is/exists: 우산이 있어요.",
+  },
+  {
+    key: "가", roman: "ga", label: "subject (vowel)",
+    tip: "가 — subject marker after a vowel-final noun: 날씨가 좋아요, 친구가 많아요.",
+  },
+  {
+    key: "은", roman: "eun", label: "topic (consonant)",
+    tip: "은 — topic marker after a consonant-final noun. 'As for X…' — sets the theme or contrasts: 오늘은, 형은.",
+  },
+  {
+    key: "는", roman: "neun", label: "topic (vowel)",
+    tip: "는 — topic marker after a vowel-final noun: 저는, 언니는, 여기는.",
+  },
+];
+
+// ===== Sentence data =====
+// Each card: before + [blank] + after. `answer` must be one of the PARTICLES keys.
+// Vocabulary is drawn from the Vocabulary and Verbs decks.
+const allCards = [
+  // ===== 에 — static location, destination, time =====
+  {
+    before: "저는 학교", after: " 가요.", answer: "에",
+    english: "I go to school.",
+    romanization: "jeo-neun hak-gyo-e ga-yo.",
+    explanation: "가다 / 오다 mark their destination with 에. 에서 would wrongly say the going happens at school.",
+    category: "에 — place & time",
+  },
+  {
+    before: "책상 위", after: " 컴퓨터가 있어요.", answer: "에",
+    english: "There is a computer on the desk.",
+    romanization: "chaek-sang wi-e keom-pyu-teo-ga i-sseo-yo.",
+    explanation: "있다 / 없다 describe existence at a spot, and that spot always takes 에 — never 에서.",
+    category: "에 — place & time",
+  },
+  {
+    before: "가방 안", after: " 책이 있어요.", answer: "에",
+    english: "There is a book in the bag.",
+    romanization: "ga-bang an-e chae-gi i-sseo-yo.",
+    explanation: "Position nouns (안, 밖, 위, 밑, 앞, 뒤, 옆) take 에 when you say something exists there.",
+    category: "에 — place & time",
+  },
+  {
+    before: "아침", after: " 운동해요.", answer: "에",
+    english: "I exercise in the morning.",
+    romanization: "a-chim-e un-dong-hae-yo.",
+    explanation: "에 also marks a point in time — 아침에, 저녁에, 2시에. (오늘 / 내일 are exceptions and take no 에.)",
+    category: "에 — place & time",
+  },
+  {
+    before: "의자", after: " 앉아요.", answer: "에",
+    english: "I sit on the chair.",
+    romanization: "ui-ja-e an-ja-yo.",
+    explanation: "앉다 marks the resting spot with 에 — you end up at the chair, so it behaves like a destination.",
+    category: "에 — place & time",
+  },
+  {
+    before: "친구가 기숙사", after: " 와요.", answer: "에",
+    english: "A friend is coming to the dorm.",
+    romanization: "chin-gu-ga gi-suk-sa-e wa-yo.",
+    explanation: "오다 takes 에 for where the movement is headed. Compare 기숙사에서 와요 = coming *from* the dorm.",
+    category: "에 — place & time",
+  },
+  {
+    before: "역", after: " 도착했어요.", answer: "에",
+    english: "I arrived at the station.",
+    romanization: "yeo-ge do-cha-kae-sseo-yo.",
+    explanation: "도착하다 is an arrival, so its place is an endpoint: 역에 도착했어요.",
+    category: "에 — place & time",
+  },
+
+  // ===== 에서 — where an action happens, or 'from' =====
+  {
+    before: "식당", after: " 음식을 먹어요.", answer: "에서",
+    english: "I eat food at the cafeteria.",
+    romanization: "sik-dang-e-seo eum-si-geul meo-geo-yo.",
+    explanation: "Eating is an activity, and the place an activity happens takes 에서, not 에.",
+    category: "에서 — action place",
+  },
+  {
+    before: "도서관", after: " 공부해요.", answer: "에서",
+    english: "I study at the library.",
+    romanization: "do-seo-gwan-e-seo gong-bu-hae-yo.",
+    explanation: "도서관에 있어요 (existing there) vs 도서관에서 공부해요 (doing something there) — the verb decides.",
+    category: "에서 — action place",
+  },
+  {
+    before: "저는 미국", after: " 왔어요.", answer: "에서",
+    english: "I came from the United States.",
+    romanization: "jeo-neun mi-gu-ge-seo wa-sseo-yo.",
+    explanation: "에서 also means 'from' — a starting point. 미국에 왔어요 would mean you came *to* the US.",
+    category: "에서 — action place",
+  },
+  {
+    before: "기숙사", after: " 빨래해요.", answer: "에서",
+    english: "I do laundry in the dorm.",
+    romanization: "gi-suk-sa-e-seo ppal-lae-hae-yo.",
+    explanation: "Every 하다 activity verb (빨래하다, 청소하다, 요리하다) puts its location in 에서.",
+    category: "에서 — action place",
+  },
+  {
+    before: "서점", after: " 책을 찾아요.", answer: "에서",
+    english: "I look for a book at the bookstore.",
+    romanization: "seo-jeom-e-seo chae-geul cha-ja-yo.",
+    explanation: "찾다 is an action performed somewhere, so the bookstore takes 에서 while 책 takes the object marker 을.",
+    category: "에서 — action place",
+  },
+  {
+    before: "캠퍼스", after: " 걸어요.", answer: "에서",
+    english: "I walk around campus.",
+    romanization: "kaem-peo-seu-e-seo geo-reo-yo.",
+    explanation: "The walking happens within campus, so 에서. 캠퍼스에 걸어요 would be wrong — 에 needs an endpoint.",
+    category: "에서 — action place",
+  },
+  {
+    before: "역", after: " 지하철을 타요.", answer: "에서",
+    english: "I take the subway at the station.",
+    romanization: "yeo-ge-seo ji-ha-cheo-reul ta-yo.",
+    explanation: "Boarding is the action and the station is where it happens: 역에서. Note 역에 가요 would use 에.",
+    category: "에서 — action place",
+  },
+
+  // ===== 을 — object marker, consonant-final noun =====
+  {
+    before: "저는 책", after: " 봐요.", answer: "을",
+    english: "I read (look at) a book.",
+    romanization: "jeo-neun chae-geul bwa-yo.",
+    explanation: "책 is what gets acted on, so it takes the object marker; 책 ends in the consonant ㄱ, so 을 not 를.",
+    category: "을/를 — object",
+  },
+  {
+    before: "아이스크림", after: " 좋아해요.", answer: "을",
+    english: "I like ice cream.",
+    romanization: "a-i-seu-keu-ri-meul jo-a-hae-yo.",
+    explanation: "좋아하다 is a verb and takes an object (을/를). Careful: 좋다 is an adjective and takes 이/가 instead.",
+    category: "을/를 — object",
+  },
+  {
+    before: "우산", after: " 찾아요.", answer: "을",
+    english: "I'm looking for an umbrella.",
+    romanization: "u-san-eul cha-ja-yo.",
+    explanation: "우산 ends in ㄴ, a consonant, so the object marker is 을.",
+    category: "을/를 — object",
+  },
+  {
+    before: "음식", after: " 만들어요.", answer: "을",
+    english: "I make food.",
+    romanization: "eum-si-geul man-deu-reo-yo.",
+    explanation: "만들다 acts on 음식, and 음식 ends in ㄱ → 을. Spoken quickly it links as [음시글].",
+    category: "을/를 — object",
+  },
+  {
+    before: "아침", after: " 먹어요.", answer: "을",
+    english: "I eat breakfast.",
+    romanization: "a-chi-meul meo-geo-yo.",
+    explanation: "Here 아침 is the thing eaten, so it takes 을. As a time word instead it would take 에: 아침에 먹어요.",
+    category: "을/를 — object",
+  },
+  {
+    before: "지하철", after: " 타요.", answer: "을",
+    english: "I take the subway.",
+    romanization: "ji-ha-cheo-reul ta-yo.",
+    explanation: "타다 takes its vehicle as an object, not with 에. 지하철 ends in ㄹ → 을.",
+    category: "을/를 — object",
+  },
+  {
+    before: "게임", after: " 해요.", answer: "을",
+    english: "I play games.",
+    romanization: "ge-i-meul hae-yo.",
+    explanation: "When you split a 하다 noun off from the verb, it becomes the object: 게임을 해요 (게임 ends in ㅁ).",
+    category: "을/를 — object",
+  },
+
+  // ===== 를 — object marker, vowel-final noun =====
+  {
+    before: "커피", after: " 마셔요.", answer: "를",
+    english: "I drink coffee.",
+    romanization: "keo-pi-reul ma-syeo-yo.",
+    explanation: "커피 ends in the vowel ㅣ, so the object marker is 를.",
+    category: "을/를 — object",
+  },
+  {
+    before: "숙제", after: " 해요.", answer: "를",
+    english: "I do homework.",
+    romanization: "suk-je-reul hae-yo.",
+    explanation: "숙제 ends in ㅔ (a vowel) → 를. Same pattern as 청소를 해요, 요리를 해요.",
+    category: "을/를 — object",
+  },
+  {
+    before: "피자", after: " 주문해요.", answer: "를",
+    english: "I order pizza.",
+    romanization: "pi-ja-reul ju-mun-hae-yo.",
+    explanation: "주문하다 acts on the pizza; 피자 ends in ㅏ → 를.",
+    category: "을/를 — object",
+  },
+  {
+    before: "친구", after: " 좋아해요.", answer: "를",
+    english: "I like my friend.",
+    romanization: "chin-gu-reul jo-a-hae-yo.",
+    explanation: "친구 ends in ㅜ → 를. Compare 친구가 좋아요 ('my friend is nice'), where the adjective 좋다 needs 가.",
+    category: "을/를 — object",
+  },
+  {
+    before: "버스", after: " 타요.", answer: "를",
+    english: "I take the bus.",
+    romanization: "beo-seu-reul ta-yo.",
+    explanation: "버스 ends in ㅡ → 를. Like 지하철을 타요, the vehicle is the object of 타다.",
+    category: "을/를 — object",
+  },
+  {
+    before: "사과", after: " 먹어요.", answer: "를",
+    english: "I eat an apple.",
+    romanization: "sa-gwa-reul meo-geo-yo.",
+    explanation: "사과 ends in ㅘ, a vowel → 를.",
+    category: "을/를 — object",
+  },
+  {
+    before: "노래", after: " 들어요.", answer: "를",
+    english: "I listen to a song.",
+    romanization: "no-rae-reul deu-reo-yo.",
+    explanation: "듣다 takes what you hear as an object; 노래 ends in ㅐ → 를.",
+    category: "을/를 — object",
+  },
+
+  // ===== 이 — subject marker, consonant-final noun =====
+  {
+    before: "가방 안에 우산", after: " 있어요.", answer: "이",
+    english: "There is an umbrella in the bag.",
+    romanization: "ga-bang an-e u-san-i i-sseo-yo.",
+    explanation: "있다 / 없다 mark what exists with 이/가. 우산 ends in ㄴ → 이.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "오늘 시간", after: " 없어요.", answer: "이",
+    english: "I don't have time today.",
+    romanization: "o-neul si-ga-ni eop-seo-yo.",
+    explanation: "없다 marks the missing thing with 이/가, never 을/를. 시간 ends in ㄴ → 이.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "이 음식", after: " 맛있어요.", answer: "이",
+    english: "This food is delicious.",
+    romanization: "i eum-si-gi ma-si-sseo-yo.",
+    explanation: "Descriptive verbs (맛있다, 좋다, 비싸다) take 이/가 for what is being described. 음식 ends in ㄱ → 이.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "선생님", after: " 학교에 있어요.", answer: "이",
+    english: "The teacher is at school.",
+    romanization: "seon-saeng-ni-mi hak-gyo-e i-sseo-yo.",
+    explanation: "선생님 is the one existing, so 이/가; it ends in ㅁ → 이. The place 학교 keeps 에 because the verb is 있다.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "남동생", after: " 대학생이에요.", answer: "이",
+    english: "My younger brother is a college student.",
+    romanization: "nam-dong-saeng-i dae-hak-saeng-i-e-yo.",
+    explanation: "Stating a plain fact about who someone is takes 이/가; 남동생 ends in ㅇ → 이. (The 이에요 at the end is the copula, not a particle.)",
+    category: "이/가 — subject",
+  },
+  {
+    before: "수업", after: " 재미있어요.", answer: "이",
+    english: "The class is interesting.",
+    romanization: "su-eo-bi jae-mi-i-sseo-yo.",
+    explanation: "재미있다 describes 수업, so 수업 is the subject; it ends in ㅂ → 이.",
+    category: "이/가 — subject",
+  },
+
+  // ===== 가 — subject marker, vowel-final noun =====
+  {
+    before: "오늘 날씨", after: " 좋아요.", answer: "가",
+    english: "The weather is nice today.",
+    romanization: "o-neul nal-ssi-ga jo-a-yo.",
+    explanation: "좋다 is an adjective, so what's good takes 이/가. 날씨 ends in ㅣ → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "커피", after: " 맛있어요.", answer: "가",
+    english: "The coffee is delicious.",
+    romanization: "keo-pi-ga ma-si-sseo-yo.",
+    explanation: "맛있다 describes the coffee, so 커피 is the subject — and it ends in a vowel → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "친구", after: " 많아요.", answer: "가",
+    english: "I have a lot of friends.",
+    romanization: "chin-gu-ga ma-na-yo.",
+    explanation: "많다 is descriptive, so the plentiful thing takes 이/가. 친구 ends in ㅜ → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "학교", after: " 넓어요.", answer: "가",
+    english: "The school is spacious.",
+    romanization: "hak-gyo-ga neol-beo-yo.",
+    explanation: "넓다 describes 학교; 학교 ends in ㅗ → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "여기 의자", after: " 있어요.", answer: "가",
+    english: "There's a chair here.",
+    romanization: "yeo-gi ui-ja-ga i-sseo-yo.",
+    explanation: "있다 marks the existing thing with 이/가; 의자 ends in ㅏ → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "언니", after: " 요리해요.", answer: "가",
+    english: "My older sister is cooking.",
+    romanization: "eon-ni-ga yo-ri-hae-yo.",
+    explanation: "Reporting who is doing something right now uses 이/가. 언니 ends in ㅣ → 가.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "컴퓨터", after: " 비싸요.", answer: "가",
+    english: "The computer is expensive.",
+    romanization: "keom-pyu-teo-ga bi-ssa-yo.",
+    explanation: "비싸다 describes the computer; 컴퓨터 ends in ㅓ → 가.",
+    category: "이/가 — subject",
+  },
+
+  // ===== 은 — topic marker, consonant-final noun =====
+  {
+    before: "오늘", after: " 날씨가 좋아요.", answer: "은",
+    english: "As for today, the weather is nice.",
+    romanization: "o-neu-reun nal-ssi-ga jo-a-yo.",
+    explanation: "은/는 sets the theme — 'today (unlike other days)'. The actual subject 날씨 still keeps 가. 오늘 ends in ㄹ → 은.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "한국 음식", after: " 맛있어요.", answer: "은",
+    english: "Korean food (as a category) is delicious.",
+    romanization: "han-gu-geum-si-geun ma-si-sseo-yo.",
+    explanation: "Generalizing about a whole category is classic topic territory. 음식 ends in ㄱ → 은.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "저 사람", after: " 학생이에요.", answer: "은",
+    english: "That person over there is a student.",
+    romanization: "jeo sa-ra-meun hak-saeng-i-e-yo.",
+    explanation: "Introducing someone and then commenting on them takes 은/는. 사람 ends in ㅁ → 은.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "형", after: " 일해요.", answer: "은",
+    english: "My older brother, he works.",
+    romanization: "hyeong-eun il-hae-yo.",
+    explanation: "은/는 contrasts him with someone else already mentioned. 형 ends in ㅇ → 은.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "내일", after: " 시간이 있어요.", answer: "은",
+    english: "Tomorrow I have time.",
+    romanization: "nae-i-reun si-ga-ni i-sseo-yo.",
+    explanation: "'Tomorrow (as opposed to today)' is the topic; 시간 stays the subject with 이. 내일 ends in ㄹ → 은.",
+    category: "은/는 — topic",
+  },
+
+  // ===== 는 — topic marker, vowel-final noun =====
+  {
+    before: "저", after: " 대학생이에요.", answer: "는",
+    english: "I am a college student.",
+    romanization: "jeo-neun dae-hak-saeng-i-e-yo.",
+    explanation: "저 is the default topic when introducing yourself, and it ends in ㅓ → 는. (저 takes the irregular 제가 when it needs 이/가.)",
+    category: "은/는 — topic",
+  },
+  {
+    before: "언니", after: " 커피를 좋아해요.", answer: "는",
+    english: "My older sister likes coffee.",
+    romanization: "eon-ni-neun keo-pi-reul jo-a-hae-yo.",
+    explanation: "언니 is the theme being talked about and ends in ㅣ → 는; 커피 is what she likes, so it takes the object 를.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "여기", after: " 도서관이에요.", answer: "는",
+    english: "This place is the library.",
+    romanization: "yeo-gi-neun do-seo-gwa-ni-e-yo.",
+    explanation: "여기/거기/저기 take 는 when you label the place. 여기 ends in ㅣ → 는.",
+    category: "은/는 — topic",
+  },
+  {
+    before: "오빠", after: " 운동을 해요.", answer: "는",
+    english: "My older brother works out.",
+    romanization: "o-ppa-neun un-dong-eul hae-yo.",
+    explanation: "오빠 is the topic and ends in ㅏ → 는; 운동 is the object of 하다 and ends in ㅇ → 을.",
+    category: "은/는 — topic",
+  },
+
+  // ===== Compound — sentences with two or three blanks =====
+  // Authored with `parts` (n+1 text chunks) + `answers`/`explanations` (n each),
+  // filled left to right. Single-blank cards above use the shorter before/after form.
+  {
+    parts: ["저", " 도서관", " 공부해요."],
+    answers: ["는", "에서"],
+    explanations: [
+      "저 is the theme of the sentence and ends in a vowel → 는.",
+      "공부하다 is an activity, so its location takes 에서, not 에.",
+    ],
+    english: "I study at the library.",
+    romanization: "jeo-neun do-seo-gwan-e-seo gong-bu-hae-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["언니", " 식당", " 음식", " 먹어요."],
+    answers: ["가", "에서", "을"],
+    explanations: [
+      "언니 is who does the eating → subject marker; it ends in ㅣ → 가.",
+      "The eating happens at the cafeteria → 에서.",
+      "음식 is what gets eaten → object marker, and it ends in ㄱ → 을.",
+    ],
+    english: "My older sister eats food at the cafeteria.",
+    romanization: "eon-ni-ga sik-dang-e-seo eum-si-geul meo-geo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["저", " 학교", " 가요."],
+    answers: ["는", "에"],
+    explanations: [
+      "저 sets the topic and ends in a vowel → 는.",
+      "가다 marks its destination with 에. 학교에서 가요 would be wrong — nothing is happening *at* the school.",
+    ],
+    english: "I go to school.",
+    romanization: "jeo-neun hak-gyo-e ga-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["친구", " 커피", " 좋아해요."],
+    answers: ["가", "를"],
+    explanations: [
+      "친구 is the one doing the liking → 이/가; it ends in ㅜ → 가.",
+      "좋아하다 is a verb and takes an object; 커피 ends in a vowel → 를.",
+    ],
+    english: "My friend likes coffee.",
+    romanization: "chin-gu-ga keo-pi-reul jo-a-hae-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["오늘", " 날씨", " 좋아요."],
+    answers: ["은", "가"],
+    explanations: [
+      "오늘 is the theme — 'as for today' — and ends in ㄹ → 은.",
+      "좋다 describes 날씨, so 날씨 stays the subject with 가. Topic and subject can both appear in one sentence.",
+    ],
+    english: "Today the weather is nice.",
+    romanization: "o-neu-reun nal-ssi-ga jo-a-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["가방 안", " 우산", " 있어요."],
+    answers: ["에", "이"],
+    explanations: [
+      "있다 puts its place in 에 — never 에서.",
+      "What exists takes 이/가; 우산 ends in ㄴ → 이.",
+    ],
+    english: "There is an umbrella in the bag.",
+    romanization: "ga-bang an-e u-san-i i-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["형", " 역", " 버스", " 타요."],
+    answers: ["은", "에서", "를"],
+    explanations: [
+      "형 is the topic and ends in ㅇ → 은.",
+      "The boarding happens at the station → 에서.",
+      "타다 takes its vehicle as an object; 버스 ends in ㅡ → 를.",
+    ],
+    english: "My older brother takes the bus at the station.",
+    romanization: "hyeong-eun yeo-ge-seo beo-seu-reul ta-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["저", " 기숙사", " 빨래", " 해요."],
+    answers: ["는", "에서", "를"],
+    explanations: [
+      "저 is the topic → 는.",
+      "The laundry gets done in the dorm — an activity location → 에서.",
+      "Splitting 빨래하다 makes 빨래 the object; it ends in ㅐ → 를.",
+    ],
+    english: "I do laundry in the dorm.",
+    romanization: "jeo-neun gi-suk-sa-e-seo ppal-lae-reul hae-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["남동생", " 캠퍼스", " 걸어요."],
+    answers: ["이", "에서"],
+    explanations: [
+      "남동생 is the walker → 이/가; it ends in ㅇ → 이.",
+      "The walking takes place within campus → 에서.",
+    ],
+    english: "My younger brother walks around campus.",
+    romanization: "nam-dong-saeng-i kaem-peo-seu-e-seo geo-reo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["선생님", " 학교", " 있어요."],
+    answers: ["은", "에"],
+    explanations: [
+      "선생님 is the topic here and ends in ㅁ → 은. (이 would also be grammatical, but 은 sets him as the theme.)",
+      "있다 always marks its location with 에.",
+    ],
+    english: "The teacher is at school.",
+    romanization: "seon-saeng-ni-meun hak-gyo-e i-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["저", " 아침", " 운동", " 해요."],
+    answers: ["는", "에", "을"],
+    explanations: [
+      "저 is the topic → 는.",
+      "아침 is a time here, and time points take 에.",
+      "Split off from 운동하다, 운동 becomes the object; it ends in ㅇ → 을.",
+    ],
+    english: "I work out in the morning.",
+    romanization: "jeo-neun a-chi-me un-dong-eul hae-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["언니", " 서점", " 책", " 찾아요."],
+    answers: ["는", "에서", "을"],
+    explanations: [
+      "언니 is the topic and ends in ㅣ → 는.",
+      "찾다 is an action performed at the bookstore → 에서.",
+      "책 is what's being looked for → object; it ends in ㄱ → 을.",
+    ],
+    english: "My older sister looks for a book at the bookstore.",
+    romanization: "eon-ni-neun seo-jeom-e-seo chae-geul cha-ja-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["오빠", " 지하철", " 타요."],
+    answers: ["는", "을"],
+    explanations: [
+      "오빠 is the topic and ends in ㅏ → 는.",
+      "타다 takes a vehicle as its object; 지하철 ends in ㄹ → 을.",
+    ],
+    english: "My older brother takes the subway.",
+    romanization: "o-ppa-neun ji-ha-cheo-reul ta-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["내일", " 시간", " 있어요."],
+    answers: ["은", "이"],
+    explanations: [
+      "내일 is the theme — 'tomorrow, unlike today' — and ends in ㄹ → 은.",
+      "있다 marks what you have with 이/가; 시간 ends in ㄴ → 이.",
+    ],
+    english: "Tomorrow I have time.",
+    romanization: "nae-i-reun si-ga-ni i-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["저", " 미국", " 왔어요."],
+    answers: ["는", "에서"],
+    explanations: [
+      "저 is the topic → 는.",
+      "Here 에서 means 'from' — the origin of the coming. 미국에 왔어요 would mean you came *to* the US.",
+    ],
+    english: "I came from the United States.",
+    romanization: "jeo-neun mi-gu-ge-seo wa-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+];
+
+// ===== Normalization =====
+// Two authoring shapes feed one internal model: `parts` (n+1 text chunks) with
+// `answers`/`explanations` arrays of length n. Single-blank cards written as
+// before/after/answer/explanation are widened here.
+const cards = allCards.map(c => c.parts
+  ? { ...c, blanks: c.answers.length }
+  : {
+      ...c,
+      parts: [c.before, c.after],
+      answers: [c.answer],
+      explanations: [c.explanation],
+      blanks: 1,
+    }
+);
+
+// ===== State =====
+let activeCategory = "All";
+let deck = [];
+let idx = 0;
+let picks = [];        // one entry per blank answered so far, in order
+let answered = false;  // true once every blank on this card is filled (or revealed)
+let right = 0;
+let wrong = 0;
+
+const categories = [...new Set(cards.map(c => c.category))];
+
+// ===== Elements =====
+const filtersEl   = document.getElementById("filters");
+const choicesEl   = document.getElementById("choices");
+const cardEl      = document.getElementById("card");
+const frontCat    = document.getElementById("frontCat");
+const frontSent   = document.getElementById("frontSentence");
+const frontEng    = document.getElementById("frontEnglish");
+const backCat     = document.getElementById("backCat");
+const backSent    = document.getElementById("backSentence");
+const backRoman   = document.getElementById("backRoman");
+const backExpl    = document.getElementById("backExplanation");
+const verdictEl   = document.getElementById("verdict");
+const progressEl  = document.getElementById("progress");
+const promptEl    = document.getElementById("blankPrompt");
+const scoreEl     = document.getElementById("score");
+const guideEl     = document.getElementById("guide");
+
+// ===== Filters =====
+function buildFilters() {
+  filtersEl.innerHTML = "";
+  const label = document.createElement("span");
+  label.className = "filters-label";
+  label.textContent = "Particle type";
+  filtersEl.appendChild(label);
+  ["All", ...categories].forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "filter-btn" + (cat === activeCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.addEventListener("click", () => {
+      activeCategory = cat;
+      rebuildDeck();
+    });
+    filtersEl.appendChild(btn);
+  });
+}
+
+function rebuildDeck() {
+  deck = activeCategory === "All"
+    ? [...cards]
+    : cards.filter(c => c.category === activeCategory);
+  idx = 0;
+  buildFilters();
+  render();
+}
+
+// ===== Choice buttons =====
+// Each carries its hover explanation in data-tip; the guide panel below is the
+// tap-friendly equivalent for touch devices.
+function buildChoices() {
+  choicesEl.innerHTML = "";
+  PARTICLES.forEach(p => {
+    const btn = document.createElement("button");
+    btn.className = "particle-btn";
+    btn.dataset.particle = p.key;
+    btn.dataset.tip = p.tip;
+    btn.innerHTML = `${p.key}<span class="roman-tag">${p.roman}</span>`;
+    btn.addEventListener("click", () => choose(p.key));
+    choicesEl.appendChild(btn);
+  });
+}
+
+function buildGuide() {
+  const rows = document.getElementById("guideRows");
+  rows.innerHTML = "";
+  PARTICLES.forEach(p => {
+    const row = document.createElement("div");
+    row.className = "guide-row";
+    row.innerHTML =
+      `<span class="guide-key">${p.key}<small>${p.roman}</small></span>` +
+      `<span>${p.tip.replace(/^[^—]*—\s*/, "")}</span>`;
+    rows.appendChild(row);
+  });
+}
+
+document.getElementById("guideBtn").addEventListener("click", () => {
+  guideEl.classList.toggle("open");
+});
+
+function escapeHtml(s) {
+  return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// ===== Front sentence =====
+// Blanks before `picks.length` show what was chosen; the one at `picks.length`
+// is the live target; the rest stay empty. Once the card is graded, each filled
+// blank is tinted by whether it matched.
+function renderFront() {
+  const c = deck[idx];
+  let html = "";
+  c.parts.forEach((chunk, i) => {
+    html += escapeHtml(chunk);
+    if (i === c.answers.length) return;
+    const num = c.blanks > 1 ? `<span class="blank-index">${i + 1}</span>` : "";
+    if (i < picks.length) {
+      const graded = answered ? (picks[i] === c.answers[i] ? " ok" : " bad") : "";
+      html += `<span class="blank filled${graded}">${picks[i]}</span>${num}`;
+    } else if (i === picks.length && !answered) {
+      html += `<span class="blank active">?</span>${num}`;
+    } else {
+      html += `<span class="blank">?</span>${num}`;
+    }
+  });
+  frontSent.innerHTML = html;
+}
+
+function renderPrompt() {
+  const c = deck[idx];
+  if (!c || c.blanks === 1) { promptEl.textContent = ""; return; }
+  promptEl.textContent = answered
+    ? `${c.blanks} particles`
+    : `Blank ${picks.length + 1} of ${c.blanks}`;
+}
+
+// ===== Render =====
+function render() {
+  cardEl.classList.remove("flipped", "correct", "incorrect");
+  picks = [];
+  answered = false;
+  verdictEl.textContent = "";
+  document.querySelectorAll(".particle-btn").forEach(b => {
+    b.classList.remove("picked-correct", "picked-wrong", "reveal", "dimmed");
+  });
+
+  if (deck.length === 0) {
+    frontCat.textContent = "";
+    frontSent.textContent = "No cards";
+    frontEng.textContent = "";
+    backCat.textContent = "";
+    backSent.textContent = "";
+    backRoman.textContent = "";
+    backExpl.textContent = "";
+    promptEl.textContent = "";
+    progressEl.textContent = "0 of 0";
+    return;
+  }
+
+  const c = deck[idx];
+  progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
+  frontCat.textContent = c.category;
+  backCat.textContent  = c.category;
+  frontEng.textContent = c.english;
+  backRoman.textContent = c.romanization;
+  backSent.innerHTML = c.parts.map((chunk, i) =>
+    escapeHtml(chunk) + (i < c.answers.length
+      ? `<span class="answer-particle">${c.answers[i]}</span>`
+      : "")
+  ).join("");
+
+  renderFront();
+  renderPrompt();
+  renderExplanations();
+  updateScore();
+}
+
+// Explanations are laid out one row per blank, each marked against what was picked.
+function renderExplanations() {
+  const c = deck[idx];
+  if (c.blanks === 1) {
+    backExpl.textContent = c.explanations[0];
+    return;
+  }
+  backExpl.innerHTML = c.explanations.map((text, i) => {
+    const pick = picks[i];
+    const ok = pick === c.answers[i];
+    const mark = pick === undefined ? `${i + 1}.` : (ok ? "✓" : "✗");
+    const chose = (pick !== undefined && !ok) ? ` <span class="picked">(you chose ${pick})</span>` : "";
+    return `<div class="expl-row"><span class="expl-mark">${mark}</span>` +
+           `<span><strong>${c.answers[i]}</strong> — ${escapeHtml(text)}${chose}</span></div>`;
+  }).join("");
+}
+
+function updateScore() {
+  scoreEl.textContent = (right + wrong) === 0
+    ? ""
+    : `${right} correct · ${wrong} wrong`;
+}
+
+// ===== Answering =====
+// A pick fills the next open blank. The card is only graded and flipped once
+// every blank has an answer, so a compound sentence is scored as one unit.
+function choose(particle) {
+  if (deck.length === 0) return;
+  if (answered) { next(); return; }
+
+  const c = deck[idx];
+  picks.push(particle);
+
+  if (picks.length < c.blanks) {
+    renderFront();
+    renderPrompt();
+    return;
+  }
+
+  const allCorrect = picks.every((p, i) => p === c.answers[i]);
+  if (allCorrect) right++; else wrong++;
+  answered = true;
+
+  document.querySelectorAll(".particle-btn").forEach(b => {
+    const p = b.dataset.particle;
+    const isAnswer = c.answers.includes(p);
+    const wasWrong = picks.some((pick, i) => pick === p && pick !== c.answers[i]);
+    if (wasWrong) b.classList.add("picked-wrong");
+    else if (isAnswer) b.classList.add(allCorrect ? "picked-correct" : "reveal");
+    else b.classList.add("dimmed");
+  });
+
+  verdictEl.textContent = allCorrect
+    ? "correct"
+    : (c.blanks > 1 ? "check the marks" : "not quite");
+  renderFront();
+  renderPrompt();
+  renderExplanations();
+  cardEl.classList.add("flipped", allCorrect ? "correct" : "incorrect");
+  updateScore();
+}
+
+// Flipping the card early gives up on the sentence and reveals it, unscored —
+// `answered` is set so a pick afterwards can't be counted as correct.
+function revealCard() {
+  if (deck.length === 0) return;
+  if (!answered) {
+    const c = deck[idx];
+    answered = true;
+    document.querySelectorAll(".particle-btn").forEach(b => {
+      if (c.answers.includes(b.dataset.particle)) b.classList.add("reveal");
+      else b.classList.add("dimmed");
+    });
+    verdictEl.textContent = "revealed";
+    renderFront();
+    renderPrompt();
+    renderExplanations();
+  }
+  cardEl.classList.toggle("flipped");
+}
+
+document.getElementById("cardScene").addEventListener("click", revealCard);
+
+// ===== Navigation =====
+function prev() {
+  if (deck.length === 0) return;
+  idx = (idx - 1 + deck.length) % deck.length;
+  render();
+}
+function next() {
+  if (deck.length === 0) return;
+  idx = (idx + 1) % deck.length;
+  render();
+}
+
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("nextBtn").addEventListener("click", next);
+
+// ===== Shuffle =====
+document.getElementById("shuffleBtn").addEventListener("click", () => {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  render();
+});
+
+// ===== Keyboard =====
+// 1–8 map to the eight particle choices, in the order shown.
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowLeft")       { e.preventDefault(); prev(); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+  else if (e.key === " ")          { e.preventDefault(); revealCard(); }
+  else if (e.key === "Backspace" && !answered && picks.length > 0) {
+    // Undo the last pick on a multi-blank sentence.
+    e.preventDefault();
+    picks.pop();
+    renderFront();
+    renderPrompt();
+  }
+  else if (/^[1-8]$/.test(e.key)) {
+    e.preventDefault();
+    const p = PARTICLES[Number(e.key) - 1];
+    if (p) choose(p.key);
+  }
+});
+
+// ===== Init =====
+buildChoices();
+buildGuide();
+rebuildDeck();
+</script>
+</body>
+</html>

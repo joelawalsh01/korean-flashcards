@@ -334,7 +334,7 @@
     font-size: 0.78rem;
   }
 
-  /* --- Deck Switcher (shared across index/numbers/verbs) --- */
+  /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
   .deck-switch {
     display: inline-flex;
     background: #e6e9f2;
@@ -365,6 +365,7 @@
   <a class="deck-btn" href="index.html">Vocabulary</a>
   <a class="deck-btn" href="numbers.html">Numbers</a>
   <a class="deck-btn active" href="verbs.html">Verbs</a>
+  <a class="deck-btn" href="particles.html">Particles</a>
 </nav>
 
 <h1>Korean Verbs &amp; Conjugation</h1>
@@ -460,7 +461,7 @@ const allVerbs = [
   },
   {
     english: "to do",
-    korean: "하다", romanization: "ha-da", category: "Action Verb",
+    korean: "하다", romanization: "ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "해요",         romanization: "hae-yo" },
       past:    { korean: "했어요",       romanization: "hae-sseo-yo" },
@@ -496,7 +497,7 @@ const allVerbs = [
   },
   {
     english: "to like",
-    korean: "좋아하다", romanization: "jo-a-ha-da", category: "Action Verb",
+    korean: "좋아하다", romanization: "jo-a-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "좋아해요",       romanization: "jo-a-hae-yo" },
       past:    { korean: "좋아했어요",     romanization: "jo-a-hae-sseo-yo" },
@@ -505,7 +506,7 @@ const allVerbs = [
   },
   {
     english: "to work",
-    korean: "일하다", romanization: "il-ha-da", category: "Action Verb",
+    korean: "일하다", romanization: "il-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "일해요",       romanization: "il-hae-yo" },
       past:    { korean: "일했어요",     romanization: "il-hae-sseo-yo" },
@@ -514,7 +515,7 @@ const allVerbs = [
   },
   {
     english: "to study",
-    korean: "공부하다", romanization: "gong-bu-ha-da", category: "Action Verb",
+    korean: "공부하다", romanization: "gong-bu-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "공부해요",       romanization: "gong-bu-hae-yo" },
       past:    { korean: "공부했어요",     romanization: "gong-bu-hae-sseo-yo" },
@@ -574,7 +575,7 @@ const allVerbs = [
   // ===== Tandem: 60 Korean Verbs — Household & Routine =====
   {
     english: "to clean",
-    korean: "청소하다", romanization: "cheong-so-ha-da", category: "Household",
+    korean: "청소하다", romanization: "cheong-so-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "청소해요",         romanization: "cheong-so-hae-yo" },
       past:    { korean: "청소했어요",       romanization: "cheong-so-hae-sseo-yo" },
@@ -592,7 +593,7 @@ const allVerbs = [
   },
   {
     english: "to cook",
-    korean: "요리하다", romanization: "yo-ri-ha-da", category: "Household",
+    korean: "요리하다", romanization: "yo-ri-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "요리해요",         romanization: "yo-ri-hae-yo" },
       past:    { korean: "요리했어요",       romanization: "yo-ri-hae-sseo-yo" },
@@ -610,7 +611,7 @@ const allVerbs = [
   },
   {
     english: "to do the dishes",
-    korean: "설거지하다", romanization: "seol-geo-ji-ha-da", category: "Household",
+    korean: "설거지하다", romanization: "seol-geo-ji-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "설거지해요",         romanization: "seol-geo-ji-hae-yo" },
       past:    { korean: "설거지했어요",       romanization: "seol-geo-ji-hae-sseo-yo" },
@@ -619,7 +620,7 @@ const allVerbs = [
   },
   {
     english: "to do laundry",
-    korean: "빨래하다", romanization: "ppal-lae-ha-da", category: "Household",
+    korean: "빨래하다", romanization: "ppal-lae-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "빨래해요",         romanization: "ppal-lae-hae-yo" },
       past:    { korean: "빨래했어요",       romanization: "ppal-lae-hae-sseo-yo" },
@@ -628,7 +629,7 @@ const allVerbs = [
   },
   {
     english: "to organize, to tidy up",
-    korean: "정리하다", romanization: "jeong-ri-ha-da", category: "Household",
+    korean: "정리하다", romanization: "jeong-ri-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "정리해요",         romanization: "jeong-ri-hae-yo" },
       past:    { korean: "정리했어요",       romanization: "jeong-ri-hae-sseo-yo" },
@@ -648,7 +649,7 @@ const allVerbs = [
   // ===== Tandem: 60 Korean Verbs — Communication & Relationships =====
   {
     english: "to speak, to say",
-    korean: "말하다", romanization: "mal-ha-da", category: "Communication",
+    korean: "말하다", romanization: "mal-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "말해요",         romanization: "mal-hae-yo" },
       past:    { korean: "말했어요",       romanization: "mal-hae-sseo-yo" },
@@ -685,7 +686,7 @@ const allVerbs = [
   },
   {
     english: "to love",
-    korean: "사랑하다", romanization: "sa-rang-ha-da", category: "Communication",
+    korean: "사랑하다", romanization: "sa-rang-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "사랑해요",         romanization: "sa-rang-hae-yo" },
       past:    { korean: "사랑했어요",       romanization: "sa-rang-hae-sseo-yo" },
@@ -694,7 +695,7 @@ const allVerbs = [
   },
   {
     english: "to dislike, to hate",
-    korean: "싫어하다", romanization: "sil-eo-ha-da", category: "Communication",
+    korean: "싫어하다", romanization: "sil-eo-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "싫어해요",         romanization: "si-reo-hae-yo" },
       past:    { korean: "싫어했어요",       romanization: "si-reo-hae-sseo-yo" },
@@ -703,7 +704,7 @@ const allVerbs = [
   },
   {
     english: "to ask a favor, to request",
-    korean: "부탁하다", romanization: "bu-tak-ha-da", category: "Communication",
+    korean: "부탁하다", romanization: "bu-tak-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "부탁해요",         romanization: "bu-ta-kae-yo" },
       past:    { korean: "부탁했어요",       romanization: "bu-ta-kae-sseo-yo" },
@@ -741,7 +742,7 @@ const allVerbs = [
   },
   {
     english: "to arrive",
-    korean: "도착하다", romanization: "do-chak-ha-da", category: "Travel",
+    korean: "도착하다", romanization: "do-chak-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "도착해요",         romanization: "do-cha-kae-yo" },
       past:    { korean: "도착했어요",       romanization: "do-cha-kae-sseo-yo" },
@@ -750,7 +751,7 @@ const allVerbs = [
   },
   {
     english: "to depart, to leave",
-    korean: "출발하다", romanization: "chul-bal-ha-da", category: "Travel",
+    korean: "출발하다", romanization: "chul-bal-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "출발해요",         romanization: "chul-bal-hae-yo" },
       past:    { korean: "출발했어요",       romanization: "chul-bal-hae-sseo-yo" },
@@ -778,7 +779,7 @@ const allVerbs = [
   },
   {
     english: "to travel",
-    korean: "여행하다", romanization: "yeo-haeng-ha-da", category: "Travel",
+    korean: "여행하다", romanization: "yeo-haeng-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "여행해요",         romanization: "yeo-haeng-hae-yo" },
       past:    { korean: "여행했어요",       romanization: "yeo-haeng-hae-sseo-yo" },
@@ -789,7 +790,7 @@ const allVerbs = [
   // ===== Tandem: 60 Korean Verbs — Food & Dining =====
   {
     english: "to order (food)",
-    korean: "주문하다", romanization: "ju-mun-ha-da", category: "Food & Dining",
+    korean: "주문하다", romanization: "ju-mun-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "주문해요",         romanization: "ju-mun-hae-yo" },
       past:    { korean: "주문했어요",       romanization: "ju-mun-hae-sseo-yo" },
@@ -893,7 +894,7 @@ const allVerbs = [
   },
   {
     english: "to worry",
-    korean: "걱정하다", romanization: "geok-jeong-ha-da", category: "Emotion & State",
+    korean: "걱정하다", romanization: "geok-jeong-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "걱정해요",       romanization: "geok-jeong-hae-yo" },
       past:    { korean: "걱정했어요",     romanization: "geok-jeong-hae-sseo-yo" },
@@ -912,7 +913,7 @@ const allVerbs = [
   },
   {
     english: "to be tired",
-    korean: "피곤하다", romanization: "pi-gon-ha-da", category: "Emotion & State",
+    korean: "피곤하다", romanization: "pi-gon-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "피곤해요",       romanization: "pi-gon-hae-yo" },
       past:    { korean: "피곤했어요",     romanization: "pi-gon-hae-sseo-yo" },
@@ -921,7 +922,7 @@ const allVerbs = [
   },
   {
     english: "to be shy, to be embarrassed",
-    korean: "부끄러워하다", romanization: "bu-kkeu-reo-wo-ha-da", category: "Emotion & State",
+    korean: "부끄러워하다", romanization: "bu-kkeu-reo-wo-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "부끄러워해요",   romanization: "bu-kkeu-reo-wo-hae-yo" },
       past:    { korean: "부끄러워했어요", romanization: "bu-kkeu-reo-wo-hae-sseo-yo" },
@@ -950,7 +951,7 @@ const allVerbs = [
   },
   {
     english: "to sing",
-    korean: "노래하다", romanization: "no-rae-ha-da", category: "Culture & Social",
+    korean: "노래하다", romanization: "no-rae-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "노래해요",         romanization: "no-rae-hae-yo" },
       past:    { korean: "노래했어요",       romanization: "no-rae-hae-sseo-yo" },
@@ -959,7 +960,7 @@ const allVerbs = [
   },
   {
     english: "to play games",
-    korean: "게임하다", romanization: "ge-im-ha-da", category: "Culture & Social",
+    korean: "게임하다", romanization: "ge-im-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "게임해요",         romanization: "ge-im-hae-yo" },
       past:    { korean: "게임했어요",       romanization: "ge-im-hae-sseo-yo" },
@@ -968,7 +969,7 @@ const allVerbs = [
   },
   {
     english: "to celebrate, to congratulate",
-    korean: "축하하다", romanization: "chuk-ha-ha-da", category: "Culture & Social",
+    korean: "축하하다", romanization: "chuk-ha-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "축하해요",         romanization: "chu-ka-hae-yo" },
       past:    { korean: "축하했어요",       romanization: "chu-ka-hae-sseo-yo" },
@@ -977,7 +978,7 @@ const allVerbs = [
   },
   {
     english: "to invite",
-    korean: "초대하다", romanization: "cho-dae-ha-da", category: "Culture & Social",
+    korean: "초대하다", romanization: "cho-dae-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "초대해요",         romanization: "cho-dae-hae-yo" },
       past:    { korean: "초대했어요",       romanization: "cho-dae-hae-sseo-yo" },
@@ -1004,7 +1005,7 @@ const allVerbs = [
   },
   {
     english: "to participate in an event",
-    korean: "행사에 참여하다", romanization: "haeng-sa-e cha-myeo-ha-da", category: "Culture & Social",
+    korean: "행사에 참여하다", romanization: "haeng-sa-e cha-myeo-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "행사에 참여해요",         romanization: "haeng-sa-e cha-myeo-hae-yo" },
       past:    { korean: "행사에 참여했어요",       romanization: "haeng-sa-e cha-myeo-hae-sseo-yo" },
@@ -1024,7 +1025,7 @@ const allVerbs = [
   },
   {
     english: "to practice",
-    korean: "연습하다", romanization: "yeon-seup-ha-da", category: "Self-Improvement",
+    korean: "연습하다", romanization: "yeon-seup-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "연습해요",         romanization: "yeon-seu-pae-yo" },
       past:    { korean: "연습했어요",       romanization: "yeon-seu-pae-sseo-yo" },
@@ -1033,7 +1034,7 @@ const allVerbs = [
   },
   {
     english: "to make an effort, to try hard",
-    korean: "노력하다", romanization: "no-ryeok-ha-da", category: "Self-Improvement",
+    korean: "노력하다", romanization: "no-ryeok-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "노력해요",         romanization: "no-ryeo-kae-yo" },
       past:    { korean: "노력했어요",       romanization: "no-ryeo-kae-sseo-yo" },
@@ -1042,7 +1043,7 @@ const allVerbs = [
   },
   {
     english: "to focus, to concentrate",
-    korean: "집중하다", romanization: "jip-jung-ha-da", category: "Self-Improvement",
+    korean: "집중하다", romanization: "jip-jung-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "집중해요",         romanization: "jip-jung-hae-yo" },
       past:    { korean: "집중했어요",       romanization: "jip-jung-hae-sseo-yo" },
@@ -1051,7 +1052,7 @@ const allVerbs = [
   },
   {
     english: "to plan",
-    korean: "계획하다", romanization: "gye-hoek-ha-da", category: "Self-Improvement",
+    korean: "계획하다", romanization: "gye-hoek-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "계획해요",         romanization: "gye-hoe-kae-yo" },
       past:    { korean: "계획했어요",       romanization: "gye-hoe-kae-sseo-yo" },
@@ -1060,7 +1061,7 @@ const allVerbs = [
   },
   {
     english: "to prepare, to get ready",
-    korean: "준비하다", romanization: "jun-bi-ha-da", category: "Self-Improvement",
+    korean: "준비하다", romanization: "jun-bi-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "준비해요",         romanization: "jun-bi-hae-yo" },
       past:    { korean: "준비했어요",       romanization: "jun-bi-hae-sseo-yo" },
@@ -1069,11 +1070,94 @@ const allVerbs = [
   },
   {
     english: "to grow, to develop",
-    korean: "성장하다", romanization: "seong-jang-ha-da", category: "Self-Improvement",
+    korean: "성장하다", romanization: "seong-jang-ha-da", category: "하다 Verb",
     conjugations: {
       present: { korean: "성장해요",         romanization: "seong-jang-hae-yo" },
       past:    { korean: "성장했어요",       romanization: "seong-jang-hae-sseo-yo" },
       want:    { korean: "성장하고 싶어요",  romanization: "seong-jang-ha-go si-peo-yo" },
+    },
+  },
+
+  // ===== TTMIK Level 1 (Track 43) — Noun + 하다 Verbs =====
+  {
+    english: "to remember",
+    korean: "기억하다", romanization: "gi-eok-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "기억해요",         romanization: "gi-eo-kae-yo" },
+      past:    { korean: "기억했어요",       romanization: "gi-eo-kae-sseo-yo" },
+      want:    { korean: "기억하고 싶어요",  romanization: "gi-eo-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to think",
+    korean: "생각하다", romanization: "saeng-gak-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "생각해요",         romanization: "saeng-ga-kae-yo" },
+      past:    { korean: "생각했어요",       romanization: "saeng-ga-kae-sseo-yo" },
+      want:    { korean: "생각하고 싶어요",  romanization: "saeng-ga-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to recognize, to be aware of",
+    korean: "인식하다", romanization: "in-sik-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "인식해요",         romanization: "in-si-kae-yo" },
+      past:    { korean: "인식했어요",       romanization: "in-si-kae-sseo-yo" },
+      want:    { korean: "인식하고 싶어요",  romanization: "in-si-ka-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to agree",
+    korean: "동의하다", romanization: "dong-ui-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "동의해요",         romanization: "dong-ui-hae-yo" },
+      past:    { korean: "동의했어요",       romanization: "dong-ui-hae-sseo-yo" },
+      want:    { korean: "동의하고 싶어요",  romanization: "dong-ui-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to admit, to acknowledge",
+    korean: "인정하다", romanization: "in-jeong-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "인정해요",         romanization: "in-jeong-hae-yo" },
+      past:    { korean: "인정했어요",       romanization: "in-jeong-hae-sseo-yo" },
+      want:    { korean: "인정하고 싶어요",  romanization: "in-jeong-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to regret",
+    korean: "후회하다", romanization: "hu-hoe-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "후회해요",         romanization: "hu-hoe-hae-yo" },
+      past:    { korean: "후회했어요",       romanization: "hu-hoe-hae-sseo-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to move (into a different house)",
+    korean: "이사하다", romanization: "i-sa-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "이사해요",         romanization: "i-sa-hae-yo" },
+      past:    { korean: "이사했어요",       romanization: "i-sa-hae-sseo-yo" },
+      want:    { korean: "이사하고 싶어요",  romanization: "i-sa-ha-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to move (something), to be in motion",
+    korean: "움직이다", romanization: "um-ji-gi-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "움직여요",         romanization: "um-ji-gyeo-yo" },
+      past:    { korean: "움직였어요",       romanization: "um-ji-gyeo-sseo-yo" },
+      want:    { korean: "움직이고 싶어요",  romanization: "um-ji-gi-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to exercise, to work out",
+    korean: "운동하다", romanization: "un-dong-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "운동해요",         romanization: "un-dong-hae-yo" },
+      past:    { korean: "운동했어요",       romanization: "un-dong-hae-sseo-yo" },
+      want:    { korean: "운동하고 싶어요",  romanization: "un-dong-ha-go si-peo-yo" },
     },
   },
 ];
