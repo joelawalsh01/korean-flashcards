@@ -12,7 +12,15 @@ Korean language flashcard apps for vocabulary study. Each page is a self-contain
 
 - `particles.html` — particle-choice drill. Cards are sentences built from the vocabulary/verb decks with one or more blanks; the learner picks from a fixed 8-button set (에, 에서, 을, 를, 이, 가, 은, 는). Two authoring shapes normalize to one internal model at load (`cards`): the compact `{before, after, answer, explanation}` for single-blank cards, and `{parts, answers, explanations}` (parts has one more entry than answers) for compound sentences. Blanks fill left to right and the card is graded as a unit only once every blank has a pick. Each particle button carries its hover explanation in `data-tip` (rendered by `.particle-btn::after`); the same text feeds the tap-friendly "Particle guide" panel
 
-The pages share the same UI shell and JS shape but have **independent, copy-pasted code** — there is no shared module. Changes to behavior usually need to be made in all files.
+The pages share the same UI shell and JS shape but have **independent, copy-pasted code** — with one exception: `speak.js` is loaded by all four and holds the audio playback shim. Changes to any other behavior need to be made in all files.
+
+## Audio
+
+- `speak.js` — `speak(text)` plays `audio/<hash>.mp3`, falling back to the Web Speech API with a `ko-KR` voice if the clip is missing. `speakerButton(getText, extraClass)` builds the 🔊 button and already calls `stopPropagation` so a tap doesn't flip the card. `speechTextOf(card)` resolves what a card says
+- `tools/build-audio.mjs` — run `node tools/build-audio.mjs` after adding cards. It slices each page's card array out of the HTML, evaluates it, and generates a clip per unique string with macOS `say -v Yuna` + `ffmpeg`. Existing files are skipped; a hash collision aborts the build
+- **The FNV-1a hash in `speak.js` and `tools/build-audio.mjs` must stay identical** — it is the only link between a card's text and its file, which is why there is no manifest
+- Cards may carry an optional `speech` field: a string overrides what is spoken (used in `index.html` for grammar labels like `은/는` → `"은, 는"`, which TTS would otherwise read literally), and `null` suppresses audio for that card entirely. Absent, the `korean` field is spoken
+- What each deck speaks: `index.html`/`numbers.html` the card's hangul; `verbs.html` the base form plus a button per conjugation row (Conjugate mode speaks the drilled form); `particles.html` the sentence with its blanks filled in
 
 ## Development
 

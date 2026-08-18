@@ -334,6 +334,32 @@
     font-size: 0.78rem;
   }
 
+
+  /* --- Audio button (playback lives in speak.js) --- */
+  .speak-btn {
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .speak-btn:hover { background: rgba(255,255,255,0.36); }
+  .speak-btn:active { transform: scale(0.9); }
+
+  .speak-btn.small { font-size: 0.7rem; padding: 3px 5px; }
+
+  /* Keeps the hangul and its speaker button on one line. */
+  .main-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
   /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
   .deck-switch {
     display: inline-flex;
@@ -395,7 +421,7 @@
     </div>
     <div class="card-face card-back">
       <span class="card-category" id="backCat"></span>
-      <span class="card-main" id="backMain"></span>
+      <div class="main-row"><span class="card-main" id="backMain"></span><span id="backSpeak"></span></div>
       <span class="pronunciation" id="backRoman"></span>
       <div class="conj-list" id="conjList"></div>
       <span class="card-hint" id="backHint">tap to flip</span>
@@ -414,8 +440,10 @@
 </div>
 
 <p class="keyboard-hint">
-  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>Enter</kbd> check (Conjugate)
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>Enter</kbd> check (Conjugate) &nbsp;&middot;&nbsp; <kbd>S</kbd> hear it
 </p>
+
+<script src="speak.js"></script>
 
 <script>
 // ===== Tense metadata =====
@@ -1288,6 +1316,7 @@ function render() {
     backRoman.textContent = "";
     conjList.innerHTML = "";
     progressEl.textContent = "0 of 0";
+    updateSpeakBtn();
     return;
   }
 
@@ -1317,6 +1346,7 @@ function render() {
       row.innerHTML =
         `<span class="conj-label">${t.label}</span>` +
         `<span class="conj-form">${c.korean}</span>`;
+      row.appendChild(speakerButton(c.korean, "small"));
       conjList.appendChild(row);
     });
   } else {
@@ -1337,6 +1367,26 @@ function render() {
 
     setTimeout(() => answerInput.focus(), 50);
   }
+
+  updateSpeakBtn();
+}
+
+// ===== Audio =====
+// Recall mode speaks the base form (each conjugation row has its own button);
+// Conjugate mode speaks the form being drilled.
+function currentSpeech() {
+  if (deck.length === 0) return null;
+  const v = deck[idx];
+  if (mode === "recall") return speechTextOf(v);
+  const target = v.conjugations[activeTense];
+  return target ? target.korean : null;
+}
+
+const speakBtn = speakerButton(currentSpeech);
+document.getElementById("backSpeak").appendChild(speakBtn);
+
+function updateSpeakBtn() {
+  speakBtn.style.display = currentSpeech() ? "" : "none";
 }
 
 // ===== Recall-mode flip on tap =====
@@ -1401,6 +1451,7 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     cardEl.classList.toggle("flipped");
   }
+  else if (e.key === "s" || e.key === "S") { e.preventDefault(); speak(currentSpeech()); }
 });
 
 // ===== Init =====

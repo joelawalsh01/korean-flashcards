@@ -245,6 +245,32 @@
     font-size: 0.78rem;
   }
 
+
+  /* --- Audio button (playback lives in speak.js) --- */
+  .speak-btn {
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .speak-btn:hover { background: rgba(255,255,255,0.36); }
+  .speak-btn:active { transform: scale(0.9); }
+
+  .speak-btn.small { font-size: 0.7rem; padding: 3px 5px; }
+
+  /* Keeps the hangul and its speaker button on one line. */
+  .main-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
   /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
   .deck-switch {
     display: inline-flex;
@@ -299,7 +325,7 @@
     <div class="card-face card-back">
       <span class="card-category" id="backCat"></span>
       <span class="card-system" id="backSystem"></span>
-      <span class="card-main" id="backMain"></span>
+      <div class="main-row"><span class="card-main" id="backMain"></span><span id="backSpeak"></span></div>
       <span class="romanization" id="backRoman"></span>
       <span class="pronunciation" id="backPron"></span>
       <span class="card-hint" id="backHint">tap to flip</span>
@@ -313,8 +339,10 @@
 </div>
 
 <p class="keyboard-hint">
-  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>S</kbd> hear it
 </p>
+
+<script src="speak.js"></script>
 
 <script>
 // Each card poses a usage question on the front (e.g. "Age: 20?").
@@ -477,6 +505,7 @@ function render() {
     backPron.textContent = "";
     progressEl.textContent = "0 of 0";
     backHint.textContent = "tap to flip";
+    updateSpeakBtn();
     return;
   }
   const c = deck[idx];
@@ -489,6 +518,19 @@ function render() {
   backPron.textContent = c.pronunciation || "";
   backHint.textContent = "hover hangul for romanization";
   progressEl.textContent = `Card ${idx + 1} of ${deck.length}`;
+  updateSpeakBtn();
+}
+
+// --- Audio ---
+function currentSpeech() {
+  return deck.length ? speechTextOf(deck[idx]) : null;
+}
+
+const speakBtn = speakerButton(currentSpeech);
+document.getElementById("backSpeak").appendChild(speakBtn);
+
+function updateSpeakBtn() {
+  speakBtn.style.display = currentSpeech() ? "" : "none";
 }
 
 // --- Romanization hover/tap ---
@@ -535,6 +577,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
   else if (e.key === "ArrowRight") { e.preventDefault(); next(); }
   else if (e.key === " ") { e.preventDefault(); cardEl.classList.toggle("flipped"); }
+  else if (e.key === "s" || e.key === "S") { e.preventDefault(); speak(currentSpeech()); }
 });
 
 // --- Init ---

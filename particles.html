@@ -466,6 +466,32 @@
     font-size: 0.78rem;
   }
 
+
+  /* --- Audio button (playback lives in speak.js) --- */
+  .speak-btn {
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: inherit;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .speak-btn:hover { background: rgba(255,255,255,0.36); }
+  .speak-btn:active { transform: scale(0.9); }
+
+  .speak-btn.small { font-size: 0.7rem; padding: 3px 5px; }
+
+  /* Keeps the hangul and its speaker button on one line. */
+  .main-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
   /* --- Deck Switcher (shared across index/numbers/verbs/particles) --- */
   .deck-switch {
     display: inline-flex;
@@ -531,7 +557,7 @@
     <div class="card-face card-back">
       <span class="card-category" id="backCat"></span>
       <span class="verdict" id="verdict"></span>
-      <div class="sentence" id="backSentence"></div>
+      <div class="main-row"><div class="sentence" id="backSentence"></div><span id="backSpeak"></span></div>
       <div class="roman" id="backRoman"></div>
       <div class="explanation" id="backExplanation"></div>
       <span class="card-hint" id="backHint">&#8594; for next</span>
@@ -551,8 +577,10 @@
 <p class="score" id="score"></p>
 
 <p class="keyboard-hint">
-  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>1</kbd>&ndash;<kbd>8</kbd> pick a particle &nbsp;&middot;&nbsp; <kbd>Backspace</kbd> undo a blank &nbsp;&middot;&nbsp; <kbd>Space</kbd> reveal
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>1</kbd>&ndash;<kbd>8</kbd> pick a particle &nbsp;&middot;&nbsp; <kbd>Backspace</kbd> undo a blank &nbsp;&middot;&nbsp; <kbd>Space</kbd> reveal &nbsp;&middot;&nbsp; <kbd>S</kbd> hear it
 </p>
+
+<script src="speak.js"></script>
 
 <script>
 // ===== Particle metadata =====
@@ -1418,7 +1446,24 @@ function render() {
   renderFront();
   renderPrompt();
   renderExplanations();
+  updateSpeakBtn();
   updateScore();
+}
+
+// ===== Audio =====
+// Speaks the sentence with its blanks filled in, so what you hear is the
+// finished sentence rather than the fragments around the gaps.
+function currentSpeech() {
+  if (deck.length === 0) return null;
+  const c = deck[idx];
+  return c.parts.map((p, i) => p + (c.answers[i] || "")).join("").trim();
+}
+
+const speakBtn = speakerButton(currentSpeech);
+document.getElementById("backSpeak").appendChild(speakBtn);
+
+function updateSpeakBtn() {
+  speakBtn.style.display = currentSpeech() ? "" : "none";
 }
 
 // One row per blank, marked against what was picked. A miss also gets a "not X"
@@ -1570,6 +1615,7 @@ document.addEventListener("keydown", (e) => {
     renderFront();
     renderPrompt();
   }
+  else if (e.key === "s" || e.key === "S") { e.preventDefault(); speak(currentSpeech()); }
   else if (/^[1-8]$/.test(e.key)) {
     e.preventDefault();
     const p = PARTICLES[Number(e.key) - 1];
