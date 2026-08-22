@@ -1,0 +1,1021 @@
+======================================================================
+VOCABULARY — index.html (Conversations 1–3) — 170 cards
+======================================================================
+
+--- Noun (109) ---
+1학년  [il-hangnyeon]  —  freshman
+2학년  [i-hangnyeon]  —  sophomore
+3학년  [sam-hangnyeon]  —  junior
+4학년  [sa-hangnyeon]  —  senior
+과  [gwa]  —  lesson, chapter
+대학생  [daehaksaeng]  —  college student
+미국  [miguk]  —  the United States
+사람  [saram]  —  person, people
+인사  [insa]  —  greeting
+학년  [hangnyeon]  —  school year  ([항년])
+학생  [haksaeng]  —  student  ([학쌩])
+한국  [hanguk]  —  Korea  ([항국])
+도서관  [doseogwan]  —  library
+수업  [sueop]  —  course, class
+숙제  [sukje]  —  homework
+식당  [sikdang]  —  restaurant (학교 식당 'school cafeteria')
+아침  [achim]  —  breakfast; morning
+친구  [chingu]  —  friend
+커피  [keopi]  —  coffee
+학교  [hakgyo]  —  school
+가방  [gabang]  —  bag
+기숙사  [gisuksa]  —  dormitory
+대학교  [daehakgyo]  —  college, university
+뒤  [dwi]  —  back, behind
+밑  [mit]  —  bottom, below
+밖  [bak]  —  outside
+빌딩  [bilding]  —  building
+서점  [seojeom]  —  bookstore
+시계  [sigye]  —  clock, watch
+안  [an]  —  inside
+앞  [ap]  —  front
+어디  [eodi]  —  what place, where (question word)
+옆  [yeop]  —  side, beside
+우체국  [ucheguk]  —  post office
+의자  [uija]  —  chair
+위  [wi]  —  the top side, above
+책상  [chaeksang]  —  desk
+책  [chaek]  —  book
+학생회관  [haksaenghoegwan]  —  student center
+캠퍼스  [kaempeoseu]  —  campus
+거  [geo]  —  thing, item (informal)
+것  [geot]  —  thing, item, fact
+컴퓨터  [keompyuteo]  —  computer
+아이스크림  [aiseukeurim]  —  ice cream
+호텔  [hotel]  —  hotel
+택시  [taeksi]  —  taxi
+버스  [beoseu]  —  bus
+마이크  [maikeu]  —  microphone
+테이블  [teibeul]  —  table
+레스토랑  [reseutorang]  —  restaurant
+브랜드  [beuraendeu]  —  brand
+지하철  [jihacheol]  —  subway
+역  [yeok]  —  (train/subway) station
+차  [cha]  —  car
+사과  [sagwa]  —  apple
+물  [mul]  —  water
+오렌지 주스  [orenji juseu]  —  orange juice
+내일  [naeil]  —  tomorrow
+오늘  [oneul]  —  today
+날씨  [nalssi]  —  weather
+복숭아  [boksunga]  —  peach
+피자  [pija]  —  pizza
+누나  [nuna]  —  older sister (of a male)
+언니  [eonni]  —  older sister (of a female)
+형  [hyeong]  —  older brother (of a male)
+오빠  [oppa]  —  older brother (of a female)
+여동생  [yeodongsaeng]  —  younger sister
+남동생  [namdongsaeng]  —  younger brother
+여자  [yeoja]  —  woman, female
+남자  [namja]  —  man, male
+형제  [hyeongje]  —  sibling(s)
+시간  [sigan]  —  time
+재미  [jaemi]  —  fun (재미있다 = interesting)
+맛  [mat]  —  taste
+옆집  [yeopjip]  —  next door, neighbor's house
+우산  [usan]  —  umbrella
+음식  [eumsik]  —  food
+선생님  [seonsaengnim]  —  teacher; respectful term
+손님  [sonnim]  —  customer, guest
+기사님  [gisanim]  —  driver (respectful)
+공부  [gongbu]  —  studying  (공부하다 = to study)
+일  [il]  —  work, job  (일하다 = to work)
+기억  [gieok]  —  memory  (기억하다 = to remember)
+청소  [cheongso]  —  cleaning  (청소하다 = to clean)
+요리  [yori]  —  cooking, dish  (요리사 = chef (요리 + 사 expert))
+이사  [isa]  —  moving (house)  (이사하다 = to move house)
+노래  [norae]  —  song  ((노래를) 노래했어요 = I sang a song)
+노력  [noryeok]  —  effort  (노력하다 = to try hard)
+동의  [dongui]  —  agreement, agreeing  (맞아요 = that's correct / I agree)
+인정  [injeong]  —  admitting, acknowledgement  (인정하다 = to admit)
+후회  [huhoe]  —  regret  (후회하다 = to regret)
+운동  [undong]  —  exercise  (운동하다 = to work out)
+사랑  [sarang]  —  love  (사랑해요 = I love you)
+말  [mal]  —  words, language  (말하다 = to speak)
+생각  [saenggak]  —  thought, idea  (생각하다 = to think)
+인식  [insik]  —  cognition, recognition  (인식하다 = to recognize)
+언제  [eonje]  —  when
+어제  [eoje]  —  yesterday
+전화  [jeonhwa]  —  phone call, telephone  (전화하다 = to make a phone call)
+부엌  [bueok]  —  kitchen  ([부억])
+주방  [jubang]  —  kitchen (also 부엌)
+거실  [geosil]  —  living room
+화장실  [hwajangsil]  —  bathroom, restroom
+욕실  [yoksil]  —  bathroom (with a bath)
+안방  [anbang]  —  master bedroom
+현관  [hyeongwan]  —  entryway, doorway
+얼마  [eolma]  —  how much (money, price)  (얼마예요? = How much is it?)
+의문사  [uimunsa]  —  interrogative words
+사무실  [samusil]  —  office  (사무실 갔다 왔어요 = I went to the office (and came back))
+
+--- Number (4) ---
+일  [il]  —  1 (one)
+이  [i]  —  2 (two)
+삼  [sam]  —  3 (three)
+사  [sa]  —  4 (four)
+
+--- Adjective (13) ---
+안녕하다  [annyeonghada]  —  to be well (Hi, Hello, How are you?)  (안녕하세요.)
+괜찮다  [gwaenchanta]  —  to be all right, okay
+넓다  [neolda]  —  to be spacious, wide
+많다  [manta]  —  to be many, much  (많아요)
+맛있다  [masitta]  —  to be delicious
+어떻다  [eotteota]  —  to be how  (어때요)
+재미있다  [jaemiitda]  —  to be fun, interesting  (재미있어요)
+좋다  [jota]  —  to be good, nice  (좋아요)
+있다  [itda]  —  to be (existence)  (있어요)
+맞다  [matda]  —  to be right, correct  (맞아요)
+비싸다  [bissada]  —  to be expensive  (비싸요)
+없다  [eopda]  —  to not exist; to not have  (없어요 [업서요])
+맛없다  [maseopda]  —  to not be delicious  (맛없어요)
+
+--- Copula (1) ---
+이다  [ida]  —  to be (equation)  (이에요/예요)
+
+--- Particle (6) ---
+도  [do]  —  also, too
+은/는  [eun/neun]  —  topic particle ('as for')
+들  [deul]  —  plural particle
+에  [e]  —  in, at, on (static location)
+이/가  [i/ga]  —  subject marking particle
+은요?/는요?  [eunyo/neunyo]  —  How about (noun)? (consonant + 은요? / vowel + 는요?)  (거실은요? = How about the living room?)
+
+--- Pronoun (13) ---
+저  [jeo]  —  I (humble)  (= 나 (plain))
+이것  [igeot]  —  this thing, this one  (spoken: 이거)
+이거  [igeo]  —  this thing, this one (spoken)
+그것  [geugeot]  —  that thing, it  (spoken: 그거)
+그거  [geugeo]  —  that thing, it (spoken)
+저것  [jeogeot]  —  that thing over there  (spoken: 저거)
+저거  [jeogeo]  —  that thing over there (spoken)
+여기  [yeogi]  —  here
+거기  [geogi]  —  there (near you)
+저기  [jeogi]  —  over there
+누구  [nugu]  —  who
+뭐  [mwo]  —  what
+누가  [nuga]  —  who (subject form — 누구 + 가)  (누가 왔어요? = Who came?)
+
+--- Suffix (2) ---
+~어요/아요  [~eoyo/ayo]  —  polite ending
+씨  [ssi]  —  Mr./Ms. (after a name)
+
+--- Interjection (4) ---
+어  [eo]  —  oh
+저  [jeo]  —  uh (expression of hesitation)
+아니요  [aniyo]  —  no
+네  [ne]  —  yes
+
+--- Verb (5) ---
+먹다  [meokda]  —  to eat
+앉다  [anda]  —  to sit
+알다  [alda]  —  to know
+좋아하다  [joahada]  —  to like  (좋아해요)
+일하다  [ilhada]  —  to work  (일해요)
+
+--- Adverb (8) ---
+아주  [aju]  —  very, really
+그럼  [geureom]  —  then, so, in that case
+왜  [wae]  —  why  (어제 왜 안 왔어요? = Why didn't you come yesterday?)
+어떻게  [eotteoke]  —  how  ([어떠케])
+얼마나  [eolmana]  —  how + adjective/adverb  (얼마나 빨라요? = How fast is it?)
+자주  [jaju]  —  often, frequently  (얼마나 자주 = how often)
+너무  [neomu]  —  very much, too (much)  (너무 귀여워요! = It's so cute!)
+빨리  [ppalli]  —  quickly, fast (adverb)  (빠르다 → 빠른 (adj.) / 빨리 (adv.))
+
+--- Counter (2) ---
+층  [cheung]  —  floor, layer (1층, 2층, 3층, ...)
+분  [bun]  —  person (honorific counter)  (이 분 = this person (honorific))
+
+--- Determiner (3) ---
+이  [i]  —  this (near me)  (+ noun)
+그  [geu]  —  the, that (near you)  (+ noun)
+저  [jeo]  —  that (over there)  (+ noun)
+
+======================================================================
+NUMBERS — numbers.html (Sino vs Native) — 80 cards
+======================================================================
+
+--- Age (11) ---
+한 살  [han sal]  —  Age: 1 year old?  {Native}
+두 살  [du sal]  —  Age: 2 years old?  {Native}
+세 살  [se sal]  —  Age: 3 years old?  {Native}
+네 살  [ne sal]  —  Age: 4 years old?  {Native}
+다섯 살  [daseot sal]  —  Age: 5 years old?  {Native}
+열 살  [yeol sal]  —  Age: 10 years old?  {Native}
+스무 살  [seumu sal]  —  Age: 20 years old?  {Native}
+스물한 살  [seumul-han sal]  —  Age: 21 years old?  {Native}
+서른 살  [seoreun sal]  —  Age: 30 years old?  {Native}
+마흔 살  [maheun sal]  —  Age: 40 years old?  {Native}
+쉰 살  [swin sal]  —  Age: 50 years old?  {Native}
+
+--- Hour (8) ---
+한 시  [han si]  —  Time: 1 o'clock?  {Native}
+두 시  [du si]  —  Time: 2 o'clock?  {Native}
+세 시  [se si]  —  Time: 3 o'clock?  {Native}
+네 시  [ne si]  —  Time: 4 o'clock?  {Native}
+다섯 시  [daseot si]  —  Time: 5 o'clock?  {Native}
+여섯 시  [yeoseot si]  —  Time: 6 o'clock?  {Native}
+일곱 시  [ilgop si]  —  Time: 7 o'clock?  {Native}
+열두 시  [yeoldu si]  —  Time: 12 o'clock?  {Native}
+
+--- Minute (6) ---
+일 분  [il bun]  —  Time: 1 minute?  {Sino}
+오 분  [o bun]  —  Time: 5 minutes?  {Sino}
+십 분  [sip bun]  —  Time: 10 minutes?  {Sino}
+십오 분  [sibo bun]  —  Time: 15 minutes?  {Sino}
+삼십 분  [samsip bun]  —  Time: 30 minutes?  {Sino}
+사십오 분  [sasibo bun]  —  Time: 45 minutes?  {Sino}
+
+--- People (6) ---
+한 명  [han myeong]  —  1 person?  {Native}
+두 명  [du myeong]  —  2 people?  {Native}
+세 명  [se myeong]  —  3 people?  {Native}
+네 명  [ne myeong]  —  4 people?  {Native}
+다섯 명  [daseot myeong]  —  5 people?  {Native}
+열 명  [yeol myeong]  —  10 people?  {Native}
+
+--- Things (7) ---
+한 개  [han gae]  —  1 item?  {Native}
+두 개  [du gae]  —  2 items?  {Native}
+세 개  [se gae]  —  3 items?  {Native}
+네 개  [ne gae]  —  4 items?  {Native}
+다섯 개  [daseot gae]  —  5 items?  {Native}
+열 개  [yeol gae]  —  10 items?  {Native}
+스무 개  [seumu gae]  —  20 items?  {Native}
+
+--- Money (6) ---
+백 원  [baek won]  —  Money: 100 won?  {Sino}
+오백 원  [obaek won]  —  Money: 500 won?  {Sino}
+천 원  [cheon won]  —  Money: 1,000 won?  {Sino}
+오천 원  [ocheon won]  —  Money: 5,000 won?  {Sino}
+만 원  [man won]  —  Money: 10,000 won?  {Sino}
+오만 원  [oman won]  —  Money: 50,000 won?  {Sino}
+
+--- Month (12) ---
+일월  [irwol]  —  Date: January?  {Sino}
+이월  [iwol]  —  Date: February?  {Sino}
+삼월  [samwol]  —  Date: March?  {Sino}
+사월  [sawol]  —  Date: April?  {Sino}
+오월  [owol]  —  Date: May?  {Sino}
+유월  [yuwol]  —  Date: June?  {Sino}
+칠월  [chirwol]  —  Date: July?  {Sino}
+팔월  [parwol]  —  Date: August?  {Sino}
+구월  [guwol]  —  Date: September?  {Sino}
+시월  [siwol]  —  Date: October?  {Sino}
+십일월  [sibirwol]  —  Date: November?  {Sino}
+십이월  [sibiwol]  —  Date: December?  {Sino}
+
+--- Day (6) ---
+일 일  [il il]  —  Date: 1st?  {Sino}
+오 일  [o il]  —  Date: 5th?  {Sino}
+십 일  [sip il]  —  Date: 10th?  {Sino}
+십오 일  [sibo il]  —  Date: 15th?  {Sino}
+이십오 일  [isibo il]  —  Date: 25th?  {Sino}
+삼십일 일  [samsibil il]  —  Date: 31st?  {Sino}
+
+--- Floor (4) ---
+일 층  [il cheung]  —  Floor: 1st?  {Sino}
+이 층  [i cheung]  —  Floor: 2nd?  {Sino}
+삼 층  [sam cheung]  —  Floor: 3rd?  {Sino}
+십 층  [sip cheung]  —  Floor: 10th?  {Sino}
+
+--- Phone/Math (14) ---
+영 / 공  [yeong / gong]  —  Phone/Math: 0?  {Sino}
+일  [il]  —  Phone/Math: 1?  {Sino}
+이  [i]  —  Phone/Math: 2?  {Sino}
+삼  [sam]  —  Phone/Math: 3?  {Sino}
+사  [sa]  —  Phone/Math: 4?  {Sino}
+오  [o]  —  Phone/Math: 5?  {Sino}
+육  [yuk]  —  Phone/Math: 6?  {Sino}
+칠  [chil]  —  Phone/Math: 7?  {Sino}
+팔  [pal]  —  Phone/Math: 8?  {Sino}
+구  [gu]  —  Phone/Math: 9?  {Sino}
+십  [sip]  —  Phone/Math: 10?  {Sino}
+백  [baek]  —  Phone/Math: 100?  {Sino}
+천  [cheon]  —  Phone/Math: 1,000?  {Sino}
+만  [man]  —  Phone/Math: 10,000?  {Sino}
+
+======================================================================
+VERBS — verbs.html (TTMIK Lesson 18) — 89 verbs
+======================================================================
+
+가다  [ga-da]  —  to go
+    present  가요  [ga-yo]
+    past     갔어요  [ga-sseo-yo]
+    want     가고 싶어요  [ga-go si-peo-yo]
+
+오다  [o-da]  —  to come
+    present  와요  [wa-yo]
+    past     왔어요  [wa-sseo-yo]
+    want     오고 싶어요  [o-go si-peo-yo]
+
+보다  [bo-da]  —  to see, to watch
+    present  봐요  [bwa-yo]
+    past     봤어요  [bwa-sseo-yo]
+    want     보고 싶어요  [bo-go si-peo-yo]
+
+하다  [ha-da]  —  to do
+    present  해요  [hae-yo]
+    past     했어요  [hae-sseo-yo]
+    want     하고 싶어요  [ha-go si-peo-yo]
+
+먹다  [meok-da]  —  to eat
+    present  먹어요  [meo-geo-yo]
+    past     먹었어요  [meo-geo-sseo-yo]
+    want     먹고 싶어요  [meok-go si-peo-yo]
+
+앉다  [an-da]  —  to sit
+    present  앉아요  [an-ja-yo]
+    past     앉았어요  [an-ja-sseo-yo]
+    want     앉고 싶어요  [an-go si-peo-yo]
+
+알다  [al-da]  —  to know
+    present  알아요  [a-ra-yo]
+    past     알았어요  [a-ra-sseo-yo]
+    want     알고 싶어요  [al-go si-peo-yo]
+
+좋아하다  [jo-a-ha-da]  —  to like
+    present  좋아해요  [jo-a-hae-yo]
+    past     좋아했어요  [jo-a-hae-sseo-yo]
+    want     좋아하고 싶어요  [jo-a-ha-go si-peo-yo]
+
+일하다  [il-ha-da]  —  to work
+    present  일해요  [il-hae-yo]
+    past     일했어요  [il-hae-sseo-yo]
+    want     일하고 싶어요  [il-ha-go si-peo-yo]
+
+공부하다  [gong-bu-ha-da]  —  to study
+    present  공부해요  [gong-bu-hae-yo]
+    past     공부했어요  [gong-bu-hae-sseo-yo]
+    want     공부하고 싶어요  [gong-bu-ha-go si-peo-yo]
+
+있다  [it-da]  —  to be, to exist
+    present  있어요  [i-sseo-yo]
+    past     있었어요  [i-sseo-sseo-yo]
+    want     —
+
+마시다  [ma-si-da]  —  to drink
+    present  마셔요  [ma-syeo-yo]
+    past     마셨어요  [ma-syeo-sseo-yo]
+    want     마시고 싶어요  [ma-si-go si-peo-yo]
+
+자다  [ja-da]  —  to sleep
+    present  자요  [ja-yo]
+    past     잤어요  [ja-sseo-yo]
+    want     자고 싶어요  [ja-go si-peo-yo]
+
+일어나다  [i-reo-na-da]  —  to wake up, to get up
+    present  일어나요  [i-reo-na-yo]
+    past     일어났어요  [i-reo-na-sseo-yo]
+    want     일어나고 싶어요  [i-reo-na-go si-peo-yo]
+
+입다  [ip-da]  —  to wear, to put on clothes
+    present  입어요  [i-beo-yo]
+    past     입었어요  [i-beo-sseo-yo]
+    want     입고 싶어요  [ip-go si-peo-yo]
+
+청소하다  [cheong-so-ha-da]  —  to clean
+    present  청소해요  [cheong-so-hae-yo]
+    past     청소했어요  [cheong-so-hae-sseo-yo]
+    want     청소하고 싶어요  [cheong-so-ha-go si-peo-yo]
+
+씻다  [ssit-da]  —  to wash
+    present  씻어요  [ssi-seo-yo]
+    past     씻었어요  [ssi-seo-sseo-yo]
+    want     씻고 싶어요  [ssit-go si-peo-yo]
+
+요리하다  [yo-ri-ha-da]  —  to cook
+    present  요리해요  [yo-ri-hae-yo]
+    past     요리했어요  [yo-ri-hae-sseo-yo]
+    want     요리하고 싶어요  [yo-ri-ha-go si-peo-yo]
+
+만들다  [man-deul-da]  —  to make
+    present  만들어요  [man-deu-reo-yo]
+    past     만들었어요  [man-deu-reo-sseo-yo]
+    want     만들고 싶어요  [man-deul-go si-peo-yo]
+
+설거지하다  [seol-geo-ji-ha-da]  —  to do the dishes
+    present  설거지해요  [seol-geo-ji-hae-yo]
+    past     설거지했어요  [seol-geo-ji-hae-sseo-yo]
+    want     설거지하고 싶어요  [seol-geo-ji-ha-go si-peo-yo]
+
+빨래하다  [ppal-lae-ha-da]  —  to do laundry
+    present  빨래해요  [ppal-lae-hae-yo]
+    past     빨래했어요  [ppal-lae-hae-sseo-yo]
+    want     빨래하고 싶어요  [ppal-lae-ha-go si-peo-yo]
+
+정리하다  [jeong-ri-ha-da]  —  to organize, to tidy up
+    present  정리해요  [jeong-ri-hae-yo]
+    past     정리했어요  [jeong-ri-hae-sseo-yo]
+    want     정리하고 싶어요  [jeong-ri-ha-go si-peo-yo]
+
+쉬다  [swi-da]  —  to rest
+    present  쉬어요  [swi-eo-yo]
+    past     쉬었어요  [swi-eo-sseo-yo]
+    want     쉬고 싶어요  [swi-go si-peo-yo]
+
+말하다  [mal-ha-da]  —  to speak, to say
+    present  말해요  [mal-hae-yo]
+    past     말했어요  [mal-hae-sseo-yo]
+    want     말하고 싶어요  [mal-ha-go si-peo-yo]
+
+듣다  [deut-da]  —  to listen, to hear
+    present  들어요  [deu-reo-yo]
+    past     들었어요  [deu-reo-sseo-yo]
+    want     듣고 싶어요  [deut-go si-peo-yo]
+
+주다  [ju-da]  —  to give
+    present  줘요  [jwo-yo]
+    past     줬어요  [jwo-sseo-yo]
+    want     주고 싶어요  [ju-go si-peo-yo]
+
+받다  [bat-da]  —  to receive
+    present  받아요  [ba-da-yo]
+    past     받았어요  [ba-da-sseo-yo]
+    want     받고 싶어요  [bat-go si-peo-yo]
+
+사랑하다  [sa-rang-ha-da]  —  to love
+    present  사랑해요  [sa-rang-hae-yo]
+    past     사랑했어요  [sa-rang-hae-sseo-yo]
+    want     사랑하고 싶어요  [sa-rang-ha-go si-peo-yo]
+
+싫어하다  [sil-eo-ha-da]  —  to dislike, to hate
+    present  싫어해요  [si-reo-hae-yo]
+    past     싫어했어요  [si-reo-hae-sseo-yo]
+    want     —
+
+부탁하다  [bu-tak-ha-da]  —  to ask a favor, to request
+    present  부탁해요  [bu-ta-kae-yo]
+    past     부탁했어요  [bu-ta-kae-sseo-yo]
+    want     부탁하고 싶어요  [bu-ta-ka-go si-peo-yo]
+
+타다  [ta-da]  —  to ride, to take (transport)
+    present  타요  [ta-yo]
+    past     탔어요  [ta-sseo-yo]
+    want     타고 싶어요  [ta-go si-peo-yo]
+
+내리다  [nae-ri-da]  —  to get off, to go down
+    present  내려요  [nae-ryeo-yo]
+    past     내렸어요  [nae-ryeo-sseo-yo]
+    want     내리고 싶어요  [nae-ri-go si-peo-yo]
+
+찾다  [chat-da]  —  to find, to look for
+    present  찾아요  [cha-ja-yo]
+    past     찾았어요  [cha-ja-sseo-yo]
+    want     찾고 싶어요  [chat-go si-peo-yo]
+
+도착하다  [do-chak-ha-da]  —  to arrive
+    present  도착해요  [do-cha-kae-yo]
+    past     도착했어요  [do-cha-kae-sseo-yo]
+    want     도착하고 싶어요  [do-cha-ka-go si-peo-yo]
+
+출발하다  [chul-bal-ha-da]  —  to depart, to leave
+    present  출발해요  [chul-bal-hae-yo]
+    past     출발했어요  [chul-bal-hae-sseo-yo]
+    want     출발하고 싶어요  [chul-bal-ha-go si-peo-yo]
+
+걷다  [geot-da]  —  to walk
+    present  걸어요  [geo-reo-yo]
+    past     걸었어요  [geo-reo-sseo-yo]
+    want     걷고 싶어요  [geot-go si-peo-yo]
+
+달리다  [dal-li-da]  —  to run
+    present  달려요  [dal-lyeo-yo]
+    past     달렸어요  [dal-lyeo-sseo-yo]
+    want     달리고 싶어요  [dal-li-go si-peo-yo]
+
+여행하다  [yeo-haeng-ha-da]  —  to travel
+    present  여행해요  [yeo-haeng-hae-yo]
+    past     여행했어요  [yeo-haeng-hae-sseo-yo]
+    want     여행하고 싶어요  [yeo-haeng-ha-go si-peo-yo]
+
+주문하다  [ju-mun-ha-da]  —  to order (food)
+    present  주문해요  [ju-mun-hae-yo]
+    past     주문했어요  [ju-mun-hae-sseo-yo]
+    want     주문하고 싶어요  [ju-mun-ha-go si-peo-yo]
+
+맛보다  [mat-bo-da]  —  to taste
+    present  맛봐요  [mat-bwa-yo]
+    past     맛봤어요  [mat-bwa-sseo-yo]
+    want     맛보고 싶어요  [mat-bo-go si-peo-yo]
+
+굽다  [gup-da]  —  to grill, to bake, to roast
+    present  구워요  [gu-wo-yo]
+    past     구웠어요  [gu-wo-sseo-yo]
+    want     굽고 싶어요  [gup-go si-peo-yo]
+
+튀기다  [twi-gi-da]  —  to fry
+    present  튀겨요  [twi-gyeo-yo]
+    past     튀겼어요  [twi-gyeo-sseo-yo]
+    want     튀기고 싶어요  [twi-gi-go si-peo-yo]
+
+끓이다  [kkeul-i-da]  —  to boil
+    present  끓여요  [kkeu-ryeo-yo]
+    past     끓였어요  [kkeu-ryeo-sseo-yo]
+    want     끓이고 싶어요  [kkeu-ri-go si-peo-yo]
+
+넣다  [neot-da]  —  to put in, to add
+    present  넣어요  [neo-eo-yo]
+    past     넣었어요  [neo-eo-sseo-yo]
+    want     넣고 싶어요  [neo-ko si-peo-yo]
+
+빼다  [ppae-da]  —  to leave out, to remove
+    present  빼요  [ppae-yo]
+    past     뺐어요  [ppae-sseo-yo]
+    want     빼고 싶어요  [ppae-go si-peo-yo]
+
+데우다  [de-u-da]  —  to heat up, to warm up
+    present  데워요  [de-wo-yo]
+    past     데웠어요  [de-wo-sseo-yo]
+    want     데우고 싶어요  [de-u-go si-peo-yo]
+
+기쁘다  [gi-ppeu-da]  —  to be glad, to be happy
+    present  기뻐요  [gi-ppeo-yo]
+    past     기뻤어요  [gi-ppeo-sseo-yo]
+    want     —
+
+슬프다  [seul-peu-da]  —  to be sad
+    present  슬퍼요  [seul-peo-yo]
+    past     슬펐어요  [seul-peo-sseo-yo]
+    want     —
+
+화나다  [hwa-na-da]  —  to be angry, to get angry
+    present  화나요  [hwa-na-yo]
+    past     화났어요  [hwa-na-sseo-yo]
+    want     —
+
+걱정하다  [geok-jeong-ha-da]  —  to worry
+    present  걱정해요  [geok-jeong-hae-yo]
+    past     걱정했어요  [geok-jeong-hae-sseo-yo]
+    want     —
+
+두렵다  [du-ryeop-da]  —  to be afraid, to be scared
+    present  두려워요  [du-ryeo-wo-yo]
+    past     두려웠어요  [du-ryeo-wo-sseo-yo]
+    want     —
+
+피곤하다  [pi-gon-ha-da]  —  to be tired
+    present  피곤해요  [pi-gon-hae-yo]
+    past     피곤했어요  [pi-gon-hae-sseo-yo]
+    want     —
+
+부끄러워하다  [bu-kkeu-reo-wo-ha-da]  —  to be shy, to be embarrassed
+    present  부끄러워해요  [bu-kkeu-reo-wo-hae-yo]
+    past     부끄러워했어요  [bu-kkeu-reo-wo-hae-sseo-yo]
+    want     —
+
+설레다  [seol-le-da]  —  to be excited, to have butterflies
+    present  설레요  [seol-le-yo]
+    past     설렜어요  [seol-le-sseo-yo]
+    want     —
+
+춤추다  [chum-chu-da]  —  to dance
+    present  춤춰요  [chum-chwo-yo]
+    past     춤췄어요  [chum-chwo-sseo-yo]
+    want     춤추고 싶어요  [chum-chu-go si-peo-yo]
+
+노래하다  [no-rae-ha-da]  —  to sing
+    present  노래해요  [no-rae-hae-yo]
+    past     노래했어요  [no-rae-hae-sseo-yo]
+    want     노래하고 싶어요  [no-rae-ha-go si-peo-yo]
+
+게임하다  [ge-im-ha-da]  —  to play games
+    present  게임해요  [ge-im-hae-yo]
+    past     게임했어요  [ge-im-hae-sseo-yo]
+    want     게임하고 싶어요  [ge-im-ha-go si-peo-yo]
+
+축하하다  [chuk-ha-ha-da]  —  to celebrate, to congratulate
+    present  축하해요  [chu-ka-hae-yo]
+    past     축하했어요  [chu-ka-hae-sseo-yo]
+    want     축하하고 싶어요  [chu-ka-ha-go si-peo-yo]
+
+초대하다  [cho-dae-ha-da]  —  to invite
+    present  초대해요  [cho-dae-hae-yo]
+    past     초대했어요  [cho-dae-hae-sseo-yo]
+    want     초대하고 싶어요  [cho-dae-ha-go si-peo-yo]
+
+사귀다  [sa-gwi-da]  —  to date, to be friends with
+    present  사귀어요  [sa-gwi-eo-yo]
+    past     사귀었어요  [sa-gwi-eo-sseo-yo]
+    want     사귀고 싶어요  [sa-gwi-go si-peo-yo]
+
+전통을 지키다  [jeon-tong-eul ji-ki-da]  —  to keep tradition
+    present  전통을 지켜요  [jeon-tong-eul ji-kyeo-yo]
+    past     전통을 지켰어요  [jeon-tong-eul ji-kyeo-sseo-yo]
+    want     전통을 지키고 싶어요  [jeon-tong-eul ji-ki-go si-peo-yo]
+
+행사에 참여하다  [haeng-sa-e cha-myeo-ha-da]  —  to participate in an event
+    present  행사에 참여해요  [haeng-sa-e cha-myeo-hae-yo]
+    past     행사에 참여했어요  [haeng-sa-e cha-myeo-hae-sseo-yo]
+    want     행사에 참여하고 싶어요  [haeng-sa-e cha-myeo-ha-go si-peo-yo]
+
+배우다  [bae-u-da]  —  to learn
+    present  배워요  [bae-wo-yo]
+    past     배웠어요  [bae-wo-sseo-yo]
+    want     배우고 싶어요  [bae-u-go si-peo-yo]
+
+연습하다  [yeon-seup-ha-da]  —  to practice
+    present  연습해요  [yeon-seu-pae-yo]
+    past     연습했어요  [yeon-seu-pae-sseo-yo]
+    want     연습하고 싶어요  [yeon-seu-pa-go si-peo-yo]
+
+노력하다  [no-ryeok-ha-da]  —  to make an effort, to try hard
+    present  노력해요  [no-ryeo-kae-yo]
+    past     노력했어요  [no-ryeo-kae-sseo-yo]
+    want     노력하고 싶어요  [no-ryeo-ka-go si-peo-yo]
+
+집중하다  [jip-jung-ha-da]  —  to focus, to concentrate
+    present  집중해요  [jip-jung-hae-yo]
+    past     집중했어요  [jip-jung-hae-sseo-yo]
+    want     집중하고 싶어요  [jip-jung-ha-go si-peo-yo]
+
+계획하다  [gye-hoek-ha-da]  —  to plan
+    present  계획해요  [gye-hoe-kae-yo]
+    past     계획했어요  [gye-hoe-kae-sseo-yo]
+    want     계획하고 싶어요  [gye-hoe-ka-go si-peo-yo]
+
+준비하다  [jun-bi-ha-da]  —  to prepare, to get ready
+    present  준비해요  [jun-bi-hae-yo]
+    past     준비했어요  [jun-bi-hae-sseo-yo]
+    want     준비하고 싶어요  [jun-bi-ha-go si-peo-yo]
+
+성장하다  [seong-jang-ha-da]  —  to grow, to develop
+    present  성장해요  [seong-jang-hae-yo]
+    past     성장했어요  [seong-jang-hae-sseo-yo]
+    want     성장하고 싶어요  [seong-jang-ha-go si-peo-yo]
+
+기억하다  [gi-eok-ha-da]  —  to remember
+    present  기억해요  [gi-eo-kae-yo]
+    past     기억했어요  [gi-eo-kae-sseo-yo]
+    want     기억하고 싶어요  [gi-eo-ka-go si-peo-yo]
+
+생각하다  [saeng-gak-ha-da]  —  to think
+    present  생각해요  [saeng-ga-kae-yo]
+    past     생각했어요  [saeng-ga-kae-sseo-yo]
+    want     생각하고 싶어요  [saeng-ga-ka-go si-peo-yo]
+
+인식하다  [in-sik-ha-da]  —  to recognize, to be aware of
+    present  인식해요  [in-si-kae-yo]
+    past     인식했어요  [in-si-kae-sseo-yo]
+    want     인식하고 싶어요  [in-si-ka-go si-peo-yo]
+
+동의하다  [dong-ui-ha-da]  —  to agree
+    present  동의해요  [dong-ui-hae-yo]
+    past     동의했어요  [dong-ui-hae-sseo-yo]
+    want     동의하고 싶어요  [dong-ui-ha-go si-peo-yo]
+
+인정하다  [in-jeong-ha-da]  —  to admit, to acknowledge
+    present  인정해요  [in-jeong-hae-yo]
+    past     인정했어요  [in-jeong-hae-sseo-yo]
+    want     인정하고 싶어요  [in-jeong-ha-go si-peo-yo]
+
+후회하다  [hu-hoe-ha-da]  —  to regret
+    present  후회해요  [hu-hoe-hae-yo]
+    past     후회했어요  [hu-hoe-hae-sseo-yo]
+    want     —
+
+이사하다  [i-sa-ha-da]  —  to move (into a different house)
+    present  이사해요  [i-sa-hae-yo]
+    past     이사했어요  [i-sa-hae-sseo-yo]
+    want     이사하고 싶어요  [i-sa-ha-go si-peo-yo]
+
+움직이다  [um-ji-gi-da]  —  to move (something), to be in motion
+    present  움직여요  [um-ji-gyeo-yo]
+    past     움직였어요  [um-ji-gyeo-sseo-yo]
+    want     움직이고 싶어요  [um-ji-gi-go si-peo-yo]
+
+운동하다  [un-dong-ha-da]  —  to exercise, to work out
+    present  운동해요  [un-dong-hae-yo]
+    past     운동했어요  [un-dong-hae-sseo-yo]
+    want     운동하고 싶어요  [un-dong-ha-go si-peo-yo]
+
+전화하다  [jeon-hwa-ha-da]  —  to make a phone call
+    present  전화해요  [jeon-hwa-hae-yo]
+    past     전화했어요  [jeon-hwa-hae-sseo-yo]
+    want     전화하고 싶어요  [jeon-hwa-ha-go si-peo-yo]
+
+만나다  [man-na-da]  —  to meet
+    present  만나요  [man-na-yo]
+    past     만났어요  [man-na-sseo-yo]
+    want     만나고 싶어요  [man-na-go si-peo-yo]
+
+사다  [sa-da]  —  to buy
+    present  사요  [sa-yo]
+    past     샀어요  [sa-sseo-yo]
+    want     사고 싶어요  [sa-go si-peo-yo]
+
+모르다  [mo-reu-da]  —  to not know
+    present  몰라요  [mol-la-yo]
+    past     몰랐어요  [mol-la-sseo-yo]
+    want     —
+
+내다  [nae-da]  —  to pay
+    present  내요  [nae-yo]
+    past     냈어요  [nae-sseo-yo]
+    want     내고 싶어요  [nae-go si-peo-yo]
+
+기다리다  [gi-da-ri-da]  —  to wait
+    present  기다려요  [gi-da-ryeo-yo]
+    past     기다렸어요  [gi-da-ryeo-sseo-yo]
+    want     기다리고 싶어요  [gi-da-ri-go si-peo-yo]
+
+움직이다  [um-ji-gi-da]  —  to move (motion)
+    present  움직여요  [um-ji-gyeo-yo]
+    past     움직였어요  [um-ji-gyeo-sseo-yo]
+    want     움직이고 싶어요  [um-ji-gi-go si-peo-yo]
+
+크다  [keu-da]  —  to be big
+    present  커요  [keo-yo]
+    past     컸어요  [keo-sseo-yo]
+    want     —
+
+무겁다  [mu-geop-da]  —  to be heavy
+    present  무거워요  [mu-geo-wo-yo]
+    past     무거웠어요  [mu-geo-wo-sseo-yo]
+    want     —
+
+귀엽다  [gwi-yeop-da]  —  to be cute
+    present  귀여워요  [gwi-yeo-wo-yo]
+    past     귀여웠어요  [gwi-yeo-wo-sseo-yo]
+    want     —
+
+빠르다  [ppa-reu-da]  —  to be fast
+    present  빨라요  [ppal-la-yo]
+    past     빨랐어요  [ppal-la-sseo-yo]
+    want     —
+
+======================================================================
+PARTICLE DRILL — particles.html — 82 sentences
+======================================================================
+
+저는 학교(에) 가요.
+    에: 가다 / 오다 mark their destination with 에. 에서 would wrongly say the going happens at school.
+
+책상 위(에) 컴퓨터가 있어요.
+    에: 있다 / 없다 describe existence at a spot, and that spot always takes 에 — never 에서.
+
+가방 안(에) 책이 있어요.
+    에: Position nouns (안, 밖, 위, 밑, 앞, 뒤, 옆) take 에 when you say something exists there.
+
+아침(에) 운동해요.
+    에: 에 also marks a point in time — 아침에, 저녁에, 2시에. (오늘 / 내일 are exceptions and take no 에.)
+
+의자(에) 앉아요.
+    에: 앉다 marks the resting spot with 에 — you end up at the chair, so it behaves like a destination.
+
+친구가 기숙사(에) 와요.
+    에: 오다 takes 에 for where the movement is headed. Compare 기숙사에서 와요 = coming *from* the dorm.
+
+역(에) 도착했어요.
+    에: 도착하다 is an arrival, so its place is an endpoint: 역에 도착했어요.
+
+식당(에서) 음식을 먹어요.
+    에서: Eating is an activity, and the place an activity happens takes 에서, not 에.
+
+도서관(에서) 공부해요.
+    에서: 도서관에 있어요 (existing there) vs 도서관에서 공부해요 (doing something there) — the verb decides.
+
+저는 미국(에서) 왔어요.
+    에서: 에서 also means 'from' — a starting point. 미국에 왔어요 would mean you came *to* the US.
+
+기숙사(에서) 빨래해요.
+    에서: Every 하다 activity verb (빨래하다, 청소하다, 요리하다) puts its location in 에서.
+
+서점(에서) 책을 찾아요.
+    에서: 찾다 is an action performed somewhere, so the bookstore takes 에서 while 책 takes the object marker 을.
+
+캠퍼스(에서) 걸어요.
+    에서: The walking happens within campus, so 에서. 캠퍼스에 걸어요 would be wrong — 에 needs an endpoint.
+
+역(에서) 지하철을 타요.
+    에서: Boarding is the action and the station is where it happens: 역에서. Note 역에 가요 would use 에.
+
+저는 책(을) 봐요.
+    을: 책 is what gets acted on, so it takes the object marker; 책 ends in the consonant ㄱ, so 을 not 를.
+
+아이스크림(을) 좋아해요.
+    을: 좋아하다 is a verb and takes an object (을/를). Careful: 좋다 is an adjective and takes 이/가 instead.
+
+우산(을) 찾아요.
+    을: 우산 ends in ㄴ, a consonant, so the object marker is 을.
+
+음식(을) 만들어요.
+    을: 만들다 acts on 음식, and 음식 ends in ㄱ → 을. Spoken quickly it links as [음시글].
+
+아침(을) 먹어요.
+    을: Here 아침 is the thing eaten, so it takes 을. As a time word instead it would take 에: 아침에 먹어요.
+
+지하철(을) 타요.
+    을: 타다 takes its vehicle as an object, not with 에. 지하철 ends in ㄹ → 을.
+
+게임(을) 해요.
+    을: When you split a 하다 noun off from the verb, it becomes the object: 게임을 해요 (게임 ends in ㅁ).
+
+커피(를) 마셔요.
+    를: 커피 ends in the vowel ㅣ, so the object marker is 를.
+
+숙제(를) 해요.
+    를: 숙제 ends in ㅔ (a vowel) → 를. Same pattern as 청소를 해요, 요리를 해요.
+
+피자(를) 주문해요.
+    를: 주문하다 acts on the pizza; 피자 ends in ㅏ → 를.
+
+친구(를) 좋아해요.
+    를: 친구 ends in ㅜ → 를. Compare 친구가 좋아요 ('my friend is nice'), where the adjective 좋다 needs 가.
+
+버스(를) 타요.
+    를: 버스 ends in ㅡ → 를. Like 지하철을 타요, the vehicle is the object of 타다.
+
+사과(를) 먹어요.
+    를: 사과 ends in ㅘ, a vowel → 를.
+
+노래(를) 들어요.
+    를: 듣다 takes what you hear as an object; 노래 ends in ㅐ → 를.
+
+가방 안에 우산(이) 있어요.
+    이: 있다 / 없다 mark what exists with 이/가. 우산 ends in ㄴ → 이.
+
+오늘 시간(이) 없어요.
+    이: 없다 marks the missing thing with 이/가, never 을/를. 시간 ends in ㄴ → 이.
+
+이 음식(이) 맛있어요.
+    이: Descriptive verbs (맛있다, 좋다, 비싸다) take 이/가 for what is being described. 음식 ends in ㄱ → 이.
+
+선생님(이) 학교에 있어요.
+    이: 선생님 is the one existing, so 이/가; it ends in ㅁ → 이. The place 학교 keeps 에 because the verb is 있다.
+
+남동생(이) 대학생이에요.
+    이: Stating a plain fact about who someone is takes 이/가; 남동생 ends in ㅇ → 이. (The 이에요 at the end is the copula, not a particle.)
+
+수업(이) 재미있어요.
+    이: 재미있다 describes 수업, so 수업 is the subject; it ends in ㅂ → 이.
+
+오늘 날씨(가) 좋아요.
+    가: 좋다 is an adjective, so what's good takes 이/가. 날씨 ends in ㅣ → 가.
+
+커피(가) 맛있어요.
+    가: 맛있다 describes the coffee, so 커피 is the subject — and it ends in a vowel → 가.
+
+친구(가) 많아요.
+    가: 많다 is descriptive, so the plentiful thing takes 이/가. 친구 ends in ㅜ → 가.
+
+학교(가) 넓어요.
+    가: 넓다 describes 학교; 학교 ends in ㅗ → 가.
+
+여기 의자(가) 있어요.
+    가: 있다 marks the existing thing with 이/가; 의자 ends in ㅏ → 가.
+
+언니(가) 요리해요.
+    가: Reporting who is doing something right now uses 이/가. 언니 ends in ㅣ → 가.
+
+컴퓨터(가) 비싸요.
+    가: 비싸다 describes the computer; 컴퓨터 ends in ㅓ → 가.
+
+오늘(은) 날씨가 좋아요.
+    은: 은/는 sets the theme — 'today (unlike other days)'. The actual subject 날씨 still keeps 가. 오늘 ends in ㄹ → 은.
+
+한국 음식(은) 맛있어요.
+    은: Generalizing about a whole category is classic topic territory. 음식 ends in ㄱ → 은.
+
+저 사람(은) 학생이에요.
+    은: Introducing someone and then commenting on them takes 은/는. 사람 ends in ㅁ → 은.
+
+형(은) 일해요.
+    은: 은/는 contrasts him with someone else already mentioned. 형 ends in ㅇ → 은.
+
+내일(은) 시간이 있어요.
+    은: 'Tomorrow (as opposed to today)' is the topic; 시간 stays the subject with 이. 내일 ends in ㄹ → 은.
+
+저(는) 대학생이에요.
+    는: 저 is the default topic when introducing yourself, and it ends in ㅓ → 는. (저 takes the irregular 제가 when it needs 이/가.)
+
+언니(는) 커피를 좋아해요.
+    는: 언니 is the theme being talked about and ends in ㅣ → 는; 커피 is what she likes, so it takes the object 를.
+
+여기(는) 도서관이에요.
+    는: 여기/거기/저기 take 는 when you label the place. 여기 ends in ㅣ → 는.
+
+오빠(는) 운동을 해요.
+    는: 오빠 is the topic and ends in ㅏ → 는; 운동 is the object of 하다 and ends in ㅇ → 을.
+
+저(는) 도서관(에서) 공부해요.
+    는: 저 is the theme of the sentence and ends in a vowel → 는.
+    에서: 공부하다 is an activity, so its location takes 에서, not 에.
+
+언니(가) 식당(에서) 음식(을) 먹어요.
+    가: 언니 is who does the eating → subject marker; it ends in ㅣ → 가.
+    에서: The eating happens at the cafeteria → 에서.
+    을: 음식 is what gets eaten → object marker, and it ends in ㄱ → 을.
+
+저(는) 학교(에) 가요.
+    는: 저 sets the topic and ends in a vowel → 는.
+    에: 가다 marks its destination with 에. 학교에서 가요 would be wrong — nothing is happening *at* the school.
+
+친구(가) 커피(를) 좋아해요.
+    가: 친구 is the one doing the liking → 이/가; it ends in ㅜ → 가.
+    를: 좋아하다 is a verb and takes an object; 커피 ends in a vowel → 를.
+
+오늘(은) 날씨(가) 좋아요.
+    은: 오늘 is the theme — 'as for today' — and ends in ㄹ → 은.
+    가: 좋다 describes 날씨, so 날씨 stays the subject with 가. Topic and subject can both appear in one sentence.
+
+가방 안(에) 우산(이) 있어요.
+    에: 있다 puts its place in 에 — never 에서.
+    이: What exists takes 이/가; 우산 ends in ㄴ → 이.
+
+형(은) 역(에서) 버스(를) 타요.
+    은: 형 is the topic and ends in ㅇ → 은.
+    에서: The boarding happens at the station → 에서.
+    를: 타다 takes its vehicle as an object; 버스 ends in ㅡ → 를.
+
+저(는) 기숙사(에서) 빨래(를) 해요.
+    는: 저 is the topic → 는.
+    에서: The laundry gets done in the dorm — an activity location → 에서.
+    를: Splitting 빨래하다 makes 빨래 the object; it ends in ㅐ → 를.
+
+남동생(이) 캠퍼스(에서) 걸어요.
+    이: 남동생 is the walker → 이/가; it ends in ㅇ → 이.
+    에서: The walking takes place within campus → 에서.
+
+선생님(은) 학교(에) 있어요.
+    은: 선생님 is the topic here and ends in ㅁ → 은. (이 would also be grammatical, but 은 sets him as the theme.)
+    에: 있다 always marks its location with 에.
+
+저(는) 아침(에) 운동(을) 해요.
+    는: 저 is the topic → 는.
+    에: 아침 is a time here, and time points take 에.
+    을: Split off from 운동하다, 운동 becomes the object; it ends in ㅇ → 을.
+
+언니(는) 서점(에서) 책(을) 찾아요.
+    는: 언니 is the topic and ends in ㅣ → 는.
+    에서: 찾다 is an action performed at the bookstore → 에서.
+    을: 책 is what's being looked for → object; it ends in ㄱ → 을.
+
+오빠(는) 지하철(을) 타요.
+    는: 오빠 is the topic and ends in ㅏ → 는.
+    을: 타다 takes a vehicle as its object; 지하철 ends in ㄹ → 을.
+
+내일(은) 시간(이) 있어요.
+    은: 내일 is the theme — 'tomorrow, unlike today' — and ends in ㄹ → 은.
+    이: 있다 marks what you have with 이/가; 시간 ends in ㄴ → 이.
+
+저(는) 미국(에서) 왔어요.
+    는: 저 is the topic → 는.
+    에서: Here 에서 means 'from' — the origin of the coming. 미국에 왔어요 would mean you came *to* the US.
+
+어제 (누가) 왔어요?
+    누가: 'Who' is the one doing the coming, so it needs the subject marker — and 누구 + 가 contracts to 누가.
+
+그거 (누가) 만들었어요?
+    누가: 그거 is the thing made; the unknown person is the maker, so 'who' is the subject → 누가.
+
+(누가) 전화했어요?
+    누가: The caller is the subject of 전화하다, so 누가.
+
+(누가) 샀어요?
+    누가: The buyer is doing the action → 누가. (누구 샀어요? would be asking *what* person you bought, which is nonsense.)
+
+(누가) 했어요?
+    누가: The doer of 하다 is the subject, so 누가.
+
+(누가) 선생님이에요?
+    누가: Picking one person out of a group — 'which of them is the teacher' — emphasizes who, so the subject form 누가. Compare 선생님이 누구예요?, which asks the same thing from the other side.
+
+(누가) 커피를 마셨어요?
+    누가: 커피 already carries the object marker 를, so the unknown person is the drinker — the subject → 누가.
+
+(누가) 학교에 갔어요?
+    누가: 학교 is the destination with 에; the person going is the subject → 누가.
+
+이거 (누구)예요?
+    누구: 예요 only links 이거 to an identity — nobody is doing anything — so 'who' stays bare: 누구예요?
+
+(누구)였어요?
+    누구: The past of 누구예요?. 'Who' is the identity the thing turned out to be, not the doer of an action, so 누구.
+
+어제 (누구) 만났어요?
+    누구: Here 'who' is the person you met — the object of 만나다, not the meeter — so the bare 누구. Swap in 누가 and the meaning flips to 'who met someone yesterday?'
+
+저 사람은 (누구)예요?
+    누구: 저 사람 is already set up as the topic with 은; 누구 is just the identity being asked for, so it stays bare.
+
+이 우산은 (누구) 거예요?
+    누구: 누구 거 = 'whose thing'. A possessor is not a subject, so no 가 — 누구 거예요?
+
+그 책은 (누구) 거예요?
+    누구: Same 누구 거 possessive pattern — the book belongs to someone, nobody is acting.
+
+책(이) 얼마예요?
+    이: The book is the thing being priced — the subject of 얼마예요. 책 ends in ㄱ → 이.
+
+얼마나 자주 여기(에) 와요?
+    에: 오다 marks where the movement is headed with 에 — 여기에 와요. (Speech often drops it, but of these choices only 에 fits.)
+
+사무실(에) 갔다 왔어요.
+    에: 갔다 오다 still heads somewhere first — the destination takes 에, and the action verb 에서 would wrongly say the going happens *at* the office.
+
