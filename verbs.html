@@ -89,6 +89,21 @@
   .tense-filters .filter-btn.active { background: #7048e8; color: #fff; }
 
   .tense-filters { display: none; }
+
+  /* Mode + direction pills sit on one row, wrapping on narrow screens. */
+  .toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .toggles .mode-toggle { margin-bottom: 0; }
+
+  .dir-toggle .mode-btn { color: #7048e8; }
+  .dir-toggle .mode-btn.active { background: #7048e8; color: #fff; }
+  /* Conjugate mode always asks for Korean, so the direction pill is moot there. */
+  body.mode-conjugate .dir-toggle { display: none; }
   body.mode-conjugate .tense-filters { display: flex; }
 
   .filters-label {
@@ -269,6 +284,56 @@
     opacity: 0.4;
   }
 
+  /* --- Full-drill step list (front face) --- */
+  body.mode-full .card-scene { height: 360px; }
+
+  .step-list {
+    display: none;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 12px;
+    width: 100%;
+    max-width: 290px;
+    font-size: 0.9rem;
+  }
+  body.mode-full .step-list { display: flex; }
+
+  .step-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+  .step-row.current { background: #eef1ff; }
+
+  .step-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+
+  .step-ans { font-weight: 600; text-align: right; }
+  .step-row.pending .step-ans { opacity: 0.3; }
+  .step-row.ok  .step-ans { color: #2f9e44; }
+  .step-row.bad .step-ans { color: #c92a2a; }
+
+  .step-you {
+    font-size: 0.75rem;
+    font-weight: 400;
+    opacity: 0.55;
+    text-decoration: line-through;
+    margin-right: 6px;
+  }
+
+  /* Per-row marks on the summary table (back face) */
+  .conj-row.ok  .conj-label::before { content: "✓ "; color: #b2f2bb; }
+  .conj-row.bad .conj-label::before { content: "✗ "; color: #ffc9c9; }
+
   /* --- Conjugate input --- */
   .answer-row {
     display: none;
@@ -278,7 +343,8 @@
     width: 360px;
     max-width: 92vw;
   }
-  body.mode-conjugate .answer-row { display: flex; }
+  body.mode-conjugate .answer-row,
+  body.mode-full .answer-row { display: flex; }
 
   .answer-input {
     flex: 1;
@@ -395,11 +461,18 @@
 </nav>
 
 <h1>Korean Verbs &amp; Conjugation</h1>
-<p class="subtitle">TTMIK Lessons 17–18 — recall meanings and drill conjugations</p>
+<p class="subtitle">TTMIK Level 1 Lessons 17–18 &amp; Level 2 Lesson 1 — recall meanings and drill conjugations</p>
 
-<div class="mode-toggle">
-  <button class="mode-btn active" data-mode="recall">Recall</button>
-  <button class="mode-btn" data-mode="conjugate">Conjugate</button>
+<div class="toggles">
+  <div class="mode-toggle">
+    <button class="mode-btn active" data-mode="recall">Recall</button>
+    <button class="mode-btn" data-mode="conjugate">Conjugate</button>
+    <button class="mode-btn" data-mode="full">Full drill</button>
+  </div>
+  <div class="mode-toggle dir-toggle">
+    <button class="mode-btn active" data-dir="en-ko">English → 한국어</button>
+    <button class="mode-btn" data-dir="ko-en">한국어 → English</button>
+  </div>
 </div>
 
 <div class="filters" id="filters"></div>
@@ -417,6 +490,7 @@
       <span class="tense-chip" id="frontTense" style="display:none;"></span>
       <span class="card-main" id="frontMain"></span>
       <span class="card-sub" id="frontSub"></span>
+      <div class="step-list" id="stepList"></div>
       <span class="card-hint" id="frontHint">tap to flip</span>
     </div>
     <div class="card-face card-back">
@@ -440,7 +514,7 @@
 </div>
 
 <p class="keyboard-hint">
-  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>Enter</kbd> check (Conjugate) &nbsp;&middot;&nbsp; <kbd>S</kbd> hear it
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> navigate &nbsp;&middot;&nbsp; <kbd>Space</kbd> flip &nbsp;&middot;&nbsp; <kbd>Enter</kbd> check (Conjugate / Full drill) &nbsp;&middot;&nbsp; <kbd>S</kbd> hear it
 </p>
 
 <script src="speak.js"></script>
@@ -451,8 +525,13 @@
 const TENSES = [
   { key: "present", label: "Present",  short: "PRES", desc: "polite -요" },
   { key: "past",    label: "Past",     short: "PAST", desc: "-았/었어요" },
+  { key: "future",  label: "Future",   short: "FUT",  desc: "-(으)ㄹ 거예요" },
   { key: "want",    label: "Want to",  short: "WANT", desc: "-고 싶어요" },
 ];
+
+// Full-drill chain (Class 25 / TTMIK Level 2 Lesson 1): dictionary form first,
+// then future, past, present — the order the lesson practises them in.
+const CHAIN = ["base", "future", "past", "present"];
 
 // ===== Verb data =====
 // Each verb: english, korean (base -다 form), romanization, category, conjugations map.
@@ -466,6 +545,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "가요",         romanization: "ga-yo" },
       past:    { korean: "갔어요",       romanization: "ga-sseo-yo" },
+      future:  { korean: "갈 거예요",     romanization: "gal geo-ye-yo" },
       want:    { korean: "가고 싶어요",  romanization: "ga-go si-peo-yo" },
     },
   },
@@ -475,6 +555,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "와요",         romanization: "wa-yo" },
       past:    { korean: "왔어요",       romanization: "wa-sseo-yo" },
+      future:  { korean: "올 거예요",     romanization: "ol geo-ye-yo" },
       want:    { korean: "오고 싶어요",  romanization: "o-go si-peo-yo" },
     },
   },
@@ -484,6 +565,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "봐요",         romanization: "bwa-yo" },
       past:    { korean: "봤어요",       romanization: "bwa-sseo-yo" },
+      future:  { korean: "볼 거예요",     romanization: "bol geo-ye-yo" },
       want:    { korean: "보고 싶어요",  romanization: "bo-go si-peo-yo" },
     },
   },
@@ -493,6 +575,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "해요",         romanization: "hae-yo" },
       past:    { korean: "했어요",       romanization: "hae-sseo-yo" },
+      future:  { korean: "할 거예요",     romanization: "hal geo-ye-yo" },
       want:    { korean: "하고 싶어요",  romanization: "ha-go si-peo-yo" },
     },
   },
@@ -502,6 +585,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "먹어요",       romanization: "meo-geo-yo" },
       past:    { korean: "먹었어요",     romanization: "meo-geo-sseo-yo" },
+      future:  { korean: "먹을 거예요",   romanization: "meo-geul geo-ye-yo" },
       want:    { korean: "먹고 싶어요",  romanization: "meok-go si-peo-yo" },
     },
   },
@@ -511,6 +595,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "앉아요",       romanization: "an-ja-yo" },
       past:    { korean: "앉았어요",     romanization: "an-ja-sseo-yo" },
+      future:  { korean: "앉을 거예요",   romanization: "an-jeul geo-ye-yo" },
       want:    { korean: "앉고 싶어요",  romanization: "an-go si-peo-yo" },
     },
   },
@@ -520,6 +605,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "알아요",       romanization: "a-ra-yo" },
       past:    { korean: "알았어요",     romanization: "a-ra-sseo-yo" },
+      future:  { korean: "알 거예요",    romanization: "al geo-ye-yo" },
       want:    { korean: "알고 싶어요",  romanization: "al-go si-peo-yo" },
     },
   },
@@ -529,6 +615,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "좋아해요",       romanization: "jo-a-hae-yo" },
       past:    { korean: "좋아했어요",     romanization: "jo-a-hae-sseo-yo" },
+      future:  { korean: "좋아할 거예요",   romanization: "jo-a-hal geo-ye-yo" },
       want:    { korean: "좋아하고 싶어요", romanization: "jo-a-ha-go si-peo-yo" },
     },
   },
@@ -538,6 +625,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "일해요",       romanization: "il-hae-yo" },
       past:    { korean: "일했어요",     romanization: "il-hae-sseo-yo" },
+      future:  { korean: "일할 거예요",   romanization: "il-hal geo-ye-yo" },
       want:    { korean: "일하고 싶어요", romanization: "il-ha-go si-peo-yo" },
     },
   },
@@ -547,6 +635,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "공부해요",       romanization: "gong-bu-hae-yo" },
       past:    { korean: "공부했어요",     romanization: "gong-bu-hae-sseo-yo" },
+      future:  { korean: "공부할 거예요",   romanization: "gong-bu-hal geo-ye-yo" },
       want:    { korean: "공부하고 싶어요", romanization: "gong-bu-ha-go si-peo-yo" },
     },
   },
@@ -558,6 +647,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "있어요",   romanization: "i-sseo-yo" },
       past:    { korean: "있었어요", romanization: "i-sseo-sseo-yo" },
+      future:  { korean: "있을 거예요", romanization: "i-sseul geo-ye-yo" },
       want:    null,
     },
   },
@@ -569,6 +659,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "마셔요",         romanization: "ma-syeo-yo" },
       past:    { korean: "마셨어요",       romanization: "ma-syeo-sseo-yo" },
+      future:  { korean: "마실 거예요",     romanization: "ma-sil geo-ye-yo" },
       want:    { korean: "마시고 싶어요",  romanization: "ma-si-go si-peo-yo" },
     },
   },
@@ -578,6 +669,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "자요",           romanization: "ja-yo" },
       past:    { korean: "잤어요",         romanization: "ja-sseo-yo" },
+      future:  { korean: "잘 거예요",       romanization: "jal geo-ye-yo" },
       want:    { korean: "자고 싶어요",    romanization: "ja-go si-peo-yo" },
     },
   },
@@ -587,6 +679,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "일어나요",         romanization: "i-reo-na-yo" },
       past:    { korean: "일어났어요",       romanization: "i-reo-na-sseo-yo" },
+      future:  { korean: "일어날 거예요",     romanization: "i-reo-nal geo-ye-yo" },
       want:    { korean: "일어나고 싶어요",  romanization: "i-reo-na-go si-peo-yo" },
     },
   },
@@ -596,6 +689,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "입어요",         romanization: "i-beo-yo" },
       past:    { korean: "입었어요",       romanization: "i-beo-sseo-yo" },
+      future:  { korean: "입을 거예요",     romanization: "i-beul geo-ye-yo" },
       want:    { korean: "입고 싶어요",    romanization: "ip-go si-peo-yo" },
     },
   },
@@ -607,6 +701,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "청소해요",         romanization: "cheong-so-hae-yo" },
       past:    { korean: "청소했어요",       romanization: "cheong-so-hae-sseo-yo" },
+      future:  { korean: "청소할 거예요",     romanization: "cheong-so-hal geo-ye-yo" },
       want:    { korean: "청소하고 싶어요",  romanization: "cheong-so-ha-go si-peo-yo" },
     },
   },
@@ -616,6 +711,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "씻어요",         romanization: "ssi-seo-yo" },
       past:    { korean: "씻었어요",       romanization: "ssi-seo-sseo-yo" },
+      future:  { korean: "씻을 거예요",     romanization: "ssi-seul geo-ye-yo" },
       want:    { korean: "씻고 싶어요",    romanization: "ssit-go si-peo-yo" },
     },
   },
@@ -625,6 +721,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "요리해요",         romanization: "yo-ri-hae-yo" },
       past:    { korean: "요리했어요",       romanization: "yo-ri-hae-sseo-yo" },
+      future:  { korean: "요리할 거예요",     romanization: "yo-ri-hal geo-ye-yo" },
       want:    { korean: "요리하고 싶어요",  romanization: "yo-ri-ha-go si-peo-yo" },
     },
   },
@@ -634,6 +731,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "만들어요",         romanization: "man-deu-reo-yo" },
       past:    { korean: "만들었어요",       romanization: "man-deu-reo-sseo-yo" },
+      future:  { korean: "만들 거예요",      romanization: "man-deul geo-ye-yo" },
       want:    { korean: "만들고 싶어요",    romanization: "man-deul-go si-peo-yo" },
     },
   },
@@ -643,6 +741,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "설거지해요",         romanization: "seol-geo-ji-hae-yo" },
       past:    { korean: "설거지했어요",       romanization: "seol-geo-ji-hae-sseo-yo" },
+      future:  { korean: "설거지할 거예요",     romanization: "seol-geo-ji-hal geo-ye-yo" },
       want:    { korean: "설거지하고 싶어요",  romanization: "seol-geo-ji-ha-go si-peo-yo" },
     },
   },
@@ -652,6 +751,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "빨래해요",         romanization: "ppal-lae-hae-yo" },
       past:    { korean: "빨래했어요",       romanization: "ppal-lae-hae-sseo-yo" },
+      future:  { korean: "빨래할 거예요",     romanization: "ppal-lae-hal geo-ye-yo" },
       want:    { korean: "빨래하고 싶어요",  romanization: "ppal-lae-ha-go si-peo-yo" },
     },
   },
@@ -661,6 +761,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "정리해요",         romanization: "jeong-ri-hae-yo" },
       past:    { korean: "정리했어요",       romanization: "jeong-ri-hae-sseo-yo" },
+      future:  { korean: "정리할 거예요",     romanization: "jeong-ri-hal geo-ye-yo" },
       want:    { korean: "정리하고 싶어요",  romanization: "jeong-ri-ha-go si-peo-yo" },
     },
   },
@@ -670,6 +771,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "쉬어요",         romanization: "swi-eo-yo" },
       past:    { korean: "쉬었어요",       romanization: "swi-eo-sseo-yo" },
+      future:  { korean: "쉴 거예요",      romanization: "swil geo-ye-yo" },
       want:    { korean: "쉬고 싶어요",    romanization: "swi-go si-peo-yo" },
     },
   },
@@ -681,6 +783,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "말해요",         romanization: "mal-hae-yo" },
       past:    { korean: "말했어요",       romanization: "mal-hae-sseo-yo" },
+      future:  { korean: "말할 거예요",     romanization: "mal-hal geo-ye-yo" },
       want:    { korean: "말하고 싶어요",  romanization: "mal-ha-go si-peo-yo" },
     },
   },
@@ -691,6 +794,7 @@ const allVerbs = [
       // ㄷ irregular: ㄷ → ㄹ before a vowel ending
       present: { korean: "들어요",         romanization: "deu-reo-yo" },
       past:    { korean: "들었어요",       romanization: "deu-reo-sseo-yo" },
+      future:  { korean: "들을 거예요",     romanization: "deu-reul geo-ye-yo" },
       want:    { korean: "듣고 싶어요",    romanization: "deut-go si-peo-yo" },
     },
   },
@@ -700,6 +804,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "줘요",           romanization: "jwo-yo" },
       past:    { korean: "줬어요",         romanization: "jwo-sseo-yo" },
+      future:  { korean: "줄 거예요",       romanization: "jul geo-ye-yo" },
       want:    { korean: "주고 싶어요",    romanization: "ju-go si-peo-yo" },
     },
   },
@@ -709,6 +814,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "받아요",         romanization: "ba-da-yo" },
       past:    { korean: "받았어요",       romanization: "ba-da-sseo-yo" },
+      future:  { korean: "받을 거예요",     romanization: "ba-deul geo-ye-yo" },
       want:    { korean: "받고 싶어요",    romanization: "bat-go si-peo-yo" },
     },
   },
@@ -718,6 +824,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "사랑해요",         romanization: "sa-rang-hae-yo" },
       past:    { korean: "사랑했어요",       romanization: "sa-rang-hae-sseo-yo" },
+      future:  { korean: "사랑할 거예요",     romanization: "sa-rang-hal geo-ye-yo" },
       want:    { korean: "사랑하고 싶어요",  romanization: "sa-rang-ha-go si-peo-yo" },
     },
   },
@@ -727,6 +834,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "싫어해요",         romanization: "si-reo-hae-yo" },
       past:    { korean: "싫어했어요",       romanization: "si-reo-hae-sseo-yo" },
+      future:  { korean: "싫어할 거예요",     romanization: "si-reo-hal geo-ye-yo" },
       want:    null,
     },
   },
@@ -736,6 +844,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "부탁해요",         romanization: "bu-ta-kae-yo" },
       past:    { korean: "부탁했어요",       romanization: "bu-ta-kae-sseo-yo" },
+      future:  { korean: "부탁할 거예요",     romanization: "bu-ta-kal geo-ye-yo" },
       want:    { korean: "부탁하고 싶어요",  romanization: "bu-ta-ka-go si-peo-yo" },
     },
   },
@@ -747,6 +856,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "타요",           romanization: "ta-yo" },
       past:    { korean: "탔어요",         romanization: "ta-sseo-yo" },
+      future:  { korean: "탈 거예요",       romanization: "tal geo-ye-yo" },
       want:    { korean: "타고 싶어요",    romanization: "ta-go si-peo-yo" },
     },
   },
@@ -756,6 +866,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "내려요",         romanization: "nae-ryeo-yo" },
       past:    { korean: "내렸어요",       romanization: "nae-ryeo-sseo-yo" },
+      future:  { korean: "내릴 거예요",     romanization: "nae-ril geo-ye-yo" },
       want:    { korean: "내리고 싶어요",  romanization: "nae-ri-go si-peo-yo" },
     },
   },
@@ -765,6 +876,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "찾아요",         romanization: "cha-ja-yo" },
       past:    { korean: "찾았어요",       romanization: "cha-ja-sseo-yo" },
+      future:  { korean: "찾을 거예요",     romanization: "cha-jeul geo-ye-yo" },
       want:    { korean: "찾고 싶어요",    romanization: "chat-go si-peo-yo" },
     },
   },
@@ -774,6 +886,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "도착해요",         romanization: "do-cha-kae-yo" },
       past:    { korean: "도착했어요",       romanization: "do-cha-kae-sseo-yo" },
+      future:  { korean: "도착할 거예요",     romanization: "do-cha-kal geo-ye-yo" },
       want:    { korean: "도착하고 싶어요",  romanization: "do-cha-ka-go si-peo-yo" },
     },
   },
@@ -783,6 +896,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "출발해요",         romanization: "chul-bal-hae-yo" },
       past:    { korean: "출발했어요",       romanization: "chul-bal-hae-sseo-yo" },
+      future:  { korean: "출발할 거예요",     romanization: "chul-bal-hal geo-ye-yo" },
       want:    { korean: "출발하고 싶어요",  romanization: "chul-bal-ha-go si-peo-yo" },
     },
   },
@@ -793,6 +907,7 @@ const allVerbs = [
       // ㄷ irregular: ㄷ → ㄹ before a vowel ending
       present: { korean: "걸어요",         romanization: "geo-reo-yo" },
       past:    { korean: "걸었어요",       romanization: "geo-reo-sseo-yo" },
+      future:  { korean: "걸을 거예요",     romanization: "geo-reul geo-ye-yo" },
       want:    { korean: "걷고 싶어요",    romanization: "geot-go si-peo-yo" },
     },
   },
@@ -802,6 +917,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "달려요",         romanization: "dal-lyeo-yo" },
       past:    { korean: "달렸어요",       romanization: "dal-lyeo-sseo-yo" },
+      future:  { korean: "달릴 거예요",     romanization: "dal-lil geo-ye-yo" },
       want:    { korean: "달리고 싶어요",  romanization: "dal-li-go si-peo-yo" },
     },
   },
@@ -811,6 +927,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "여행해요",         romanization: "yeo-haeng-hae-yo" },
       past:    { korean: "여행했어요",       romanization: "yeo-haeng-hae-sseo-yo" },
+      future:  { korean: "여행할 거예요",     romanization: "yeo-haeng-hal geo-ye-yo" },
       want:    { korean: "여행하고 싶어요",  romanization: "yeo-haeng-ha-go si-peo-yo" },
     },
   },
@@ -822,6 +939,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "주문해요",         romanization: "ju-mun-hae-yo" },
       past:    { korean: "주문했어요",       romanization: "ju-mun-hae-sseo-yo" },
+      future:  { korean: "주문할 거예요",     romanization: "ju-mun-hal geo-ye-yo" },
       want:    { korean: "주문하고 싶어요",  romanization: "ju-mun-ha-go si-peo-yo" },
     },
   },
@@ -831,6 +949,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "맛봐요",         romanization: "mat-bwa-yo" },
       past:    { korean: "맛봤어요",       romanization: "mat-bwa-sseo-yo" },
+      future:  { korean: "맛볼 거예요",     romanization: "mat-bol geo-ye-yo" },
       want:    { korean: "맛보고 싶어요",  romanization: "mat-bo-go si-peo-yo" },
     },
   },
@@ -841,6 +960,7 @@ const allVerbs = [
       // ㅂ irregular: ㅂ → 우 before a vowel ending
       present: { korean: "구워요",         romanization: "gu-wo-yo" },
       past:    { korean: "구웠어요",       romanization: "gu-wo-sseo-yo" },
+      future:  { korean: "구울 거예요",     romanization: "gu-ul geo-ye-yo" },
       want:    { korean: "굽고 싶어요",    romanization: "gup-go si-peo-yo" },
     },
   },
@@ -850,6 +970,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "튀겨요",         romanization: "twi-gyeo-yo" },
       past:    { korean: "튀겼어요",       romanization: "twi-gyeo-sseo-yo" },
+      future:  { korean: "튀길 거예요",     romanization: "twi-gil geo-ye-yo" },
       want:    { korean: "튀기고 싶어요",  romanization: "twi-gi-go si-peo-yo" },
     },
   },
@@ -859,6 +980,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "끓여요",         romanization: "kkeu-ryeo-yo" },
       past:    { korean: "끓였어요",       romanization: "kkeu-ryeo-sseo-yo" },
+      future:  { korean: "끓일 거예요",     romanization: "kkeu-ril geo-ye-yo" },
       want:    { korean: "끓이고 싶어요",  romanization: "kkeu-ri-go si-peo-yo" },
     },
   },
@@ -868,6 +990,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "넣어요",         romanization: "neo-eo-yo" },
       past:    { korean: "넣었어요",       romanization: "neo-eo-sseo-yo" },
+      future:  { korean: "넣을 거예요",     romanization: "neo-eul geo-ye-yo" },
       want:    { korean: "넣고 싶어요",    romanization: "neo-ko si-peo-yo" },
     },
   },
@@ -877,6 +1000,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "빼요",           romanization: "ppae-yo" },
       past:    { korean: "뺐어요",         romanization: "ppae-sseo-yo" },
+      future:  { korean: "뺄 거예요",       romanization: "ppael geo-ye-yo" },
       want:    { korean: "빼고 싶어요",    romanization: "ppae-go si-peo-yo" },
     },
   },
@@ -886,6 +1010,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "데워요",         romanization: "de-wo-yo" },
       past:    { korean: "데웠어요",       romanization: "de-wo-sseo-yo" },
+      future:  { korean: "데울 거예요",     romanization: "de-ul geo-ye-yo" },
       want:    { korean: "데우고 싶어요",  romanization: "de-u-go si-peo-yo" },
     },
   },
@@ -899,6 +1024,7 @@ const allVerbs = [
       // 으 irregular: the final 으 drops before a vowel ending
       present: { korean: "기뻐요",         romanization: "gi-ppeo-yo" },
       past:    { korean: "기뻤어요",       romanization: "gi-ppeo-sseo-yo" },
+      future:  { korean: "기쁠 거예요",     romanization: "gi-ppeul geo-ye-yo" },
       want:    null,
     },
   },
@@ -908,6 +1034,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "슬퍼요",         romanization: "seul-peo-yo" },
       past:    { korean: "슬펐어요",       romanization: "seul-peo-sseo-yo" },
+      future:  { korean: "슬플 거예요",     romanization: "seul-peul geo-ye-yo" },
       want:    null,
     },
   },
@@ -917,6 +1044,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "화나요",         romanization: "hwa-na-yo" },
       past:    { korean: "화났어요",       romanization: "hwa-na-sseo-yo" },
+      future:  { korean: "화날 거예요",     romanization: "hwa-nal geo-ye-yo" },
       want:    null,
     },
   },
@@ -926,6 +1054,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "걱정해요",       romanization: "geok-jeong-hae-yo" },
       past:    { korean: "걱정했어요",     romanization: "geok-jeong-hae-sseo-yo" },
+      future:  { korean: "걱정할 거예요",   romanization: "geok-jeong-hal geo-ye-yo" },
       want:    null,
     },
   },
@@ -936,6 +1065,7 @@ const allVerbs = [
       // ㅂ irregular: ㅂ → 우 before a vowel ending
       present: { korean: "두려워요",       romanization: "du-ryeo-wo-yo" },
       past:    { korean: "두려웠어요",     romanization: "du-ryeo-wo-sseo-yo" },
+      future:  { korean: "두려울 거예요",   romanization: "du-ryeo-ul geo-ye-yo" },
       want:    null,
     },
   },
@@ -945,6 +1075,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "피곤해요",       romanization: "pi-gon-hae-yo" },
       past:    { korean: "피곤했어요",     romanization: "pi-gon-hae-sseo-yo" },
+      future:  { korean: "피곤할 거예요",   romanization: "pi-gon-hal geo-ye-yo" },
       want:    null,
     },
   },
@@ -954,6 +1085,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "부끄러워해요",   romanization: "bu-kkeu-reo-wo-hae-yo" },
       past:    { korean: "부끄러워했어요", romanization: "bu-kkeu-reo-wo-hae-sseo-yo" },
+      future:  { korean: "부끄러워할 거예요", romanization: "bu-kkeu-reo-wo-hal geo-ye-yo" },
       want:    null,
     },
   },
@@ -963,6 +1095,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "설레요",         romanization: "seol-le-yo" },
       past:    { korean: "설렜어요",       romanization: "seol-le-sseo-yo" },
+      future:  { korean: "설렐 거예요",     romanization: "seol-lel geo-ye-yo" },
       want:    null,
     },
   },
@@ -974,6 +1107,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "춤춰요",         romanization: "chum-chwo-yo" },
       past:    { korean: "춤췄어요",       romanization: "chum-chwo-sseo-yo" },
+      future:  { korean: "춤출 거예요",     romanization: "chum-chul geo-ye-yo" },
       want:    { korean: "춤추고 싶어요",  romanization: "chum-chu-go si-peo-yo" },
     },
   },
@@ -983,6 +1117,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "노래해요",         romanization: "no-rae-hae-yo" },
       past:    { korean: "노래했어요",       romanization: "no-rae-hae-sseo-yo" },
+      future:  { korean: "노래할 거예요",     romanization: "no-rae-hal geo-ye-yo" },
       want:    { korean: "노래하고 싶어요",  romanization: "no-rae-ha-go si-peo-yo" },
     },
   },
@@ -992,6 +1127,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "게임해요",         romanization: "ge-im-hae-yo" },
       past:    { korean: "게임했어요",       romanization: "ge-im-hae-sseo-yo" },
+      future:  { korean: "게임할 거예요",     romanization: "ge-im-hal geo-ye-yo" },
       want:    { korean: "게임하고 싶어요",  romanization: "ge-im-ha-go si-peo-yo" },
     },
   },
@@ -1001,6 +1137,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "축하해요",         romanization: "chu-ka-hae-yo" },
       past:    { korean: "축하했어요",       romanization: "chu-ka-hae-sseo-yo" },
+      future:  { korean: "축하할 거예요",     romanization: "chu-ka-hal geo-ye-yo" },
       want:    { korean: "축하하고 싶어요",  romanization: "chu-ka-ha-go si-peo-yo" },
     },
   },
@@ -1010,6 +1147,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "초대해요",         romanization: "cho-dae-hae-yo" },
       past:    { korean: "초대했어요",       romanization: "cho-dae-hae-sseo-yo" },
+      future:  { korean: "초대할 거예요",     romanization: "cho-dae-hal geo-ye-yo" },
       want:    { korean: "초대하고 싶어요",  romanization: "cho-dae-ha-go si-peo-yo" },
     },
   },
@@ -1019,6 +1157,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "사귀어요",         romanization: "sa-gwi-eo-yo" },
       past:    { korean: "사귀었어요",       romanization: "sa-gwi-eo-sseo-yo" },
+      future:  { korean: "사귈 거예요",      romanization: "sa-gwil geo-ye-yo" },
       want:    { korean: "사귀고 싶어요",    romanization: "sa-gwi-go si-peo-yo" },
     },
   },
@@ -1028,6 +1167,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "전통을 지켜요",         romanization: "jeon-tong-eul ji-kyeo-yo" },
       past:    { korean: "전통을 지켰어요",       romanization: "jeon-tong-eul ji-kyeo-sseo-yo" },
+      future:  { korean: "전통을 지킬 거예요",     romanization: "jeon-tong-eul ji-kil geo-ye-yo" },
       want:    { korean: "전통을 지키고 싶어요",  romanization: "jeon-tong-eul ji-ki-go si-peo-yo" },
     },
   },
@@ -1037,6 +1177,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "행사에 참여해요",         romanization: "haeng-sa-e cha-myeo-hae-yo" },
       past:    { korean: "행사에 참여했어요",       romanization: "haeng-sa-e cha-myeo-hae-sseo-yo" },
+      future:  { korean: "행사에 참여할 거예요",     romanization: "haeng-sa-e cha-myeo-hal geo-ye-yo" },
       want:    { korean: "행사에 참여하고 싶어요",  romanization: "haeng-sa-e cha-myeo-ha-go si-peo-yo" },
     },
   },
@@ -1048,6 +1189,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "배워요",         romanization: "bae-wo-yo" },
       past:    { korean: "배웠어요",       romanization: "bae-wo-sseo-yo" },
+      future:  { korean: "배울 거예요",     romanization: "bae-ul geo-ye-yo" },
       want:    { korean: "배우고 싶어요",  romanization: "bae-u-go si-peo-yo" },
     },
   },
@@ -1057,6 +1199,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "연습해요",         romanization: "yeon-seu-pae-yo" },
       past:    { korean: "연습했어요",       romanization: "yeon-seu-pae-sseo-yo" },
+      future:  { korean: "연습할 거예요",     romanization: "yeon-seu-pal geo-ye-yo" },
       want:    { korean: "연습하고 싶어요",  romanization: "yeon-seu-pa-go si-peo-yo" },
     },
   },
@@ -1066,6 +1209,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "노력해요",         romanization: "no-ryeo-kae-yo" },
       past:    { korean: "노력했어요",       romanization: "no-ryeo-kae-sseo-yo" },
+      future:  { korean: "노력할 거예요",     romanization: "no-ryeo-kal geo-ye-yo" },
       want:    { korean: "노력하고 싶어요",  romanization: "no-ryeo-ka-go si-peo-yo" },
     },
   },
@@ -1075,6 +1219,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "집중해요",         romanization: "jip-jung-hae-yo" },
       past:    { korean: "집중했어요",       romanization: "jip-jung-hae-sseo-yo" },
+      future:  { korean: "집중할 거예요",     romanization: "jip-jung-hal geo-ye-yo" },
       want:    { korean: "집중하고 싶어요",  romanization: "jip-jung-ha-go si-peo-yo" },
     },
   },
@@ -1084,6 +1229,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "계획해요",         romanization: "gye-hoe-kae-yo" },
       past:    { korean: "계획했어요",       romanization: "gye-hoe-kae-sseo-yo" },
+      future:  { korean: "계획할 거예요",     romanization: "gye-hoe-kal geo-ye-yo" },
       want:    { korean: "계획하고 싶어요",  romanization: "gye-hoe-ka-go si-peo-yo" },
     },
   },
@@ -1093,6 +1239,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "준비해요",         romanization: "jun-bi-hae-yo" },
       past:    { korean: "준비했어요",       romanization: "jun-bi-hae-sseo-yo" },
+      future:  { korean: "준비할 거예요",     romanization: "jun-bi-hal geo-ye-yo" },
       want:    { korean: "준비하고 싶어요",  romanization: "jun-bi-ha-go si-peo-yo" },
     },
   },
@@ -1102,6 +1249,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "성장해요",         romanization: "seong-jang-hae-yo" },
       past:    { korean: "성장했어요",       romanization: "seong-jang-hae-sseo-yo" },
+      future:  { korean: "성장할 거예요",     romanization: "seong-jang-hal geo-ye-yo" },
       want:    { korean: "성장하고 싶어요",  romanization: "seong-jang-ha-go si-peo-yo" },
     },
   },
@@ -1113,6 +1261,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "기억해요",         romanization: "gi-eo-kae-yo" },
       past:    { korean: "기억했어요",       romanization: "gi-eo-kae-sseo-yo" },
+      future:  { korean: "기억할 거예요",     romanization: "gi-eo-kal geo-ye-yo" },
       want:    { korean: "기억하고 싶어요",  romanization: "gi-eo-ka-go si-peo-yo" },
     },
   },
@@ -1122,6 +1271,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "생각해요",         romanization: "saeng-ga-kae-yo" },
       past:    { korean: "생각했어요",       romanization: "saeng-ga-kae-sseo-yo" },
+      future:  { korean: "생각할 거예요",     romanization: "saeng-ga-kal geo-ye-yo" },
       want:    { korean: "생각하고 싶어요",  romanization: "saeng-ga-ka-go si-peo-yo" },
     },
   },
@@ -1131,6 +1281,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "인식해요",         romanization: "in-si-kae-yo" },
       past:    { korean: "인식했어요",       romanization: "in-si-kae-sseo-yo" },
+      future:  { korean: "인식할 거예요",     romanization: "in-si-kal geo-ye-yo" },
       want:    { korean: "인식하고 싶어요",  romanization: "in-si-ka-go si-peo-yo" },
     },
   },
@@ -1140,6 +1291,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "동의해요",         romanization: "dong-ui-hae-yo" },
       past:    { korean: "동의했어요",       romanization: "dong-ui-hae-sseo-yo" },
+      future:  { korean: "동의할 거예요",     romanization: "dong-ui-hal geo-ye-yo" },
       want:    { korean: "동의하고 싶어요",  romanization: "dong-ui-ha-go si-peo-yo" },
     },
   },
@@ -1149,6 +1301,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "인정해요",         romanization: "in-jeong-hae-yo" },
       past:    { korean: "인정했어요",       romanization: "in-jeong-hae-sseo-yo" },
+      future:  { korean: "인정할 거예요",     romanization: "in-jeong-hal geo-ye-yo" },
       want:    { korean: "인정하고 싶어요",  romanization: "in-jeong-ha-go si-peo-yo" },
     },
   },
@@ -1158,6 +1311,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "후회해요",         romanization: "hu-hoe-hae-yo" },
       past:    { korean: "후회했어요",       romanization: "hu-hoe-hae-sseo-yo" },
+      future:  { korean: "후회할 거예요",     romanization: "hu-hoe-hal geo-ye-yo" },
       want:    null,
     },
   },
@@ -1167,6 +1321,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "이사해요",         romanization: "i-sa-hae-yo" },
       past:    { korean: "이사했어요",       romanization: "i-sa-hae-sseo-yo" },
+      future:  { korean: "이사할 거예요",     romanization: "i-sa-hal geo-ye-yo" },
       want:    { korean: "이사하고 싶어요",  romanization: "i-sa-ha-go si-peo-yo" },
     },
   },
@@ -1176,6 +1331,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "움직여요",         romanization: "um-ji-gyeo-yo" },
       past:    { korean: "움직였어요",       romanization: "um-ji-gyeo-sseo-yo" },
+      future:  { korean: "움직일 거예요",     romanization: "um-ji-gil geo-ye-yo" },
       want:    { korean: "움직이고 싶어요",  romanization: "um-ji-gi-go si-peo-yo" },
     },
   },
@@ -1185,6 +1341,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "운동해요",         romanization: "un-dong-hae-yo" },
       past:    { korean: "운동했어요",       romanization: "un-dong-hae-sseo-yo" },
+      future:  { korean: "운동할 거예요",     romanization: "un-dong-hal geo-ye-yo" },
       want:    { korean: "운동하고 싶어요",  romanization: "un-dong-ha-go si-peo-yo" },
     },
   },
@@ -1196,6 +1353,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "전화해요",         romanization: "jeon-hwa-hae-yo" },
       past:    { korean: "전화했어요",       romanization: "jeon-hwa-hae-sseo-yo" },
+      future:  { korean: "전화할 거예요",     romanization: "jeon-hwa-hal geo-ye-yo" },
       want:    { korean: "전화하고 싶어요",  romanization: "jeon-hwa-ha-go si-peo-yo" },
     },
   },
@@ -1205,6 +1363,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "만나요",         romanization: "man-na-yo" },
       past:    { korean: "만났어요",       romanization: "man-na-sseo-yo" },
+      future:  { korean: "만날 거예요",     romanization: "man-nal geo-ye-yo" },
       want:    { korean: "만나고 싶어요",  romanization: "man-na-go si-peo-yo" },
     },
   },
@@ -1214,6 +1373,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "사요",         romanization: "sa-yo" },
       past:    { korean: "샀어요",       romanization: "sa-sseo-yo" },
+      future:  { korean: "살 거예요",     romanization: "sal geo-ye-yo" },
       want:    { korean: "사고 싶어요",  romanization: "sa-go si-peo-yo" },
     },
   },
@@ -1224,6 +1384,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "몰라요",   romanization: "mol-la-yo" },
       past:    { korean: "몰랐어요", romanization: "mol-la-sseo-yo" },
+      future:  { korean: "모를 거예요", romanization: "mo-reul geo-ye-yo" },
       want:    null,
     },
   },
@@ -1235,6 +1396,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "내요",         romanization: "nae-yo" },
       past:    { korean: "냈어요",       romanization: "nae-sseo-yo" },
+      future:  { korean: "낼 거예요",     romanization: "nael geo-ye-yo" },
       want:    { korean: "내고 싶어요",  romanization: "nae-go si-peo-yo" },
     },
   },
@@ -1244,6 +1406,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "기다려요",         romanization: "gi-da-ryeo-yo" },
       past:    { korean: "기다렸어요",       romanization: "gi-da-ryeo-sseo-yo" },
+      future:  { korean: "기다릴 거예요",     romanization: "gi-da-ril geo-ye-yo" },
       want:    { korean: "기다리고 싶어요",  romanization: "gi-da-ri-go si-peo-yo" },
     },
   },
@@ -1253,6 +1416,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "움직여요",         romanization: "um-ji-gyeo-yo" },
       past:    { korean: "움직였어요",       romanization: "um-ji-gyeo-sseo-yo" },
+      future:  { korean: "움직일 거예요",     romanization: "um-ji-gil geo-ye-yo" },
       want:    { korean: "움직이고 싶어요",  romanization: "um-ji-gi-go si-peo-yo" },
     },
   },
@@ -1265,6 +1429,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "커요",     romanization: "keo-yo" },
       past:    { korean: "컸어요",   romanization: "keo-sseo-yo" },
+      future:  { korean: "클 거예요", romanization: "keul geo-ye-yo" },
       want:    null,
     },
   },
@@ -1275,6 +1440,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "무거워요",   romanization: "mu-geo-wo-yo" },
       past:    { korean: "무거웠어요", romanization: "mu-geo-wo-sseo-yo" },
+      future:  { korean: "무거울 거예요", romanization: "mu-geo-ul geo-ye-yo" },
       want:    null,
     },
   },
@@ -1285,6 +1451,7 @@ const allVerbs = [
     conjugations: {
       present: { korean: "귀여워요",   romanization: "gwi-yeo-wo-yo" },
       past:    { korean: "귀여웠어요", romanization: "gwi-yeo-wo-sseo-yo" },
+      future:  { korean: "귀여울 거예요", romanization: "gwi-yeo-ul geo-ye-yo" },
       want:    null,
     },
   },
@@ -1295,18 +1462,68 @@ const allVerbs = [
     conjugations: {
       present: { korean: "빨라요",   romanization: "ppal-la-yo" },
       past:    { korean: "빨랐어요", romanization: "ppal-la-sseo-yo" },
+      future:  { korean: "빠를 거예요", romanization: "ppa-reul geo-ye-yo" },
+      want:    null,
+    },
+  },
+
+  // ===== Class 25 (TTMIK Level 2, Lesson 1) — Future Tense =====
+  // Future = stem + ㄹ 거예요 (vowel stem), 을 거예요 (consonant stem), or just
+  // 거예요 when the stem already ends in ㄹ (놀다, 멀다, 살다).
+  {
+    english: "to stick to, to pass (an exam)",
+    korean: "붙다", romanization: "but-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "붙어요",       romanization: "bu-teo-yo" },
+      past:    { korean: "붙었어요",     romanization: "bu-teo-sseo-yo" },
+      future:  { korean: "붙을 거예요",  romanization: "bu-teul geo-ye-yo" },
+      want:    { korean: "붙고 싶어요",  romanization: "but-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to play, to hang out",
+    korean: "놀다", romanization: "nol-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "놀아요",       romanization: "no-ra-yo" },
+      past:    { korean: "놀았어요",     romanization: "no-ra-sseo-yo" },
+      future:  { korean: "놀 거예요",    romanization: "nol geo-ye-yo" },
+      want:    { korean: "놀고 싶어요",  romanization: "nol-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to live",
+    korean: "살다", romanization: "sal-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "살아요",       romanization: "sa-ra-yo" },
+      past:    { korean: "살았어요",     romanization: "sa-ra-sseo-yo" },
+      future:  { korean: "살 거예요",    romanization: "sal geo-ye-yo" },
+      want:    { korean: "살고 싶어요",  romanization: "sal-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to be far",
+    korean: "멀다", romanization: "meol-da", category: "Descriptive",
+    conjugations: {
+      present: { korean: "멀어요",       romanization: "meo-reo-yo" },
+      past:    { korean: "멀었어요",     romanization: "meo-reo-sseo-yo" },
+      future:  { korean: "멀 거예요",    romanization: "meol geo-ye-yo" },
       want:    null,
     },
   },
 ];
 
 // ===== State =====
-let mode = "recall";               // "recall" | "conjugate"
+let mode = "recall";               // "recall" | "conjugate" | "full"
+let direction = "en-ko";           // "en-ko" prompts in English, "ko-en" in Korean
 let activeCategory = "All";
 let activeTense = "present";       // used only in conjugate mode
 let deck = [];
 let idx = 0;
-let checked = false;               // true after user has submitted an answer
+let checked = false;               // conjugate: true after the answer was submitted
+
+// Full drill: which CHAIN step is being asked, and the result of each one.
+let step = 0;
+let results = [];                  // [{ ok, input }] per completed step
 
 const categories = [...new Set(allVerbs.map(v => v.category))];
 
@@ -1321,6 +1538,7 @@ const frontTense  = document.getElementById("frontTense");
 const frontMain   = document.getElementById("frontMain");
 const frontSub    = document.getElementById("frontSub");
 const frontHint   = document.getElementById("frontHint");
+const stepList    = document.getElementById("stepList");
 const backCat     = document.getElementById("backCat");
 const backMain    = document.getElementById("backMain");
 const backRoman   = document.getElementById("backRoman");
@@ -1330,14 +1548,23 @@ const progressEl  = document.getElementById("progress");
 const answerInput = document.getElementById("answerInput");
 const checkBtn    = document.getElementById("checkBtn");
 
-// ===== Mode toggle =====
-document.querySelectorAll(".mode-btn").forEach(btn => {
+// ===== Mode / direction toggles =====
+document.querySelectorAll(".mode-btn[data-mode]").forEach(btn => {
   btn.addEventListener("click", () => {
     mode = btn.dataset.mode;
-    document.querySelectorAll(".mode-btn").forEach(b => b.classList.toggle("active", b === btn));
+    document.querySelectorAll(".mode-btn[data-mode]").forEach(b => b.classList.toggle("active", b === btn));
     bodyEl.classList.toggle("mode-recall",    mode === "recall");
     bodyEl.classList.toggle("mode-conjugate", mode === "conjugate");
+    bodyEl.classList.toggle("mode-full",      mode === "full");
     rebuildDeck();
+  });
+});
+
+document.querySelectorAll(".mode-btn[data-dir]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    direction = btn.dataset.dir;
+    document.querySelectorAll(".mode-btn[data-dir]").forEach(b => b.classList.toggle("active", b === btn));
+    render();
   });
 });
 
@@ -1407,13 +1634,77 @@ function isCorrect(input, target) {
   return n === normalize(target.korean) || n === normalize(target.romanization);
 }
 
+// English answers (Korean → English direction) are matched leniently: any one
+// of the comma-separated glosses counts, "to" and a leading "be" are optional,
+// and bracketed notes like "(transport)" are ignored.
+function canonEnglish(s) {
+  const words = s.toLowerCase().replace(/\(.*?\)/g, " ").replace(/[^a-z\s]/g, " ")
+    .trim().split(/\s+/).filter(Boolean);
+  if (words[0] === "to") words.shift();
+  if (words[0] === "be" && words.length > 1) words.shift();
+  return words.join("");
+}
+
+function isCorrectEnglish(input, english) {
+  const n = canonEnglish(input);
+  if (!n) return false;
+  return english.replace(/\(.*?\)/g, "").split(/[,;\/]/)
+    .map(canonEnglish).filter(Boolean).some(a => a === n);
+}
+
+// ===== Full drill helpers =====
+// What each CHAIN step asks for. The first step is the dictionary form when
+// prompting in English, or the English meaning when prompting in Korean.
+function stepInfo(v, key) {
+  if (key === "base") {
+    return direction === "en-ko"
+      ? { label: "Dictionary form", answer: v.korean, check: s => isCorrect(s, v),
+          placeholder: "Type the dictionary form (hangul or romanization)" }
+      : { label: "Meaning", answer: v.english, check: s => isCorrectEnglish(s, v.english),
+          placeholder: "Type the meaning in English" };
+  }
+  const t = TENSES.find(x => x.key === key);
+  const c = v.conjugations[key];
+  return { label: t.label, answer: c.korean, check: s => isCorrect(s, c),
+           placeholder: `Type the ${t.label.toLowerCase()} form (${t.desc})` };
+}
+
+function renderSteps(v) {
+  stepList.innerHTML = "";
+  CHAIN.forEach((key, i) => {
+    const info = stepInfo(v, key);
+    const row = document.createElement("div");
+    const r = results[i];
+    row.className = "step-row " + (r ? (r.ok ? "ok" : "bad") : (i === step ? "current" : "pending"));
+    const ans = document.createElement("span");
+    ans.className = "step-ans";
+    if (r) {
+      if (!r.ok && r.input) {
+        const you = document.createElement("span");
+        you.className = "step-you";
+        you.textContent = r.input;
+        ans.appendChild(you);
+      }
+      ans.appendChild(document.createTextNode(info.answer));
+    } else {
+      ans.textContent = i === step ? "?" : "·";
+    }
+    row.innerHTML = `<span class="step-label">${info.label}</span>`;
+    row.appendChild(ans);
+    stepList.appendChild(row);
+  });
+}
+
 // ===== Render =====
 function render() {
   cardEl.classList.remove("flipped", "correct", "incorrect");
   checked = false;
+  step = 0;
+  results = [];
   answerInput.value = "";
   answerInput.disabled = false;
   checkBtn.textContent = "Check";
+  stepList.innerHTML = "";
 
   if (deck.length === 0) {
     frontCat.textContent = "";
@@ -1436,30 +1727,25 @@ function render() {
   backCat.textContent  = v.category;
 
   if (mode === "recall") {
-    // Front: English. Back: base form + full conjugation table.
+    // Front: the prompt language. Back: the other language + conjugation table.
     frontTense.style.display = "none";
-    frontMain.classList.remove("hangul");
-    frontMain.textContent = v.english;
     frontSub.textContent  = "";
     frontHint.textContent = "tap to flip";
-
-    backMain.textContent  = v.korean;
-    backRoman.textContent = v.romanization;
     backHint.textContent  = "tap to flip";
 
-    conjList.innerHTML = "";
-    TENSES.forEach(t => {
-      const c = v.conjugations[t.key];
-      if (!c) return;
-      const row = document.createElement("div");
-      row.className = "conj-row";
-      row.innerHTML =
-        `<span class="conj-label">${t.label}</span>` +
-        `<span class="conj-form">${c.korean}</span>`;
-      row.appendChild(speakerButton(c.korean, "small"));
-      conjList.appendChild(row);
-    });
-  } else {
+    if (direction === "en-ko") {
+      frontMain.classList.remove("hangul");
+      frontMain.textContent = v.english;
+      backMain.textContent  = v.korean;
+      backRoman.textContent = v.romanization;
+    } else {
+      frontMain.classList.add("hangul");
+      frontMain.textContent = v.korean;
+      backMain.textContent  = v.english;
+      backRoman.textContent = `${v.korean} · ${v.romanization}`;
+    }
+    renderConjTable(v, null);
+  } else if (mode === "conjugate") {
     // Conjugate mode. Front: base form + English + tense chip. Back: answer.
     const t = TENSES.find(x => x.key === activeTense);
     frontTense.style.display = "";
@@ -1468,6 +1754,7 @@ function render() {
     frontMain.textContent = v.korean;
     frontSub.textContent  = `${v.english}  →  ${t.desc}`;
     frontHint.textContent = "type answer below, Enter to check";
+    answerInput.placeholder = "Type conjugation (hangul or romanization)";
 
     const target = v.conjugations[activeTense];
     backMain.textContent  = target.korean;
@@ -1476,20 +1763,66 @@ function render() {
     conjList.innerHTML = "";
 
     setTimeout(() => answerInput.focus(), 50);
+  } else {
+    // Full drill. Front: prompt + the step list; back: summary table when done.
+    if (direction === "en-ko") {
+      frontMain.classList.remove("hangul");
+      frontMain.textContent = v.english;
+    } else {
+      frontMain.classList.add("hangul");
+      frontMain.textContent = v.korean;
+    }
+    frontSub.textContent = "";
+    frontHint.textContent = "";
+    backMain.textContent  = direction === "en-ko" ? v.korean : v.english;
+    backRoman.textContent = direction === "en-ko" ? v.romanization : `${v.korean} · ${v.romanization}`;
+    backHint.textContent  = "Enter or arrow key for next";
+    conjList.innerHTML = "";
+    renderStep(v);
   }
 
   updateSpeakBtn();
 }
 
+// Refreshes the chip, the step list, and the input prompt for the current step.
+function renderStep(v) {
+  const info = stepInfo(v, CHAIN[step]);
+  frontTense.style.display = "";
+  frontTense.textContent = `${step + 1}/${CHAIN.length} · ${info.label}`;
+  answerInput.placeholder = info.placeholder;
+  renderSteps(v);
+  setTimeout(() => answerInput.focus(), 50);
+}
+
+// Back-face table. `marks` (full drill) is a map of tense key → ok/bad.
+function renderConjTable(v, marks) {
+  conjList.innerHTML = "";
+  TENSES.forEach(t => {
+    const c = v.conjugations[t.key];
+    if (!c) return;
+    const row = document.createElement("div");
+    row.className = "conj-row" + (marks && t.key in marks ? (marks[t.key] ? " ok" : " bad") : "");
+    row.innerHTML =
+      `<span class="conj-label">${t.label}</span>` +
+      `<span class="conj-form">${c.korean}</span>`;
+    row.appendChild(speakerButton(c.korean, "small"));
+    conjList.appendChild(row);
+  });
+}
+
 // ===== Audio =====
-// Recall mode speaks the base form (each conjugation row has its own button);
-// Conjugate mode speaks the form being drilled.
+// Recall speaks the base form (each conjugation row has its own button);
+// Conjugate speaks the form being drilled; Full drill speaks the base form
+// once it is on screen (Korean prompt, or after the first step is answered).
 function currentSpeech() {
   if (deck.length === 0) return null;
   const v = deck[idx];
   if (mode === "recall") return speechTextOf(v);
-  const target = v.conjugations[activeTense];
-  return target ? target.korean : null;
+  if (mode === "conjugate") {
+    const target = v.conjugations[activeTense];
+    return target ? target.korean : null;
+  }
+  return (direction === "ko-en" || results.length > 0) ? speechTextOf(v) : null;
 }
 
 const speakBtn = speakerButton(currentSpeech);
@@ -1501,19 +1834,43 @@ function updateSpeakBtn() {
 
 // ===== Recall-mode flip on tap =====
 cardScene.addEventListener("click", (e) => {
-  // In conjugate mode the user should type, not flip by tapping.
+  // In the typing modes the user should type, not flip by tapping.
   if (mode !== "recall") return;
   cardEl.classList.toggle("flipped");
 });
 
-// ===== Conjugate: check answer =====
+// ===== Check answer (Conjugate + Full drill) =====
 function checkAnswer() {
-  if (mode !== "conjugate" || deck.length === 0) return;
+  if (mode === "recall" || deck.length === 0) return;
   if (checked) { next(); return; }
   const v = deck[idx];
-  const target = v.conjugations[activeTense];
-  const correct = isCorrect(answerInput.value, target);
-  cardEl.classList.add("flipped", correct ? "correct" : "incorrect");
+
+  if (mode === "conjugate") {
+    const target = v.conjugations[activeTense];
+    const correct = isCorrect(answerInput.value, target);
+    cardEl.classList.add("flipped", correct ? "correct" : "incorrect");
+    answerInput.disabled = true;
+    checkBtn.textContent = "Next →";
+    checked = true;
+    return;
+  }
+
+  // Full drill: grade this step, then move on to the next one.
+  const info = stepInfo(v, CHAIN[step]);
+  results.push({ ok: info.check(answerInput.value), input: answerInput.value.trim() });
+  answerInput.value = "";
+  step++;
+  updateSpeakBtn();
+
+  if (step < CHAIN.length) { renderStep(v); return; }
+
+  // All steps answered: flip to the summary, coloured by the overall result.
+  renderSteps(v);
+  const marks = {};
+  CHAIN.forEach((key, i) => { if (key !== "base") marks[key] = results[i].ok; });
+  renderConjTable(v, marks);
+  const allOk = results.every(r => r.ok);
+  cardEl.classList.add("flipped", allOk ? "correct" : "incorrect");
   answerInput.disabled = true;
   checkBtn.textContent = "Next →";
   checked = true;
@@ -1561,6 +1918,7 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     cardEl.classList.toggle("flipped");
   }
+  else if (e.key === "Enter" && checked) { e.preventDefault(); next(); }
   else if (e.key === "s" || e.key === "S") { e.preventDefault(); speak(currentSpeech()); }
 });
 
