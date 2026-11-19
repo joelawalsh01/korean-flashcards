@@ -1510,6 +1510,146 @@ const allVerbs = [
       want:    null,
     },
   },
+
+  // ===== Class 28–29 (TTMIK Level 2, Lesson 3) — And, Then, So =====
+  // Descriptive verbs from the sample sentences; want doesn't apply.
+  {
+    english: "to be sick, to hurt",
+    korean: "아프다", romanization: "a-peu-da", category: "Descriptive",
+    conjugations: {
+      present: { korean: "아파요",       romanization: "a-pa-yo" },
+      past:    { korean: "아팠어요",     romanization: "a-pa-sseo-yo" },
+      future:  { korean: "아플 거예요",  romanization: "a-peul geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be a lot, to be many",
+    korean: "많다", romanization: "man-ta", category: "Descriptive",
+    conjugations: {
+      present: { korean: "많아요",       romanization: "ma-na-yo" },
+      past:    { korean: "많았어요",     romanization: "ma-na-sseo-yo" },
+      future:  { korean: "많을 거예요",  romanization: "ma-neul geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be strong, to be sturdy",
+    korean: "튼튼하다", romanization: "teun-teun-ha-da", category: "Descriptive",
+    conjugations: {
+      present: { korean: "튼튼해요",       romanization: "teun-teun-hae-yo" },
+      past:    { korean: "튼튼했어요",     romanization: "teun-teun-hae-sseo-yo" },
+      future:  { korean: "튼튼할 거예요",  romanization: "teun-teun-hal geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be healthy",
+    korean: "건강하다", romanization: "geon-gang-ha-da", category: "Descriptive",
+    conjugations: {
+      present: { korean: "건강해요",       romanization: "geon-gang-hae-yo" },
+      past:    { korean: "건강했어요",     romanization: "geon-gang-hae-sseo-yo" },
+      future:  { korean: "건강할 거예요",  romanization: "geon-gang-hal geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be pretty",
+    korean: "예쁘다", romanization: "ye-ppeu-da", category: "Descriptive",
+    conjugations: {
+      present: { korean: "예뻐요",       romanization: "ye-ppeo-yo" },
+      past:    { korean: "예뻤어요",     romanization: "ye-ppeo-sseo-yo" },
+      future:  { korean: "예쁠 거예요",  romanization: "ye-ppeul geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to be good at, to do well",
+    korean: "잘하다", romanization: "jal-ha-da", category: "하다 Verb",
+    conjugations: {
+      present: { korean: "잘해요",         romanization: "jal-hae-yo" },
+      past:    { korean: "잘했어요",       romanization: "jal-hae-sseo-yo" },
+      future:  { korean: "잘할 거예요",    romanization: "jal-hal geo-ye-yo" },
+      want:    { korean: "잘하고 싶어요",  romanization: "jal-ha-go si-peo-yo" },
+    },
+  },
+  // Weather / illness expressions: the noun + particle stays fixed and only the
+  // verb conjugates. Nobody "wants" to catch a cold, so want is null.
+  {
+    english: "to rain",
+    korean: "비가 오다", romanization: "bi-ga o-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "비가 와요",       romanization: "bi-ga wa-yo" },
+      past:    { korean: "비가 왔어요",     romanization: "bi-ga wa-sseo-yo" },
+      future:  { korean: "비가 올 거예요",  romanization: "bi-ga ol geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to catch a cold",
+    korean: "감기에 걸리다", romanization: "gam-gi-e geol-li-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "감기에 걸려요",       romanization: "gam-gi-e geol-lyeo-yo" },
+      past:    { korean: "감기에 걸렸어요",     romanization: "gam-gi-e geol-lyeo-sseo-yo" },
+      future:  { korean: "감기에 걸릴 거예요",  romanization: "gam-gi-e geol-lil geo-ye-yo" },
+      want:    null,
+    },
+  },
+  {
+    english: "to have a fever",
+    korean: "열이 나다", romanization: "yeo-ri na-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "열이 나요",       romanization: "yeo-ri na-yo" },
+      past:    { korean: "열이 났어요",     romanization: "yeo-ri na-sseo-yo" },
+      future:  { korean: "열이 날 거예요",  romanization: "yeo-ri nal geo-ye-yo" },
+      want:    null,
+    },
+  },
+  // 가다 + 오다 compounds: only the final 오다 conjugates.
+  {
+    english: "to go and come back, to have been to",
+    korean: "갔다 오다", romanization: "gat-da o-da", category: "Travel",
+    conjugations: {
+      present: { korean: "갔다 와요",         romanization: "gat-da wa-yo" },
+      past:    { korean: "갔다 왔어요",       romanization: "gat-da wa-sseo-yo" },
+      future:  { korean: "갔다 올 거예요",    romanization: "gat-da ol geo-ye-yo" },
+      want:    { korean: "갔다 오고 싶어요",  romanization: "gat-da o-go si-peo-yo" },
+    },
+  },
+  {
+    english: "to come down, to get down",
+    korean: "내려오다", romanization: "nae-ryeo-o-da", category: "Action Verb",
+    conjugations: {
+      present: { korean: "내려와요",         romanization: "nae-ryeo-wa-yo" },
+      past:    { korean: "내려왔어요",       romanization: "nae-ryeo-wa-sseo-yo" },
+      future:  { korean: "내려올 거예요",    romanization: "nae-ryeo-ol geo-ye-yo" },
+      want:    { korean: "내려오고 싶어요",  romanization: "nae-ryeo-o-go si-peo-yo" },
+    },
+  },
+
+  // ===== Class 31 (TTMIK Level 2, Lesson 4) — And, With =====
+  {
+    english: "to bring",
+    korean: "가지고 오다", romanization: "ga-ji-go o-da", category: "Everyday",
+    conjugations: {
+      present: { korean: "가지고 와요",         romanization: "ga-ji-go wa-yo" },
+      past:    { korean: "가지고 왔어요",       romanization: "ga-ji-go wa-sseo-yo" },
+      future:  { korean: "가지고 올 거예요",    romanization: "ga-ji-go ol geo-ye-yo" },
+      want:    { korean: "가지고 오고 싶어요",  romanization: "ga-ji-go o-go si-peo-yo" },
+    },
+  },
+
+  // ===== Class 33 (TTMIK Level 2, Lesson 5) — Days of the Week =====
+  {
+    english: "to be excited, to be fun",
+    korean: "신나다", romanization: "sin-na-da", category: "Emotion & State",
+    conjugations: {
+      present: { korean: "신나요",       romanization: "sin-na-yo" },
+      past:    { korean: "신났어요",     romanization: "sin-na-sseo-yo" },
+      future:  { korean: "신날 거예요",  romanization: "sin-nal geo-ye-yo" },
+      want:    null,
+    },
+  },
 ];
 
 // ===== State =====

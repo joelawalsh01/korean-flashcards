@@ -544,7 +544,11 @@
     <strong>Batchim rule:</strong> 을/이/은 follow a noun ending in a consonant (받침);
     를/가/는 follow a noun ending in a vowel. 에 and 에서 never change.<br>
     <strong>누구 / 누가:</strong> 누구 + 가 contracts to 누가, so the subject form of
-    &ldquo;who&rdquo; is its own word — those two are offered only on the 누구/누가 cards.
+    &ldquo;who&rdquo; is its own word — those two are offered only on the 누구/누가 cards.<br>
+    <strong>그리고 / 그래서:</strong> both join two sentences; 그래서 only when the first is
+    the reason for the second. Only 그리고 can join nouns.<br>
+    <strong>랑 / 이랑:</strong> the same batchim rule — 랑 after a vowel, 이랑 after a
+    consonant. 하고 means the same and never changes.
   </p>
 </div>
 
@@ -629,10 +633,29 @@ const PARTICLES = [
     key: "누가", roman: "nu-ga", role: "whosubject",
     tip: "누가 — 'who' as the subject, doing the action. It is 누구 + 가 contracted (누구가 → 누가), so the subject marker is already inside it.",
   },
+  // Only offered on 그리고/그래서 cards (TTMIK Level 2 Lesson 3).
+  {
+    key: "그리고", roman: "geu-ri-go", role: "and",
+    tip: "그리고 — 'and' / 'and then'. Adds B next to A with no cause between them. The only one of the two that can link nouns: 서울 그리고 부산.",
+  },
+  {
+    key: "그래서", roman: "geu-rae-seo", role: "so",
+    tip: "그래서 — 'so' / 'therefore'. A is the reason B happens. Joins sentences only, never nouns.",
+  },
+  // Only offered on 랑/이랑 cards (TTMIK Level 2 Lesson 4).
+  {
+    key: "랑", roman: "rang", role: "with", form: "vowel",
+    tip: "랑 — 'and' / 'with' after a noun ending in a vowel: 우유랑 빵, 친구랑, 누구랑. Casual; 하고 means the same.",
+  },
+  {
+    key: "이랑", roman: "i-rang", role: "with", form: "consonant",
+    tip: "이랑 — 'and' / 'with' after a noun ending in a consonant (받침): 빵이랑 우유, 동생이랑. Casual; 하고 means the same.",
+  },
 ];
 
 // The eight particle buttons every ordinary card offers. A card may override
-// this with its own `choices` list — the 누구/누가 cards show just those two.
+// this with its own `choices` list — the 누구/누가, 그리고/그래서 and 랑/이랑
+// cards show just their pair.
 const DEFAULT_CHOICES = ["에", "에서", "을", "를", "이", "가", "은", "는"];
 
 // ===== Sentence data =====
@@ -1319,6 +1342,296 @@ const allCards = [
     explanation: "내년 is a point in time, so it takes 에 like 아침에 or 2시에. Only 오늘 / 어제 / 내일 drop it.",
     category: "에 — place & time",
   },
+
+  // ===== Class 28–29 (TTMIK Level 2, Lesson 3) — And, Then, So =====
+  {
+    parts: ["오늘", " 비", " 왔어요."],
+    answers: ["은", "가"],
+    explanations: [
+      "오늘 sets the time frame as the topic — 'as for today'. It ends in ㄹ → 은. (오늘 never takes 에.)",
+      "비가 오다 is literally 'rain comes': 비 is the subject doing the coming, and it ends in a vowel → 가.",
+    ],
+    english: "It rained today.",
+    romanization: "o-neu-reun bi-ga wa-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    before: "저는 학생이에요. 그래서 돈", after: " 없어요.", answer: "이",
+    english: "I'm a student. So I don't have money.",
+    romanization: "jeo-neun hak-saeng-i-e-yo. geu-rae-seo do-ni eop-seo-yo.",
+    explanation: "없다 takes the thing that doesn't exist as its subject — it never has an object. 돈 ends in ㄴ → 이.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "김치는 맛있어요. 그래서 김치", after: " 많이 먹어요.", answer: "를",
+    english: "Kimchi is delicious. So I eat a lot of kimchi.",
+    romanization: "gim-chi-neun ma-si-sseo-yo. geu-rae-seo gim-chi-reul ma-ni meo-geo-yo.",
+    explanation: "In the second sentence kimchi is what 먹다 acts on — the object. 김치 ends in a vowel → 를.",
+    category: "을/를 — object",
+  },
+  {
+    parts: ["친구", " 만났어요. 그리고 밥", " 먹었어요."],
+    answers: ["를", "을"],
+    explanations: [
+      "만나다 takes the person you meet as its object — English 'meet with' doesn't carry over. 친구 ends in a vowel → 를.",
+      "밥 is what 먹다 acts on. It ends in ㅂ → 을.",
+    ],
+    english: "I met a friend. And then we ate.",
+    romanization: "chin-gu-reul man-na-sseo-yo. geu-ri-go ba-beul meo-geo-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["저는 돈이 없었어요. 그래서 현우 씨", " 돈", " 냈어요."],
+    answers: ["가", "을"],
+    explanations: [
+      "현우 씨 is the one who paid — new information answering 'who paid?', so the subject marker. 씨 ends in a vowel → 가.",
+      "돈을 내다 = to pay: the money is what 내다 acts on. 돈 ends in ㄴ → 을.",
+    ],
+    english: "I didn't have money. So Hyunwoo paid.",
+    romanization: "jeo-neun do-ni eop-seo-sseo-yo. geu-rae-seo hyeo-nu ssi-ga do-neul nae-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["커피숍", " 저", " 물", " 마셨어요."],
+    answers: ["에서", "는", "을"],
+    explanations: [
+      "Drinking is an action carried out at the café, so the location takes 에서.",
+      "저 is the topic — contrasting what I had with what 현우 had. Vowel ending → 는.",
+      "물 is what 마시다 acts on. It ends in ㄹ → 을.",
+    ],
+    english: "At the café, I drank water.",
+    romanization: "keo-pi-syo-be-seo jeo-neun mu-reul ma-syeo-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    before: "딸", after: " 아파요.", answer: "이",
+    english: "My daughter is sick.",
+    romanization: "tta-ri a-pa-yo.",
+    explanation: "아프다 is a descriptive verb — it describes 딸 rather than acting on anything, so 딸 is the subject. It ends in ㄹ → 이.",
+    category: "이/가 — subject",
+  },
+  {
+    before: "감기", after: " 걸렸어요.", answer: "에",
+    english: "I caught a cold.",
+    romanization: "gam-gi-e geol-lyeo-sseo-yo.",
+    explanation: "걸리다 marks the illness you catch with 에 — 감기에 걸리다 is a fixed pairing. English 'catch a cold' tempts 를, but the cold isn't an object here.",
+    category: "에 — place & time",
+  },
+  {
+    before: "열", after: " 나요?", answer: "이",
+    english: "Do you have a fever?",
+    romanization: "yeo-ri na-yo?",
+    explanation: "열이 나다 is 'a fever comes out': 열 is the subject of 나다, not an object. It ends in ㄹ → 이.",
+    category: "이/가 — subject",
+  },
+
+  // 그리고 vs 그래서 — the lesson's own fill-in exercise. Each card is chosen so
+  // only one reading makes sense; sentences where the teacher noted either works
+  // (친구를 만났어요 ___ 밥을 먹었어요) are left out.
+  {
+    parts: ["서울 ", " 부산"], answers: ["그리고"], choices: ["그리고", "그래서"],
+    explanations: ["Two nouns in a list — only 그리고 can link nouns. 그래서 only joins whole sentences."],
+    english: "Seoul and Busan",
+    romanization: "seo-ul geu-ri-go bu-san",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["책, 연필 ", " 공책"], answers: ["그리고"], choices: ["그리고", "그래서"],
+    explanations: ["A list of nouns — the last item is joined with 그리고. 그래서 can't link nouns."],
+    english: "A book, a pencil, and a notebook",
+    romanization: "chaek, yeon-pil geu-ri-go gong-chaek",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["저는 학생이에요. ", " 돈이 없어요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["Being a student is the reason for having no money — cause → result is 그래서."],
+    english: "I'm a student. So I don't have money.",
+    romanization: "jeo-neun hak-saeng-i-e-yo. geu-rae-seo do-ni eop-seo-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["김밥은 맛있어요. ", " 김밥을 자주 먹어요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["It's delicious, and that's why I eat it often — the first sentence is the reason, so 그래서."],
+    english: "Kimbap is delicious. So I eat kimbap often.",
+    romanization: "gim-ba-beun ma-si-sseo-yo. geu-rae-seo gim-ba-beul ja-ju meo-geo-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["예지 씨는 예뻐요. ", " 노래도 잘해요."], answers: ["그리고"], choices: ["그리고", "그래서"],
+    explanations: ["Singing well doesn't follow from being pretty — it's a second fact added on (도, 'also', is the clue), so 그리고."],
+    english: "Yeji is pretty. And she also sings well.",
+    romanization: "ye-ji ssi-neun ye-ppeo-yo. geu-ri-go no-rae-do jal-hae-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["오늘은 비가 왔어요. ", " 집에 있었어요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["The rain is why I stayed home — cause → result, so 그래서."],
+    english: "It rained today. So I stayed home.",
+    romanization: "o-neu-reun bi-ga wa-sseo-yo. geu-rae-seo ji-be i-sseo-sseo-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["김치는 맛있어요. ", " 한국 음식이에요."], answers: ["그리고"], choices: ["그리고", "그래서"],
+    explanations: ["Being tasty isn't why kimchi is Korean — the two facts are just listed, so 그리고. 그래서 would claim 'it's delicious, therefore it's Korean food'."],
+    english: "Kimchi is delicious. And it's Korean food.",
+    romanization: "gim-chi-neun ma-si-sseo-yo. geu-ri-go han-guk eum-si-gi-e-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["저는 한국인이에요. ", " 김치를 많이 먹어요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["Being Korean is the reason for eating lots of kimchi — 그래서."],
+    english: "I'm Korean. So I eat a lot of kimchi.",
+    romanization: "jeo-neun han-gu-gi-ni-e-yo. geu-rae-seo gim-chi-reul ma-ni meo-geo-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["저는 김치를 많이 먹어요. ", " 튼튼해요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["Eating kimchi is presented as the reason for being strong — 'therefore' is 그래서."],
+    english: "I eat a lot of kimchi. Therefore, I'm strong.",
+    romanization: "jeo-neun gim-chi-reul ma-ni meo-geo-yo. geu-rae-seo teun-teun-hae-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+  {
+    parts: ["오늘 많이 아팠어요. ", " 회사를 못 갔어요."], answers: ["그래서"], choices: ["그리고", "그래서"],
+    explanations: ["Being sick is why I couldn't go to work — cause → result, so 그래서."],
+    english: "I was very sick today. So I couldn't go to work.",
+    romanization: "o-neul ma-ni a-pa-sseo-yo. geu-rae-seo hoe-sa-reul mot ga-sseo-yo.",
+    category: "그리고/그래서 — and / so",
+  },
+
+  // ===== Class 31 (TTMIK Level 2, Lesson 4) — And, With =====
+  // 랑 vs 이랑 is the batchim rule again. 하고 is never offered alongside them:
+  // it is always correct too, which would leave two right answers.
+  {
+    parts: ["우유", " 빵 샀어요."], answers: ["랑"], choices: ["랑", "이랑"],
+    explanations: ["우유 ends in a vowel → 랑. (우유하고 빵 means the same; 랑 is the casual one.)"],
+    english: "I bought milk and bread.",
+    romanization: "u-yu-rang ppang sa-sseo-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["빵", " 우유 샀어요."], answers: ["이랑"], choices: ["랑", "이랑"],
+    explanations: ["빵 ends in the consonant ㅇ → 이랑. The 이 is only there to make it easier to say, like 이/가 and 은/는."],
+    english: "I bought bread and milk.",
+    romanization: "ppang-i-rang u-yu sa-sseo-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["누구", " 갔어요?"], answers: ["랑"], choices: ["랑", "이랑"],
+    explanations: ["누구 ends in a vowel → 랑. Here 랑 means 'with', not 'and'."],
+    english: "Who did you go with?",
+    romanization: "nu-gu-rang ga-sseo-yo?",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["가족들", " 갔다 왔어요."], answers: ["이랑"], choices: ["랑", "이랑"],
+    explanations: ["The plural -들 ends in ㄹ, so 이랑 — whatever comes last in the word decides the form."],
+    english: "I went (on a trip) with my family.",
+    romanization: "ga-jok-deu-ri-rang gat-da wa-sseo-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["친구", " 같이 영화 봤어요."], answers: ["랑"], choices: ["랑", "이랑"],
+    explanations: ["친구 ends in a vowel → 랑. Adding 같이 ('together') makes the 'with' meaning unmistakable."],
+    english: "I watched a movie together with a friend.",
+    romanization: "chin-gu-rang ga-chi yeong-hwa bwa-sseo-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["동생", " 같이 공부할 거예요."], answers: ["이랑"], choices: ["랑", "이랑"],
+    explanations: ["동생 ends in the consonant ㅇ → 이랑."],
+    english: "I'm going to study with my younger sibling.",
+    romanization: "dong-saeng-i-rang ga-chi gong-bu-hal geo-ye-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["김밥", " 라면 좋아해요."], answers: ["이랑"], choices: ["랑", "이랑"],
+    explanations: ["김밥 ends in the consonant ㅂ → 이랑."],
+    english: "I like kimbap and ramen.",
+    romanization: "gim-ba-bi-rang ra-myeon jo-a-hae-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["노트", " 펜 가지고 오세요."], answers: ["랑"], choices: ["랑", "이랑"],
+    explanations: ["노트 ends in a vowel (ㅡ) → 랑."],
+    english: "Please bring a notebook and a pen.",
+    romanization: "no-teu-rang pen ga-ji-go o-se-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    parts: ["선생님", " 같이 밥을 먹을 거예요."], answers: ["이랑"], choices: ["랑", "이랑"],
+    explanations: ["선생님 ends in the consonant ㅁ → 이랑."],
+    english: "I'm going to eat with my teacher.",
+    romanization: "seon-saeng-ni-mi-rang ga-chi ba-beul meo-geul geo-ye-yo.",
+    category: "랑/이랑 — and, with",
+  },
+  {
+    before: "내일 선생님하고 경복궁", after: " 갈 거예요.", answer: "에",
+    english: "I'm going to Gyeongbok Palace with my teacher tomorrow.",
+    romanization: "nae-il seon-saeng-nim-ha-go gyeong-bok-gung-e gal geo-ye-yo.",
+    explanation: "가다 marks its destination with 에. 'With my teacher' (하고) changes nothing about that — 에서 would mean the going happens at the palace.",
+    category: "에 — place & time",
+  },
+
+  // ===== Class 31 & 33 (TTMIK Level 2, Lesson 5) — Days of the Week =====
+  {
+    parts: ["저는 월요일", " 영화", " 봤어요."],
+    answers: ["에", "를"],
+    explanations: [
+      "Days of the week are points in time, so they take 에 — 월요일에. (Only 오늘 / 어제 / 내일 go without it.)",
+      "영화 is what 보다 acts on. Vowel ending → 를.",
+    ],
+    english: "I watched a movie on Monday.",
+    romanization: "jeo-neun wo-ryo-i-re yeong-hwa-reul bwa-sseo-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["토요일에", " 소풍", " 갈 거예요."],
+    answers: ["는", "을"],
+    explanations: [
+      "에 can stack with the topic marker: 토요일에는 = 'as for Saturday' — singling out the day as the theme. 에 ends in a vowel → 는.",
+      "소풍을 가다 = to go on a picnic: the outing itself is marked with 을/를, like 여행을 가다. 소풍 ends in ㅇ → 을.",
+    ],
+    english: "On Saturday, I'm going to go on a picnic.",
+    romanization: "to-yo-i-re-neun so-pung-eul gal geo-ye-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["무슨 요일", " 수업", " 있어요?"],
+    answers: ["에", "이"],
+    explanations: [
+      "The day is a point in time → 에.",
+      "있다 says the class exists — 수업 is its subject. It ends in ㅂ → 이.",
+    ],
+    english: "What day do you have class?",
+    romanization: "mu-seun yo-i-re su-eo-bi i-sseo-yo?",
+    category: "Compound — 2+ particles",
+  },
+  {
+    parts: ["평일", " 어린이집", " 가요."],
+    answers: ["에", "에"],
+    explanations: [
+      "평일 (weekdays) is a time → 에.",
+      "어린이집 is where 가다 is headed → 에. 에서 would mean the going happens at the daycare.",
+    ],
+    english: "(She) goes to daycare on weekdays.",
+    romanization: "pyeong-i-re eo-ri-ni-ji-be ga-yo.",
+    category: "Compound — 2+ particles",
+  },
+  {
+    before: "제 코스", after: " 월요일부터 목요일까지예요.", answer: "는",
+    english: "My course is from Monday to Thursday.",
+    romanization: "je ko-seu-neun wo-ryo-il-bu-teo mo-gyo-il-kka-ji-ye-yo.",
+    explanation: "코스 is the topic the sentence describes. It ends in a vowel → 는. (부터 … 까지 = from … until.)",
+    category: "은/는 — topic",
+  },
+  {
+    before: "겨울 방학", after: " 11월부터 1월까지예요.", answer: "은",
+    english: "Winter break is from November to January.",
+    romanization: "gyeo-ul bang-ha-geun si-bi-rwol-bu-teo i-rwol-kka-ji-ye-yo.",
+    explanation: "방학 is the topic being described. It ends in ㄱ → 은.",
+    category: "은/는 — topic",
+  },
 ];
 
 // ===== Normalization =====
@@ -1451,6 +1764,16 @@ const ROLE_NAME = {
   topic: "topic",
   who: "who",
   whosubject: "who (subject)",
+  and: "and",
+  so: "so",
+  with: "and / with",
+};
+
+// 그리고 vs 그래서 is about the logic between two sentences, not grammar roles.
+// (랑 vs 이랑 needs no table — they share a role, so whyNot's batchim branch covers it.)
+const CONJ_PAIR = {
+  "그리고": "그리고 only adds B next to A. Here A is the reason B happens, and that cause → result link is exactly what 그래서 says.",
+  "그래서": "그래서 claims B happens because of A — but nothing here follows from A (and 그래서 can never join two nouns). B is simply added on, so it's 그리고.",
 };
 
 // 누구 vs 누가 is a single either/or, not a role matrix — the two are never
@@ -1521,6 +1844,7 @@ function whyNot(chosenKey, correctKey, noun) {
   if (!chosen || !correct) return "";
 
   if (WHO_PAIR[chosenKey] && WHO_PAIR[correctKey]) return WHO_PAIR[chosenKey];
+  if (CONJ_PAIR[chosenKey] && CONJ_PAIR[correctKey]) return CONJ_PAIR[chosenKey];
 
   // Same job, wrong form — this is purely the batchim rule.
   if (chosen.role === correct.role) {
